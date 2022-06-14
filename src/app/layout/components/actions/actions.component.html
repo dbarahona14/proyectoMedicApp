@@ -8,9 +8,9 @@
 
   <tc-dropdown-content [align]="'right'" [animation]="'fadeInUp'" [offset]="[10, 0]">
     <div class="menu-header">
-      <h4 class="h5 menu-title mt-0 mb-0">Notifications</h4>
+      <h4 class="h5 menu-title mt-0 mb-0">Notificaciones</h4>
 
-      <a href="#" (click)="$event.preventDefault(); notifications = []" [tcColor]="['#ed5564', '#8E333C']">Clear All</a>
+      <a href="#" (click)="$event.preventDefault(); notifications = []" [tcColor]="['#ed5564', '#8E333C']">Borrar todo</a>
     </div>
 
     <ul class="list">
@@ -29,7 +29,7 @@
       </ng-container>
 
       <li *ngIf="!notifications || (notifications.length === 0)">
-        <span class="empty-item">No notifications</span>
+        <span class="empty-item">Sin notificaciones</span>
       </li>
     </ul>
 
@@ -42,7 +42,7 @@
         [block]="true"
         [afterIcon]="'icofont-tasks-alt'"
       >
-        View all notifications
+        Ver todas las notificaciones
       </a>
     </div>
   </tc-dropdown-content>
@@ -51,7 +51,8 @@
 <tc-dropdown class="item" [close]="closeDropdown">
   <tc-dropdown-button>
     <div class="d-flex align-items-center">
-      <tc-avatar [src]="'/assets/content/user-400-1.jpg'" class="me-1"></tc-avatar>
+      <tc-avatar [src]="'/assets/content/anonymous-400.jpg'" class="me-1"></tc-avatar>
+      <span>Diego Barahona</span>
       <i class="icofont-simple-down"></i>
     </div>
   </tc-dropdown-button>
@@ -61,35 +62,35 @@
       <li>
         <a href="#" (click)="goTo($event, 'edit-account')" class="align-items-center">
           <span class="icon icofont-ui-home"></span>
-          Edit account
+          Editar cuenta
         </a>
       </li>
 
       <li>
         <a href="#" (click)="goTo($event, 'user-profile')" class="align-items-center">
           <span class="icon icofont-ui-user"></span>
-          User profile
+          Mi perfil
         </a>
       </li>
 
-      <li>
+      <!-- <li>
         <a href="#" (click)="goTo($event, 'events-calendar')" class="align-items-center">
           <span class="icon icofont-ui-calendar"></span>
           Calendar
         </a>
-      </li>
+      </li> -->
 
       <li>
         <a href="#" (click)="goTo($event, 'settings')" class="align-items-center">
           <span class="icon icofont-ui-settings"></span>
-          Settings
+          Configuración
         </a>
       </li>
 
       <li>
         <a href="#" (click)="goTo($event, 'sign-in', '../public/')" class="align-items-center">
           <span class="icon icofont-logout"></span>
-          Log Out
+          Cerrar sesión
         </a>
       </li>
     </ul>
