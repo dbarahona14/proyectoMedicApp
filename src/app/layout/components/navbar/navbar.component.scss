@@ -1,0 +1,234 @@
+@import '~src/assets/scss/variables';
+
+:host {
+  $_bg: #fff;
+  $_color: $main-color;
+  $_color: var(--main-color);
+
+  background: $_bg;
+  color: $_color;
+  display: block;
+  transition: box-shadow .2s $animation;
+  will-change: box-shadow;
+
+  .navbar-wrap {
+    background: inherit;
+    height: 100%;
+    margin: 0 auto;
+    min-height: inherit;
+    padding: 0 $module-rem;
+    position: relative;
+
+    ::ng-deep {
+      .mCustomScrollBox {
+        background: inherit;
+        height: 100%;
+        min-height: inherit;
+        width: 100%;
+
+        .mCSB_container {
+          align-items: center;
+          background: inherit;
+          display: flex;
+          height: 100%;
+          justify-content: space-between;
+          margin: 0;
+          min-height: inherit;
+
+          > * {
+            margin: 0 $module-rem;
+          }
+        }
+        .mCSB_scrollTools {
+          background: rgba(#fff,.2);
+          width: 2px;
+        }
+      }
+      .navbar-toggle {
+        align-items: center;
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 40px;
+        justify-content: center;
+        margin: 0 $module-rem;
+        width: 35px;
+
+        span {
+          background: main-palette(500);
+          display: block;
+          height: 3px;
+          margin: 4px 0;
+          width: 35px;
+        }
+      }
+      .navbar-close {
+        color: inherit;
+        cursor: pointer;
+        font-size: 30px;
+        margin: 0 $module-rem;
+        position: absolute;
+        right: $module-rem;
+        top: $module-rem * 1.5;
+        width: auto !important;
+        z-index: 1;
+      }
+      .add-patient {
+        flex-grow: 1;
+        height: 100%;
+        margin: 0 $module-rem;
+        padding: ($module-rem * 2) ($module-rem * 4);
+      }
+      .assistant-menu {
+        display: block;
+        margin: 0 $module-rem;
+        padding: 0 ($module-rem * 4) ($module-rem * 2);
+
+        .link {
+          color: inherit;
+          display: block;
+          font-weight: 700;
+          opacity: .3;
+          padding: ($module-rem * 0.5) 0;
+          transition: opacity .2s $animation;
+
+          .tc-icon {
+            margin-right: $module-rem;
+            padding: 0;
+          }
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+  &.boxed {
+    .navbar-wrap {
+      max-width: $boxed-width;
+      max-width: var(--boxed-width);
+    }
+  }
+  &.horizontal-vertical {
+    @include max991 {
+      display: flex;
+      justify-content: flex-end;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      transform: translateX(-$vertical-navbar-width);
+      transition: transform .2s $animation;
+      width: $vertical-navbar-width;
+      will-change: transform, width;
+      z-index: 9997;
+
+      .navbar-wrap {
+        padding: 0;
+        width: $vertical-navbar-width;
+
+        ::ng-deep {
+          .mCustomScrollBox {
+            .mCSB_container {
+              align-items: flex-start;
+              flex-direction: column;
+              justify-content: flex-start;
+              height: auto;
+            }
+          }
+          .logo,
+          .navbar-toggle,
+          .navbar-close,
+          .add-patient,
+          .assistant-menu {
+            margin: 0;
+            width: 100%;
+          }
+        }
+      }
+      &.opened {
+        transform: translateX(0);
+      }
+    }
+  }
+  &.vertical {
+    display: flex;
+    justify-content: flex-end;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: transform .2s $animation;
+    width: $vertical-navbar-width;
+    will-change: transform, width;
+    -webkit-overflow-scrolling: touch;
+    z-index: 9997;
+    @include max991 {
+      transform: translateX(-$vertical-navbar-width);
+    }
+
+    .navbar-wrap {
+      padding: 0;
+      width: $vertical-navbar-width;
+
+      ::ng-deep {
+        .mCustomScrollBox {
+          .mCSB_container {
+            align-items: flex-start;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-height: 100%;
+
+            .app-container.loaded & {
+              height: auto;
+            }
+          }
+        }
+        .logo,
+        .navbar-toggle,
+        .navbar-close,
+        .add-patient,
+        .assistant-menu {
+          margin: 0;
+          width: 100%;
+        }
+      }
+    }
+    &.opened {
+      transform: translateX(0);
+    }
+  }
+  &.horizontal:not(.horizontal-vertical) {
+    ::ng-deep {
+      .mCustomScrollBox {
+        overflow: visible;
+
+        .mCSB_container {
+          overflow: visible;
+        }
+
+        .mCSB_scrollTools {
+          display: none !important;
+        }
+      }
+    }
+  }
+  &.horizontal.horizontal-vertical {
+    ::ng-deep {
+      @include min992 {
+        .mCustomScrollBox {
+          overflow: visible;
+
+          .mCSB_container {
+            overflow: visible;
+          }
+
+          .mCSB_scrollTools {
+            display: none !important;
+          }
+        }
+      }
+    }
+  }
+}

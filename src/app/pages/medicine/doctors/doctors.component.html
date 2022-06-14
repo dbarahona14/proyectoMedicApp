@@ -1,0 +1,139 @@
+<div class="row">
+  <div class="col-12 col-md-4" *ngFor="let doctor of doctors; let i = index; let l = last">
+    <tc-contact
+      [data]="doctor"
+      [ngClass]="{ 'mb-0': l, 'mb-md-0': (i + 2) === doctors.length || (i + 3) === doctors.length }"
+    ></tc-contact>
+  </div>
+</div>
+
+<div class="add-action-box">
+  <button
+    tc-button
+    [afterIcon]="'icofont-contact-add'"
+    [square]="true"
+    [tcShape]="500"
+    (click)="openModal(modalBody, 'Add doctor', modalFooter)"
+  ></button>
+</div>
+
+<!-- Modal window -->
+<ng-container>
+  <ng-template #modalBody>
+    <form [formGroup]="doctorForm" novalidate class="new-doctor-form">
+      <tc-form-group class="avatar-box">
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+        <tc-avatar [src]="currentAvatar"></tc-avatar>
+        <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true" (click)="fileInput.click()">
+          Select image
+        </button>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'First name'" formControlName="name"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Last name'" formControlName="lastName"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-autocomplete [placeholder]="'Speciality'" [data]="specialists" formControlName="role"></tc-autocomplete>
+          </tc-form-group>
+        </div>
+
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-select [placeholder]="'Gender'" formControlName="gender" [options]="gender"></tc-select>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <tc-form-group>
+        <tc-textarea [placeholder]="'Address'" formControlName="address"></tc-textarea>
+      </tc-form-group>
+
+      <tc-form-group *ngIf="doctorForm.get('social')['controls'] && doctorForm.get('social')['controls'].length">
+        <tc-form-label>Social networks</tc-form-label>
+
+        <div formArrayName="social" class="social-list">
+          <div class="social-item">
+            <div class="row" *ngFor="let item of doctorForm.get('social')['controls']; let i = index" [formGroup]="item">
+              <div class="col">
+                <div class="row">
+                  <tc-form-group class="col-12 col-sm-6">
+                    <tc-input
+                      [placeholder]="'Icon class'"
+                      [prefixIcon]="item.value.icon"
+                      [readonly]="true"
+                      formControlName="icon"
+                    ></tc-input>
+                  </tc-form-group>
+
+                  <tc-form-group class="col-12 col-sm-6">
+                    <tc-input [placeholder]="'Link'" formControlName="link"></tc-input>
+                  </tc-form-group>
+                </div>
+              </div>
+
+              <div class="col col-auto">
+                <button
+                  tc-button
+                  [afterIcon]="'icofont-ui-delete'"
+                  [view]="'error'"
+                  [square]="true"
+                  [outline]="true"
+                  [tcShape]="500"
+                  [type]="'button'"
+                  (click)="removeControl(doctorForm.controls['social'], i)"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tc-form-group>
+
+      <tc-form-label>Add social network</tc-form-label>
+
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col-12 col-sm-6 mb-4 mb-md-0">
+              <tc-input [placeholder]="'Icon class'" #icon></tc-input>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <tc-input [placeholder]="'Link'" #link></tc-input>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-auto">
+          <button
+            tc-button
+            [afterIcon]="'icofont-plus'"
+            [type]="'button'"
+            [view]="'accent'"
+            [square]="true"
+            [outline]="true"
+            [tcShape]="500"
+            (click)="addControl(doctorForm.controls['social'], icon, link)"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancel</button>
+      <button tc-button [view]="'info'" [disabled]="doctorForm.invalid" (click)="addDoctor(doctorForm)">
+        Add doctor
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- end Modal window -->

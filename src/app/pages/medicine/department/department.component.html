@@ -1,0 +1,86 @@
+<div class="row">
+  <div class="col col-12 col-md-6 mb-4">
+    <nz-carousel nzAutoPlay>
+      <div nz-carousel-content *ngFor="let slide of slides" class="department-slide">
+        <img [src]="slide.img" alt="" height="410" width="540" class="slide-img">
+        <h3 class="slide-title">{{ slide.title }}</h3>
+      </div>
+    </nz-carousel>
+  </div>
+
+  <div class="col col-12 col-md-6 mb-4">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus eos incidunt iure odit perferendis qui
+      repellendus sunt voluptate, voluptatibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad aperiam consequuntur corporis cumque deserunt
+      dolore dolorum ea eius, est eveniet excepturi id illum incidunt, itaque natus necessitatibus odit possimus quaerat
+      qui quis recusandae rem reprehenderit similique suscipit, vitae voluptatum. Blanditiis ipsum laudantium omnis
+      quasi quis quo saepe similique, veritatis!</p>
+    <h5>Working time</h5>
+    <p><span class="text-muted">Mon. - Fri.</span> 6:00AM - 20:00PM</p>
+    <p><span class="text-muted">Sat. - Sun.</span> 6:00AM - 17:00PM</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis illo maiores nemo omnis repellendus. Amet
+      cupiditate dignissimos dolorum eveniet ipsa nisi obcaecati provident quibusdam quis temporibus! Ab accusamus
+      asperiores autem magnam, optio qui rem repudiandae. Asperiores aut eos illo maxime quasi quidem sed sit tempora
+      voluptatibus. Adipisci aut distinctio quas?</p>
+  </div>
+</div>
+
+<tc-card *ngIf="doctors && doctors.length" [title]="'Doctors'" class="mb-0">
+  <div class="table-wrap">
+    <nz-table #editRowTable nzBordered [nzData]="doctors" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Role</th>
+        <th>Gender</th>
+        <th class="min-w-150px">Address</th>
+        <th [nzAlign]="'right'">Edit</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of editRowTable.data">
+        <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+          <td>
+            <div class="d-flex align-items-center">
+              <tc-avatar [src]="data.img" class="me-2 min-w-40px"></tc-avatar>
+              <strong class="text-nowrap">{{ data.name }}</strong>
+            </div>
+          </td>
+          <td>{{ data.age }}</td>
+          <td>{{ data.role }}</td>
+          <td>{{ data.gender }}</td>
+          <td>{{ data.address }}</td>
+          <td [nzAlign]="'right'">
+            <button tc-button [size]="'sm'" [view]="'accent'" (click)="startEdit(data.id)">Edit</button>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td class="min-w-80px">
+            <tc-input [(ngModel)]="editCache[data.id].data.name"></tc-input>
+          </td>
+          <td class="min-w-80px">
+            <tc-input [(ngModel)]="editCache[data.id].data.age"></tc-input>
+          </td>
+          <td class="min-w-80px">
+            <tc-input [(ngModel)]="editCache[data.id].data.role"></tc-input>
+          </td>
+          <td class="min-w-80px">
+            <tc-select [placeholder]="'Gender'" [(ngModel)]="editCache[data.id].data.gender" [options]="gender"></tc-select>
+          </td>
+          <td class="min-w-150px">
+            <tc-input [(ngModel)]="editCache[data.id].data.address"></tc-input>
+          </td>
+          <td class="min-w-80px">
+            <div class="actions">
+              <button tc-button [size]="'sm'" [view]="'success'" (click)="saveEdit(data.id)">Save</button>
+              <button tc-button [size]="'sm'" [view]="'error'" nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)">Cancel</button>
+            </div>
+          </td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</tc-card>

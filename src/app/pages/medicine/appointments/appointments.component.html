@@ -1,0 +1,141 @@
+<tc-card class="mb-0">
+  <tc-table [rows]="appointments" [hovered]="true" [pagination]="true">
+    <tc-table-col [columnTitle]="'Photo'" [columnName]="'img'">
+      <ng-template #tableTDTemplate let-value>
+        <tc-avatar [src]="value"></tc-avatar>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Name'" [columnName]="'name'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <strong>{{ value }}</strong>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Email'" [columnName]="'email'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
+          <tc-icon [iconClass]="'icofont-ui-email'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon> {{ value }}
+        </span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Date'" [columnName]="'date'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" [tcColor]="'#a5a5a5'">{{ value }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Visit time'" [columnName]="'fromTo'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" [tcColor]="'#a5a5a5'">{{ value }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Number'" [columnName]="'number'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
+          <tc-icon [iconClass]="'icofont-ui-cell-phone'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon>
+          {{ value }}
+        </span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Doctor'" [columnName]="'doctor'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'Injury / Condition'" [columnName]="'injury'" [enableSorting]="true"></tc-table-col>
+    <tc-table-col [columnTitle]="'Actions'" [columnName]="'actions'">
+      <ng-template #tableTDTemplate let-row="row">
+        <div class="actions">
+          <button
+            tc-button
+            [afterIcon]="'icofont-ui-edit'"
+            [view]="'info'"
+            [square]="true"
+            [tcShape]="500"
+            [size]="'sm'"
+            (click)="edit(row)"
+          ></button>
+
+          <button
+            tc-button
+            [afterIcon]="'icofont-ui-delete'"
+            [view]="'error'"
+            [square]="true"
+            [tcShape]="500"
+            [size]="'sm'"
+            (click)="remove(row)"
+          ></button>
+        </div>
+      </ng-template>
+    </tc-table-col>
+  </tc-table>
+</tc-card>
+
+<div class="add-action-box">
+  <button
+    tc-button
+    [afterIcon]="'icofont-stethoscope-alt'"
+    [view]="'accent'"
+    [square]="true"
+    [tcShape]="500"
+    (click)="openModal(modalBody, 'Add appointment', modalFooter)"
+  ></button>
+</div>
+
+<!-- Modal window -->
+<ng-container>
+  <ng-template #modalBody>
+    <form [formGroup]="appointmentForm" novalidate>
+      <tc-form-group class="avatar-box d-flex">
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+        <tc-avatar [src]="appointmentForm.value.img"></tc-avatar>
+        <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true" (click)="fileInput.click()">
+          Select image
+        </button>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Name'" formControlName="name"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-autocomplete [placeholder]="'Doctor'" [data]="doctors" [key]="'name'" formControlName="doctor"></tc-autocomplete>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Email'" formControlName="email"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Date'" formControlName="date"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col col-md-6">
+          <tc-form-group>
+            <tc-input [placeholder]="'Time from'" formControlName="from"></tc-input>
+          </tc-form-group>
+        </div>
+
+        <div class="col col-md-6">
+          <tc-form-group>
+            <tc-input [placeholder]="'Time to'" formControlName="to"></tc-input>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Number'" formControlName="number"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group class="mb-0">
+        <tc-input [placeholder]="'Injury'" formControlName="injury"></tc-input>
+      </tc-form-group>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancel</button>
+      <button tc-button [view]="'info'" [disabled]="appointmentForm.invalid" (click)="addAppointment(appointmentForm)">
+        Add appointment
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- end Modal window -->

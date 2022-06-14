@@ -1,0 +1,146 @@
+<tc-card class="mb-0">
+  <tc-table [rows]="patients" [hovered]="true" [pagination]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
+    <tc-table-col [columnTitle]="'Foto'" [columnName]="'img'">
+      <ng-template #tableTDTemplate let-value>
+        <tc-avatar [src]="value"></tc-avatar>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Nombre'" [columnName]="'name'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <strong>{{ value }}</strong>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'ID'" [columnName]="'id'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <span [tcColor]="'#a5a5a5'" #id>{{ value }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Edad'" [columnName]="'age'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <span [tcColor]="'#a5a5a5'">{{ value }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Dirección'" [columnName]="'address'">
+      <ng-template #tableTDTemplate let-value>
+        <div class="address-col">{{ value }}</div>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Número'" [columnName]="'number'">
+      <ng-template #tableTDTemplate let-value>
+      <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
+        <tc-icon [iconClass]="'icofont-ui-cell-phone'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon>
+        {{ value }}
+      </span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Última visita'" [columnName]="'lastVisit'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" [tcColor]="'#a5a5a5'">{{ value }}</span>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Estado'" [columnName]="'status'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <tc-badge [view]="value === 'Approved' ? 'success' : 'warning'">{{ value }}</tc-badge>
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Acciones'" [columnName]="'actions'">
+      <ng-template #tableTDTemplate let-row="row">
+        <div class="actions">
+          <a
+            href="#"
+            tc-button
+            [routerLink]="['../', 'patient-profile']"
+            [afterIcon]="'icofont-external-link'"
+            [square]="true"
+            [tcShape]="500"
+            [size]="'sm'"
+          ></a>
+
+          <button
+            tc-button
+            [afterIcon]="'icofont-ui-edit'"
+            [view]="'info'"
+            [square]="true"
+            [tcShape]="500"
+            [size]="'sm'"
+            (click)="openModal(modalBody, 'Actualizar información paciente', modalFooter, row)"
+          ></button>
+
+          <button
+            tc-button
+            [afterIcon]="'icofont-ui-delete'"
+            [view]="'error'"
+            [square]="true"
+            [tcShape]="500"
+            [size]="'sm'"
+            (click)="remove(row.id)"
+          ></button>
+        </div>
+      </ng-template>
+    </tc-table-col>
+  </tc-table>
+</tc-card>
+
+
+<!-- edit patient Modal window -->
+<ng-container>
+  <ng-template #modalBody>
+    <form [formGroup]="patientForm" novalidate class="new-patient-form">
+      <tc-form-group class="avatar-box d-flex">
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+        <tc-avatar [src]="currentAvatar"></tc-avatar>
+        <button
+          tc-button
+          [type]="'button'"
+          [afterIcon]="'icofont-ui-user'"
+          [view]="'accent'"
+          [outline]="true"
+          (click)="fileInput.click()"
+        >
+          Selecciona imagen
+        </button>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Nombre'" formControlName="name"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Número contacto'" [type]="'number'" formControlName="number"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="age"></tc-input>
+          </tc-form-group>
+        </div>
+
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-select [placeholder]="'Género'" formControlName="gender" [options]="gender"></tc-select>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <tc-form-group>
+        <tc-select [placeholder]="'Estado'" formControlName="status" [options]="status"></tc-select>
+      </tc-form-group>
+
+      <tc-form-group class="mb-0">
+        <tc-textarea [placeholder]="'Dirección'" formControlName="address"></tc-textarea>
+      </tc-form-group>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+      <button tc-button [view]="'info'" [disabled]="patientForm.invalid" (click)="updatePatient(patientForm)">
+        Actualizar paciente
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- end Modal window -->

@@ -1,0 +1,14 @@
+@import '~src/assets/scss/variables';
+
+$_module-rem: $module-rem;
+
+:host {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  margin: -$_module-rem * 0.5;
+
+  &.tc-radio-horizontal {
+    flex-direction: row;
+  }
+}

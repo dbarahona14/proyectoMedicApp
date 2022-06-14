@@ -1,0 +1,148 @@
+<div class="row">
+  <div class="col col-12 col-md-6 mb-4">
+    <form
+      [formGroup]="doctorForm"
+      novalidate
+      class="new-doctor-form"
+      (ngSubmit)="saveData(doctorForm)"
+      *ngIf="doctorInfo"
+    >
+      <tc-form-group>
+        <tc-form-label>Photo</tc-form-label>
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+        <div class="d-flex align-items-center">
+          <tc-avatar [src]="currentAvatar" [size]="100"></tc-avatar>
+          <button
+            tc-button
+            [type]="'button'"
+            [afterIcon]="'icofont-ui-user'"
+            [view]="'accent'"
+            [outline]="true"
+            (click)="fileInput.click()"
+          >
+            Change photo
+          </button>
+        </div>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>First name</tc-form-label>
+        <tc-input [placeholder]="'First name'" formControlName="name"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Last name</tc-form-label>
+        <tc-input [placeholder]="'Last name'" formControlName="lastName"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-form-label>Speciality</tc-form-label>
+            <tc-autocomplete [placeholder]="'Speciality'" [data]="specialists" formControlName="role"></tc-autocomplete>
+          </tc-form-group>
+        </div>
+
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-form-label>Gender</tc-form-label>
+            <tc-select
+              [placeholder]="'Gender'"
+              formControlName="gender"
+              [options]="gender"
+            ></tc-select>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <tc-form-group>
+        <tc-form-label>Address</tc-form-label>
+        <tc-textarea [placeholder]="'Address'" formControlName="address"></tc-textarea>
+      </tc-form-group>
+
+      <tc-form-group *ngIf="doctorForm.get('social')['controls'] && doctorForm.get('social')['controls'].length">
+        <tc-form-label>Social networks</tc-form-label>
+
+        <div formArrayName="social" class="social-list">
+          <div class="social-item">
+            <div class="row" *ngFor="let item of doctorForm.get('social')['controls']; let i = index" [formGroup]="item">
+              <div class="col">
+                <div class="row">
+                  <tc-form-group class="col-12 col-sm-6">
+                    <tc-input
+                      [placeholder]="'Icon class'"
+                      [prefixIcon]="item.value.icon"
+                      [readonly]="true"
+                      formControlName="icon"
+                    ></tc-input>
+                  </tc-form-group>
+
+                  <tc-form-group class="col-12 col-sm-6">
+                    <tc-input [placeholder]="'Link'" formControlName="link"></tc-input>
+                  </tc-form-group>
+                </div>
+              </div>
+
+              <div class="col col-auto">
+                <button
+                  tc-button
+                  [afterIcon]="'icofont-ui-delete'"
+                  [view]="'error'"
+                  [square]="true"
+                  [outline]="true"
+                  [tcShape]="500"
+                  [type]="'button'"
+                  (click)="removeControl(doctorForm.controls['social'], i)"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Add social network</tc-form-label>
+
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col-12 col-sm-6 mb-4 mb-md-0">
+                <tc-input [placeholder]="'Icon class'" #icon></tc-input>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <tc-input [placeholder]="'Link'" #link></tc-input>
+              </div>
+            </div>
+          </div>
+
+          <div class="col col-auto">
+            <button
+              tc-button
+              [afterIcon]="'icofont-plus'"
+              [type]="'button'"
+              [view]="'accent'"
+              [square]="true"
+              [outline]="true"
+              [tcShape]="500"
+              (click)="addControl(doctorForm.controls['social'], icon, link)"
+            ></button>
+          </div>
+        </div>
+      </tc-form-group>
+
+      <button tc-button [view]="'success'" [block]="true" [disabled]="!changes || doctorForm.invalid">
+        Save changes
+      </button>
+    </form>
+  </div>
+
+  <div class="col col-12 col-md-6 mb-4">
+    <tc-v-timeline [data]="doctorTimeline" [showLabels]="true" [align]="'right'"></tc-v-timeline>
+  </div>
+</div>
+
+<tc-card [title]="'Patients 2018'" class="mb-0 mt-4">
+  <div echarts [options]="patientsOptions" class="chat-container container-h-400"></div>
+</tc-card>

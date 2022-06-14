@@ -1,0 +1,15 @@
+@import '~src/assets/scss/variables';
+
+:host {
+	height: 100%;
+	display: flex;
+	flex: 1;
+	overflow: auto;
+	min-height: $module-rem * 30;
+
+	google-map {
+		display: block;
+		min-height: 100%;
+		width: 100%;
+	}
+}

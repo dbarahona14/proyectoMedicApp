@@ -1,0 +1,40 @@
+@use 'sass:math';
+@import '~src/assets/scss/variables';
+
+:host {
+  ::ng-deep {
+    .slick-slider {
+      height: 410px !important;
+    }
+  }
+  .department-slide {
+    height: 410px !important;
+    max-height: 410px;
+
+    .slide-img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+    .slide-title {
+      background: rgba(main-palette(500), .4);
+      bottom: 0;
+      color: #fff;
+      font-size: 18px;
+      left: 0;
+      margin: 0;
+      padding: 20px 20px 35px;
+      position: absolute;
+      right: 0;
+      text-align: center;
+    }
+  }
+  .actions {
+    display: flex;
+    margin: math.div(-$module-rem, 4);
+
+    .tc-btn {
+      margin: math.div($module-rem, 4);
+    }
+  }
+}

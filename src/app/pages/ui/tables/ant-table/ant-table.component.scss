@@ -1,0 +1,16 @@
+:host {
+  ::ng-deep {
+    .ant-select-arrow {
+      right: 8px !important;
+    }
+    .ant-table-pagination.ant-pagination {
+      margin-bottom: 0;
+    }
+    .cdk-drag-preview {
+      display: table;
+    }
+    .cdk-drag-placeholder {
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<form [formGroup]="loginForm" novalidate>
+  <tc-form-group>
+    <tc-input [placeholder]="'Correo'" formControlName="login"></tc-input>
+  </tc-form-group>
+
+  <tc-form-group>
+    <tc-input [placeholder]="'Contraseña'" [type]="'password'" formControlName="pass"></tc-input>
+  </tc-form-group>
+
+  <tc-form-group>
+    <tc-switcher [value]="true">Recuérdame</tc-switcher>
+  </tc-form-group>
+
+  <div class="actions justify-content-between">
+    <button tc-button [view]="'accent'" [beforeIcon]="'icofont-login'" (click)="logIn()">
+      Iniciar sesión
+    </button>
+  </div>
+</form>

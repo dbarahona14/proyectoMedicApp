@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-12 col-md-4" *ngFor="let dep of departments; let l = last; let i = index">
+    <tc-card
+      class="department"
+      [img]="dep.img"
+      [tcGradient]="['#fff', '#ebebeb']"
+      [ngClass]="{ 'mb-0': l, 'mb-md-0': (i === (departments.length - 2)) || (i === (departments.length - 3)) }"
+    >
+      <h3 class="h4 mt-0">{{ dep.title }}</h3>
+
+      <div class="team d-flex align-items-center mb-4">
+        <strong class="me-3">Team:</strong>
+        <tc-avatar [src]="doc" [size]="40" *ngFor="let doc of dep.team"></tc-avatar>
+        <button
+          tc-button
+          [afterIcon]="'icofont-plus'"
+          [view]="'accent'"
+          [square]="true"
+          [tcShape]="500"
+        ></button>
+      </div>
+
+      <p>{{ dep.desc }}</p>
+
+      <div class="button-box pb-2">
+        <a [routerLink]="['../', 'department']" tc-button [view]="'accent'" [outline]="true" [afterIcon]="'icofont-prescription'">More</a>
+      </div>
+    </tc-card>
+  </div>
+</div>

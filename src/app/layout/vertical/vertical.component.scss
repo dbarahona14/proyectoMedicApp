@@ -1,0 +1,35 @@
+@import '~src/assets/scss/variables';
+
+:host {
+  .app-container {
+    padding-left: $vertical-navbar-width;
+    @include max991 {
+      padding-left: 0;
+    }
+
+    ::ng-deep {
+      .navbar.horizontal {
+        z-index: 9997;
+
+        navbar-skeleton {
+          .sk-logo {
+            display: none !important;
+          }
+        }
+      }
+    }
+    .footer {
+      left: $vertical-navbar-width;
+      @include max991 {
+        left: 0;
+      }
+    }
+    &.scrolled {
+      ::ng-deep {
+        .navbar.horizontal {
+          box-shadow: 0 2px 5px rgba(#000,.05);
+        }
+      }
+    }
+  }
+}

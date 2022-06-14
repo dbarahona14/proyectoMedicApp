@@ -1,0 +1,76 @@
+.ant-input,
+.ant-picker {
+  &:not(.ant-picker-inline) {
+    background: #ebebeb;
+    border-radius: 20px;
+    width: 100%;
+  }
+
+  &:not(.ant-input-disabled):not(.ant-picker-disabled):hover {
+    box-shadow: $shadow-hover;
+  }
+  &-lg {
+    border-radius: 25px;
+  }
+  &-disabled {
+    background: rgba(#ccc,.1);
+    border-color: rgba(#ccc,.5);
+    color: #bdbdbd;
+  }
+}
+.ant-calendar-picker {
+  width: 100%;
+
+  .ant-calendar-picker-clear {
+    background-color: #ebebeb;
+  }
+  .ant-calendar-range-picker-separator {
+    vertical-align: middle;
+  }
+}
+.ant-calendar-input-wrap {
+  height: 40px;
+}
+
+.ant-table {
+  background: transparent;
+
+  table {
+    background: rgba(#ebebeb,.3);
+  }
+}
+.ant-table-thead {
+  > tr {
+    > th {
+      font-weight: bold;
+    }
+  }
+}
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td,
+.ant-table tfoot > tr > th,
+.ant-table tfoot > tr > td {
+  &:first-child {
+    padding-left: 20px;
+  }
+  &:last-child {
+    padding-right: 20px;
+  }
+}
+.ant-pagination-prev,
+.ant-pagination-next {
+  .ant-pagination-item-link {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
+.ant-pagination-options {
+  .ant-select-selector {
+    height: 32px !important;
+
+    .ant-select-selection-item {
+      line-height: 30px !important;
+    }
+  }
+}

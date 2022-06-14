@@ -1,0 +1,73 @@
+<div class="row">
+	<div class="col-12 col-md-6">
+		<tc-card [title]="'Linear'">
+			<canvas
+				baseChart
+				[datasets]="lineChartData"
+				[labels]="lineChartLabels"
+				[options]="lineChartOptions"
+				[legend]="lineChartLegend"
+				[type]="lineChartType"
+      ></canvas>
+		</tc-card>
+	</div>
+
+	<div class="col-12 col-md-6">
+		<tc-card [title]="'Bar'">
+			<canvas
+        baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [type]="barChartType"
+      ></canvas>
+		</tc-card>
+	</div>
+
+	<div class="col-12 col-md-6">
+		<tc-card [title]="'Doughnut'">
+			<canvas
+        baseChart
+        [data]="doughnutChartData"
+        [type]="doughnutChartType"
+      ></canvas>
+		</tc-card>
+	</div>
+
+	<div class="col-12 col-md-6">
+		<tc-card [title]="'Radar'">
+			<canvas
+        baseChart
+        [datasets]="radarChartData"
+        [labels]="radarChartLabels"
+        [type]="radarChartType"
+      ></canvas>
+		</tc-card>
+	</div>
+
+	<div class="col-12 col-md-6">
+		<tc-card [title]="'Pie'">
+			<canvas
+        baseChart
+				[data]="pieChartData"
+				[type]="pieChartType"
+			></canvas>
+		</tc-card>
+	</div>
+
+	<div class="col-12 col-md-6">
+		<tc-card [title]="'Polar area'">
+			<canvas
+        baseChart
+        [data]="polarAreaChartData"
+        [legend]="polarAreaChartLegend"
+        [type]="polarAreaChartType"
+      ></canvas>
+		</tc-card>
+	</div>
+</div>
+
+<tc-alert [beforeIcon]="'icofont-chart-pie'" [view]="'default'">
+  More information can be found in <a href="https://github.com/valor-software/ng2-charts" target="_blank">official page</a>.
+</tc-alert>

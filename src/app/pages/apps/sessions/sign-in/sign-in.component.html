@@ -1,0 +1,7 @@
+<h2 class="h4 mt-0 mb-1">Iniciar sesión</h2>
+<p [tcColor]="'#8f8f90'">Inicia sesión con tú cuenta</p>
+
+<login-form></login-form>
+
+<p class="mt-5 mb-1"><a (click)="$event.preventDefault()" href="#">¿Olvidaste tú contraseña?</a></p>
+<p>¿No tienes una cuenta? <a [routerLink]="['../', 'sign-up']">Regístrate</a></p>

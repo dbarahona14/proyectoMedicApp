@@ -1,0 +1,289 @@
+<tc-card [title]="'Basic'">
+  <nz-table #basicTable [nzData]="simpleTable" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+      <td>
+        <a>Action 一 {{ data.name }}</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a>Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Selection and operation'">
+  <div class="operate mb-2">
+    <button
+      tc-button
+      [disabled]="numberOfChecked === 0"
+      [load]="isOperating"
+      [view]="'accent'"
+      (click)="operateData()"
+    >
+      Reload
+    </button>
+    <span *ngIf="numberOfChecked" class="ms-2">Selected {{ numberOfChecked }} items</span>
+  </div>
+
+  <nz-table
+    #rowSelectionTable
+    nzShowPagination
+    nzShowSizeChanger
+    [nzData]="listOfAllData"
+    (nzCurrentPageDataChange)="currentPageDataChange($event)"
+  >
+    <thead>
+    <tr>
+      <th
+        nzShowCheckbox
+        [(nzChecked)]="isAllDisplayDataChecked"
+        [nzIndeterminate]="isIndeterminate"
+        (nzCheckedChange)="checkAll($event)"
+      ></th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of rowSelectionTable.data">
+      <td
+        nzShowCheckbox
+        [(nzChecked)]="mapOfCheckedId[data.id]"
+        [nzDisabled]="data.disabled"
+        (nzCheckedChange)="refreshStatus()"
+      ></td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Filter and sorter'">
+  <nz-table #filterTable [nzData]="listOfDisplayData2" [nzShowPagination]="false">
+    <thead (nzSortChange)="sort($event)" nzSingleSort>
+    <tr>
+      <th
+        nzShowSort
+        nzSortKey="name"
+        nzShowFilter
+        [nzFilters]="listOfName"
+        (nzFilterChange)="filter($event, searchAddress)"
+      >
+        Name
+      </th>
+      <th nzShowSort nzSortKey="age">Age</th>
+      <th
+        nzShowSort
+        nzSortKey="address"
+        nzShowFilter
+        [nzFilterMultiple]="false"
+        [nzFilters]="listOfAddress"
+        (nzFilterChange)="filter(listOfSearchName, $event)"
+      >
+        Address
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of filterTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Size'">
+  <h6 class="mt-0">Middle size table</h6>
+  <nz-table #middleTable nzSize="middle" [nzData]="simpleTable" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of middleTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <h6>Small size table</h6>
+  <nz-table #smallTable nzSize="small" [nzData]="simpleTable" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of smallTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Border, title and footer'">
+  <nz-table #borderedTable nzBordered nzFooter="Footer" nzTitle="Header" [nzData]="simpleTable" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of borderedTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Expandable row'">
+  <nz-table #nzTable [nzData]="expandableTable" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th nzShowExpand></th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-template ngFor let-data [ngForOf]="nzTable.data">
+      <tr>
+        <td nzShowExpand [(nzExpand)]="mapOfExpandData[data.id]"></td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.age }}</td>
+        <td>{{ data.address }}</td>
+      </tr>
+      <tr [nzExpand]="mapOfExpandData[data.id]">
+        <td></td>
+        <td colspan="3">{{ data.description }}</td>
+      </tr>
+    </ng-template>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Tree data'">
+  <nz-table #expandTable [nzData]="listOfMapData" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th nzWidth="40%">Name</th>
+      <th nzWidth="30%">Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let data of expandTable.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+          <td
+            [nzIndentSize]="item.level * 20"
+            [nzShowExpand]="!!item.children"
+            [(nzExpand)]="item.expand"
+            (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
+          >
+            {{ item.name }}
+          </td>
+          <td>{{ item.age }}</td>
+          <td>{{ item.address }}</td>
+        </tr>
+      </ng-container>
+    </ng-container>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Fixed header'">
+  <nz-table #headerTable [nzData]="listOfData" [nzPageSize]="50" [nzScroll]="{ y: '240px' }" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th nzWidth="150px">Name</th>
+      <th nzWidth="150px">Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of headerTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Editable cells'">
+  <nz-table #editRowTable nzBordered [nzData]="simpleTable" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th nzWidth="30%">Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of editRowTable.data" class="editable-row">
+      <td>
+        <div class="editable-cell" *ngIf="editKey !== data.key; else editTpl">
+          <div class="editable-cell-value-wrap" (click)="startEdit(data.key, $event)">
+            {{ data.name }}
+          </div>
+        </div>
+        <ng-template #editTpl>
+          <tc-input [(ngModel)]="data.name" [size]="'sm'"></tc-input>
+        </ng-template>
+      </td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>
+
+<tc-card [title]="'Drag sorting'" class="mb-0">
+  <nz-table [nzData]="simpleTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+    <tr *ngFor="let data of simpleTable" cdkDrag>
+      <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.address }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</tc-card>

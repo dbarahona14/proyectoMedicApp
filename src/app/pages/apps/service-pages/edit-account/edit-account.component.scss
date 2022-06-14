@@ -1,0 +1,13 @@
+@import '~src/assets/scss/variables';
+
+:host {
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -($module-rem * 0.5);
+
+    .tc-badge {
+      margin: $module-rem * 0.5;
+    }
+  }
+}

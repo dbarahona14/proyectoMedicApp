@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Menú",
+    "groupTitle": true
+  },
+  {
+    "title": "Inicio",
+    "icon": {
+      "class": "icofont-thermometer-alt"
+    },
+    "routing": "default-dashboard"
+  },
+  {
+    "title": "Doctores",
+    "icon": {
+      "class": "icofont-doctor"
+    },
+    "routing": "doctors"
+  },
+  {
+    "title": "Especialidades",
+    "icon": {
+      "class": "icofont-nurse"
+    },
+    "routing": "departments"
+  },
+  {
+    "title": "Pacientes",
+    "icon": {
+      "class": "icofont-paralysis-disability"
+    },
+    "routing": "patients"
+  }
+]
