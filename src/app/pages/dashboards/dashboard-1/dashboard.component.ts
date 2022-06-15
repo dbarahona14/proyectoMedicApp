@@ -87,7 +87,7 @@ export class PageDashboardComponent extends BasePageComponent implements OnInit,
         }
       },
       legend: {
-        data: ['Patients 2018', 'Patients 2019']
+        data: ['Pacientes 2020', 'Pacientes 2021']
       },
       grid: {
         left: 30,
@@ -110,12 +110,12 @@ export class PageDashboardComponent extends BasePageComponent implements OnInit,
           axisPointer: {
             label: {
               formatter: function (params) {
-                return 'Patients ' + params.value
+                return 'Pacientes ' + params.value
                   + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
               }
             }
           },
-          data: ['2019-1', '2019-2', '2019-3', '2019-4', '2019-5', '2019-6', '2019-7', '2019-8', '2019-9', '2019-10', '2019-11', '2019-12']
+          data: ['2021-1', '2021-2', '2021-3', '2021-4', '2021-5', '2021-6', '2021-7', '2021-8', '2021-9', '2021-10', '2021-11', '2021-12']
         },
         {
           type: 'category',
@@ -131,12 +131,12 @@ export class PageDashboardComponent extends BasePageComponent implements OnInit,
           axisPointer: {
             label: {
               formatter: function (params) {
-                return 'Patients ' + params.value
+                return 'Pacientes ' + params.value
                   + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
               }
             }
           },
-          data: ['2018-1', '2018-2', '2018-3', '2018-4', '2018-5', '2018-6', '2018-7', '2018-8', '2018-9', '2018-10', '2018-11', '2018-12']
+          data: ['2020-1', '2020-2', '2020-3', '2020-4', '2020-5', '2020-6', '2020-7', '2020-8', '2020-9', '2020-10', '2020-11', '2020-12']
         }
       ],
       yAxis: [
@@ -146,14 +146,14 @@ export class PageDashboardComponent extends BasePageComponent implements OnInit,
       ],
       series: [
         {
-          name: 'Patients 2018',
+          name: 'Pacientes 2020',
           type: 'line',
           xAxisIndex: 1,
           smooth: true,
           data: [159, 149, 174, 182, 219, 201, 175, 182, 119, 118, 112, 96]
         },
         {
-          name: 'Patients 2019',
+          name: 'Pacientes 2021',
           type: 'line',
           smooth: true,
           data: [95, 124, 132, 143, 138, 178, 194, 211, 234, 257, 241, 226]
