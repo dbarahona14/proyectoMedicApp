@@ -18,4 +18,17 @@ export class AuthService {
         return null;
     }
   }
+
+  async registro(email: string, password: string){
+    try {
+      return await this._auth.createUserWithEmailAndPassword(email, password);
+    } catch (error) {
+      alert("No se ha podido hacer el registro correctamente!!. Error: "+ error);
+      return null;
+    }
+  }
+
+  async logout(){
+    this._auth.signOut();
+  }
 }
