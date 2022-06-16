@@ -21,15 +21,22 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  logIn(){
+  logIn() {
     var email = this.loginForm.get('login').value;
     var pass = this.loginForm.get('pass').value;
-    this._auth.login(email, pass).then (res=> {
-      console.log(res);
-      console.log('Usuario logeado!');
-      //Aquí redireccionar a página inicial
-      this._router.navigate(['/vertical/default-dashboard']);
-    });
+
+    if (email && pass != null) {
+      this._auth.login(email, pass).then(res => {
+        console.log(res);
+        console.log('Usuario logeado!');
+        //Aquí redireccionar a página inicial
+        this._router.navigate(['/vertical/default-dashboard']);
+      });
+    }
+    else {
+      console.log('Favor, rellenar campos requeridos para iniciar sesión.');
+      alert('Ingrese con correo y contraseña.');
+    }
   }
 
 }

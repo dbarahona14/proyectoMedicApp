@@ -48,7 +48,8 @@ export class RegisterFormComponent implements OnInit {
       console.log("El uid es: " + res.user.uid);
       this.usuario.uid = res.user.uid;
       this.db.create(this.usuario).then(() => {
-        console.log('Created new item successfully!');
+        console.log('Created new user successfully!');
+        alert('Se creó el usuario correctamente! :)');
       });
     });
   }
