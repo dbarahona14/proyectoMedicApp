@@ -6,6 +6,7 @@ export interface Paciente {
     fNac: Date;
     id: string;
     nombre: string;
+    nombreRut: string;
     rut: string;
     telefono: string;
 }

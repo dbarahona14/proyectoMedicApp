@@ -10,12 +10,11 @@ import { HttpService } from '../../services/http/http.service';
 import { IOption } from '../../ui/interfaces/option';
 import { Content } from '../../ui/interfaces/modal';
 import { TCModalService } from '../../ui/services/modal/modal.service';
-import { IPatient } from '../../interfaces/patient';
 import * as PatientsActions from '../../store/actions/patients.actions';
 import * as SettingsActions from '../../store/actions/app-settings.actions';
-import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'vertical-layout',
@@ -27,12 +26,13 @@ import { PacienteService } from 'src/app/services/paciente/paciente.service';
 })
 export class VerticalLayoutComponent extends BaseLayoutComponent implements OnInit {
   patientForm: FormGroup;
+  searchForm: FormGroup;
   gender: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
 
 
-  data: IPatient[] = [];
+  data: Paciente[] = [];
   @Input() layout: string;
 
   constructor(
@@ -64,11 +64,14 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     super.ngOnInit();
 
     this.store.dispatch(new SettingsActions.Update({ layout: 'vertical' }));
+
+    this.llenarData();
   }
 
   // open modal window
   openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null) {
     this.initPatientForm();
+    this.initSearchForm();
 
     this.modal.open({
       body: body,
@@ -82,6 +85,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   closeModal() {
     this.modal.close();
     this.patientForm.reset();
+    this.searchForm.reset();
     this.currentAvatar = this.defaultAvatar;
   }
 
@@ -113,10 +117,14 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   addPatient(form: FormGroup) {
     if (form.valid) {
       let newPatient: Paciente = form.value;
+      let nomRut: string;
 
       newPatient.correo = 'diegob95@outlook.com';
       newPatient.fNac = new Date(1995,2,20);
       newPatient.rut = '18.988.397-8';
+
+      nomRut = form.get('nombre').value + newPatient.rut;
+      newPatient.nombreRut = nomRut;
       // newPatient.apellido = form.get('name').value;
       // newPatient.correo = form.get('email').value;
       // newPatient.status = 'Pending';
@@ -147,5 +155,18 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     this.pacienteService.create(paciente).then (res =>{
       console.log('Paciente agregado correctamente!!!');
     });
+  }
+
+  llenarData(): void {
+    this.pacienteService.getAll().snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c =>
+          ({ id: c.payload.doc.id, ...c.payload.doc.data() })
+        )
+      )
+    ).subscribe(data => {
+      this.data = data;
+    });
+    console.log(this.data);
   }
 }

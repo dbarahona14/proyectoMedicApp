@@ -125,10 +125,10 @@
           formControlName="search"
           [suffixIcon]="'icofont icofont-search'"
           [data]="data"
-          [key]="'title'"
+          [key]= "'nombreRut'"
           [placeholder]="'Ingrese nombre o RUT del paciente...'"
           (keydown.enter)="goTo($event, searchForm.value.search)"
-          (click)="goTo($event, searchForm.value.search)"
+          (click)="goTo($event, 'patients')"
         ></tc-autocomplete>
       </form>
     </div>
