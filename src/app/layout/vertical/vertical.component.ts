@@ -167,6 +167,5 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     ).subscribe(data => {
       this.data = data;
     });
-    console.log(this.data);
   }
 }
