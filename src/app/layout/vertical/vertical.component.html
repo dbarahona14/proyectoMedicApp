@@ -79,29 +79,29 @@
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'Nombre'" formControlName="name"></tc-input>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="number"></tc-input>
+        <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="age"></tc-input>
+            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-select [placeholder]="'Género'" formControlName="gender" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
       <tc-form-group class="mb-0">
-        <tc-textarea [placeholder]="'Dirección'" formControlName="address"></tc-textarea>
+        <tc-textarea [placeholder]="'Dirección'" formControlName="direccion"></tc-textarea>
       </tc-form-group>
     </form>
   </ng-template>

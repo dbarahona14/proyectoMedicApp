@@ -1,7 +1,7 @@
 export interface Paciente {
-    apellido: string;
     correo: string;
     domicilio: string;
+    genero: string;
     edad: number;
     fNac: Date;
     id: string;

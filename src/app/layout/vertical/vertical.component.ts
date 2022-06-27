@@ -14,6 +14,8 @@ import { IPatient } from '../../interfaces/patient';
 import * as PatientsActions from '../../store/actions/patients.actions';
 import * as SettingsActions from '../../store/actions/app-settings.actions';
 import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
+import { Paciente } from 'src/app/interfaces/paciente';
+import { PacienteService } from 'src/app/services/paciente/paciente.service';
 
 @Component({
   selector: 'vertical-layout',
@@ -29,6 +31,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
 
+
   data: IPatient[] = [];
   @Input() layout: string;
 
@@ -38,7 +41,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     httpSv: HttpService,
     router: Router,
     elRef: ElementRef,
-    private modal: TCModalService
+    private modal: TCModalService,
+    private pacienteService: PacienteService
   ) {
     super(store, fb, httpSv, router, elRef);
 
@@ -97,25 +101,29 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   initPatientForm() {
     this.patientForm = this.fb.group({
       img: [],
-      name: ['', Validators.required],
-      number: ['', Validators.required],
-      age: ['', Validators.required],
-      gender: ['', Validators.required],
-      address: ['', Validators.required]
+      nombre: ['', Validators.required],
+      telefono: ['', Validators.required],
+      edad: ['', Validators.required],
+      genero: ['', Validators.required],
+      direccion: ['', Validators.required],
     });
   }
 
   // add new patient
   addPatient(form: FormGroup) {
     if (form.valid) {
-      let newPatient: IPatient = form.value;
+      let newPatient: Paciente = form.value;
 
-      newPatient.img = this.currentAvatar;
-      newPatient.id = '23';
-      newPatient.status = 'Pending';
-      newPatient.lastVisit = '';
+      newPatient.correo = 'diegob95@outlook.com';
+      newPatient.fNac = new Date(1995,2,20);
+      newPatient.rut = '18.988.397-8';
+      // newPatient.apellido = form.get('name').value;
+      // newPatient.correo = form.get('email').value;
+      // newPatient.status = 'Pending';
+      // newPatient.lastVisit = '';
 
-      this.store.dispatch(new PatientsActions.Add(newPatient));
+      // this.store.dispatch(new PatientsActions.Add(newPatient));
+      this.agregarPaciente(newPatient);
       this.closeModal();
       this.patientForm.reset();
     }
@@ -133,5 +141,11 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
         this.router.navigate([currentPage.layout ? currentPage.layout : this.layout, 'patients']);
       }
     }
+  }
+
+  agregarPaciente(paciente : Paciente){
+    this.pacienteService.create(paciente).then (res =>{
+      console.log('Paciente agregado correctamente!!!');
+    });
   }
 }
