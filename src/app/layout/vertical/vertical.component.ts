@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { TCModalService } from '../../ui/services/modal/modal.service';
 import { IPatient } from '../../interfaces/patient';
 import * as PatientsActions from '../../store/actions/patients.actions';
 import * as SettingsActions from '../../store/actions/app-settings.actions';
+import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
 
 @Component({
   selector: 'vertical-layout',
@@ -27,6 +28,9 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   gender: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
+
+  data: IPatient[] = [];
+  @Input() layout: string;
 
   constructor(
     store: Store<IAppState>,
@@ -114,6 +118,20 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       this.store.dispatch(new PatientsActions.Add(newPatient));
       this.closeModal();
       this.patientForm.reset();
+    }
+  }
+
+  goTo(event: Event, value: string) {
+    if (value) {
+      let currentPage;
+
+      currentPage = this.data.find(item => {
+        return item.id === value;
+      });
+
+      if (currentPage && currentPage.routing) {
+        this.router.navigate([currentPage.layout ? currentPage.layout : this.layout, 'patients']);
+      }
     }
   }
 }
