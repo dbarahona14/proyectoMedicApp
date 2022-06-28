@@ -26,6 +26,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   changes: boolean;
   billings: any[];
 
+  patientName: string;
+
   idPaciente: string;
 
   constructor(
@@ -38,18 +40,18 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     super(store, httpSv);
 
     this.pageData = {
-      title: 'Patient profile page',
+      title: 'Perfil del paciente',
       breadcrumbs: [
         {
-          title: 'Medicine',
+          title: 'Inicio',
           route: 'default-dashboard'
         },
         {
-          title: 'Patients',
+          title: 'Lista de pacientes',
           route: 'patients'
         },
         {
-          title: 'Dr. Sophie'
+          title: 'Perfil del paciente'
         }
       ]
     };
@@ -101,6 +103,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   // init form
   initPatientForm(data: Paciente) {
+    this.patientName = data.nombre;
     this.patientForm = this.formBuilder.group({
       img: [],
       nombre: [data.nombre, Validators.required],
@@ -151,6 +154,16 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   obtenerId(): string{
     return this.idService.devuelveDatos();
+  }
+
+  updatePatient(form: FormGroup) {
+    if (form.valid) {
+      let newPatient: Paciente = form.value;
+
+      this.pacienteService.update(newPatient.id, newPatient).then( () =>{
+        console.log('Paciente actualizado con éxito!!!')
+      });
+    }
   }
 
 }

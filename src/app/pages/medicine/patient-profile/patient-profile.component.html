@@ -72,7 +72,7 @@
         <tc-select [placeholder]="'Estado'" formControlName="status" [options]="status"></tc-select>
       </tc-form-group> -->
 
-      <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid">
+      <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid" (click)="updatePatient(patientForm)">
         Guardar cambios
       </button>
     </form>
