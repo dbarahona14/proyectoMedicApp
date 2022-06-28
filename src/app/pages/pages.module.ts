@@ -23,6 +23,9 @@ import { LayoutModule } from '../layout/layout.module';
 import { BasePageComponent } from './base-page';
 
 import { pages } from '../helpers/constants/pages';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   imports: [
@@ -40,6 +43,9 @@ import { pages } from '../helpers/constants/pages';
     LeafletModule,
     GoogleMapsModule,
     FullCalendarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
     NzDatePickerModule,
     NzDividerModule,
     NzTableModule,

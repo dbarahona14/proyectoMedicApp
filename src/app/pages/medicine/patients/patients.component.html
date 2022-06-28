@@ -120,6 +120,20 @@
       </tc-form-group>
 
       <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac" >
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Correo'" type="email" formControlName="email"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
         <tc-input [placeholder]="'Número contacto'" [type]="'number'" formControlName="telefono"></tc-input>
       </tc-form-group>
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ModuleWithComponentFactories, OnDestroy, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -149,6 +149,8 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       img: [this.currentAvatar],
       nombre: [data.nombre ? data.nombre : '', Validators.required],
       rut: [data.rut? data.rut : '', Validators.required],
+      fNac: [data.fNac? data.fNac.toDate(): '', Validators.required],
+      email: [data.correo? data.correo : '', Validators.required],
       telefono: [data.telefono ? data.telefono : '', Validators.required],
       edad: [data.edad ? data.edad : '', Validators.required],
       // lastVisit: [data.lastVisit ? data.lastVisit : '', Validators.required],

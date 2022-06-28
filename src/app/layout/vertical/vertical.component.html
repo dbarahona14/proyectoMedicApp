@@ -83,6 +83,23 @@
       </tc-form-group>
 
       <tc-form-group>
+        <tc-input [placeholder]="'RUT con puntos y guión'" formControlName="rut"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker ></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+      <tc-form-group>
+        <tc-input [placeholder]="'Correo'" type="email" formControlName="correo"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
         <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
@@ -101,7 +118,7 @@
       </div>
 
       <tc-form-group class="mb-0">
-        <tc-textarea [placeholder]="'Dirección'" formControlName="direccion"></tc-textarea>
+        <tc-textarea [placeholder]="'Domicilio'" formControlName="domicilio"></tc-textarea>
       </tc-form-group>
     </form>
   </ng-template>
@@ -121,15 +138,9 @@
   <ng-template #modalBodyTwo>
     <div class="inputSearch">
       <form class="search-wrap" [formGroup]="searchForm">
-        <tc-autocomplete
-          formControlName="search"
-          [suffixIcon]="'icofont icofont-search'"
-          [data]="data"
-          [key]= "'nombreRut'"
-          [placeholder]="'Ingrese nombre o RUT del paciente...'"
-          (keydown.enter)="goTo($event, searchForm.value.search)"
-          (click)="goTo($event, 'patients')"
-        ></tc-autocomplete>
+        <tc-autocomplete formControlName="search" [suffixIcon]="'icofont icofont-search'" [data]="data"
+          [key]="'nombreRut'" [placeholder]="'Ingrese nombre o RUT del paciente...'"
+          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, 'patients')"></tc-autocomplete>
       </form>
     </div>
   </ng-template>

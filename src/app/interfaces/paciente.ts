@@ -3,7 +3,7 @@ export interface Paciente {
     domicilio: string;
     genero: string;
     edad: number;
-    fNac: Date;
+    fNac: any;
     id: string;
     nombre: string;
     nombreRut: string;

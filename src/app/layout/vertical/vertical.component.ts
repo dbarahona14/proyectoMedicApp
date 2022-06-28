@@ -58,6 +58,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
+
   }
 
   ngOnInit() {
@@ -74,10 +75,10 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     this.initSearchForm();
 
     this.modal.open({
-      body: body,
       header: header,
       footer: footer,
-      options: options
+      options: options,
+      body: body,
     });
   }
 
@@ -106,10 +107,13 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     this.patientForm = this.fb.group({
       img: [],
       nombre: ['', Validators.required],
+      correo: ['', Validators.required],
+      fNac: [],
+      rut: ['', Validators.required],
       telefono: ['', Validators.required],
       edad: ['', Validators.required],
       genero: ['', Validators.required],
-      direccion: ['', Validators.required],
+      domicilio: ['', Validators.required],
     });
   }
 
@@ -119,11 +123,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       let newPatient: Paciente = form.value;
       let nomRut: string;
 
-      newPatient.correo = 'diegob95@outlook.com';
-      newPatient.fNac = new Date(1995,2,20);
-      newPatient.rut = '18.988.397-8';
-
-      nomRut = form.get('nombre').value + newPatient.rut;
+      nomRut = newPatient.rut  + (' ') + form.get('nombre').value;
       newPatient.nombreRut = nomRut;
       // newPatient.apellido = form.get('name').value;
       // newPatient.correo = form.get('email').value;
@@ -168,4 +168,12 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       this.data = data;
     });
   }
+
+  // handleDateOpenChange(open: boolean): void {
+  //   if (open) {
+  //     this.dateMode = 'time';
+  //   }
+  // }
+
+  // handleDatePanelChange(mode: string): void { }
 }
