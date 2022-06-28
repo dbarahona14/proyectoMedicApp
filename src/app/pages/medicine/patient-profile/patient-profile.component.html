@@ -28,7 +28,7 @@
 
       <tc-form-group>
         <tc-form-label>Nombre completo</tc-form-label>
-        <tc-input [placeholder]="'Name'" formControlName="name"></tc-input>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
@@ -40,29 +40,29 @@
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Edad</tc-form-label>
-            <tc-input [placeholder]="'Edad'" formControlName="age" [type]="'number'"></tc-input>
+            <tc-input [placeholder]="'Edad'" formControlName="edad" [type]="'number'"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Género</tc-form-label>
-            <tc-select [placeholder]="'Género'" formControlName="gender" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" [formControl]="patientForm.controls['genero']" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
       <tc-form-group>
         <tc-form-label>Número de teléfono</tc-form-label>
-        <tc-input [placeholder]="'Número de teléfono'" formControlName="number"></tc-input>
+        <tc-input [placeholder]="'Número de teléfono'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
         <tc-form-label>Dirección</tc-form-label>
-        <tc-textarea [placeholder]="'Dirección'" formControlName="address"></tc-textarea>
+        <tc-textarea [placeholder]="'Dirección'" formControlName="domicilio"></tc-textarea>
       </tc-form-group>
 
-      <tc-form-group>
+      <!-- <tc-form-group>
         <tc-form-label>Última visita</tc-form-label>
         <tc-input [placeholder]="'Última atención'" formControlName="lastVisit" [readonly]="true"></tc-input>
       </tc-form-group>
@@ -70,7 +70,7 @@
       <tc-form-group>
         <tc-form-label>Estado</tc-form-label>
         <tc-select [placeholder]="'Estado'" formControlName="status" [options]="status"></tc-select>
-      </tc-form-group>
+      </tc-form-group> -->
 
       <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid">
         Guardar cambios

@@ -52,7 +52,7 @@
         <tc-badge [view]="value === 'Approved' ? 'success' : 'warning'">{{ value }}</tc-badge>
       </ng-template>
     </tc-table-col> -->
-    <tc-table-col [columnTitle]="'Acciones'" [columnName]="'actions'">
+    <tc-table-col [columnTitle]="'Acciones'" [columnName]="'id'">
       <ng-template #tableTDTemplate let-row="row">
         <div class="actions">
           <a
@@ -63,6 +63,7 @@
             [square]="true"
             [tcShape]="500"
             [size]="'sm'"
+            (click)="cambiarId(row.id)"
           ></a>
 
           <button

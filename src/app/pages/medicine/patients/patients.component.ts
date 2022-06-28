@@ -14,6 +14,7 @@ import { TCModalService } from '../../../ui/services/modal/modal.service';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { map } from 'rxjs/operators';
+import { IdService } from 'src/app/services/idService/id.service';
 
 @Component({
   selector: 'page-patients',
@@ -33,7 +34,8 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
     httpSv: HttpService,
     private fb: FormBuilder,
     private modal: TCModalService,
-    private pacienteService: PacienteService
+    private pacienteService: PacienteService,
+    private idService: IdService,
   ) {
     super(store, httpSv);
 
@@ -172,5 +174,10 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       this.closeModal();
       this.patientForm.reset();
     }
+  }
+
+  cambiarId( id: string){
+    this.idService.recibeDatos(id);
+    console.log(this.idService.devuelveDatos());
   }
 }
