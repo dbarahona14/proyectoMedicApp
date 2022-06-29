@@ -178,6 +178,5 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
 
   cambiarId( id: string){
     this.idService.recibeDatos(id);
-    console.log(this.idService.devuelveDatos());
   }
 }

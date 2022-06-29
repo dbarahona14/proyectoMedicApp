@@ -32,8 +32,23 @@
       </tc-form-group>
 
       <tc-form-group>
+        <tc-form-label>RUT</tc-form-label>
+        <tc-input [placeholder]="'RUT del paciente'" formControlName="rut"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
         <tc-form-label>Id</tc-form-label>
         <tc-input [placeholder]="'Id'" formControlName="id" [readonly]="true"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac" >
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
+        </mat-form-field>
       </tc-form-group>
 
       <div class="row">
@@ -51,6 +66,11 @@
           </tc-form-group>
         </div>
       </div>
+
+      <tc-form-group>
+        <tc-form-label>Correo</tc-form-label>
+        <tc-input [placeholder]="'algo@example.cl'" formControlName="correo"></tc-input>
+      </tc-form-group>
 
       <tc-form-group>
         <tc-form-label>Número de teléfono</tc-form-label>
@@ -79,11 +99,11 @@
   </div>
 
   <div class="col col-12 col-md-6 mb-4">
-    <tc-v-timeline [data]="patientTimeline" [showIcons]="false" [align]="'left'"></tc-v-timeline>
+    <tc-v-timeline [data]="patientTimeline" [showIcons]="true" [align]="'left'"></tc-v-timeline>
   </div>
 </div>
 
-<tc-card [title]="'Billings'" class="mb-0 mt-4">
+<!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
   <tc-table [rows]="billings" [hovered]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
     <tc-table-col [columnTitle]="'Bill NO'" [columnName]="'billNo'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
@@ -114,4 +134,4 @@
       </ng-template>
     </tc-table-col>
   </tc-table>
-</tc-card>
+</tc-card> -->

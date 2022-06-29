@@ -9,6 +9,8 @@ import { IOption } from '../../../ui/interfaces/option';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { IdService } from 'src/app/services/idService/id.service';
+import { HistorialService } from 'src/app/services/historial/historial.service';
+import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
 
 @Component({
   selector: 'page-patient-profile',
@@ -36,6 +38,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     private formBuilder: FormBuilder,
     private pacienteService: PacienteService,
     private idService: IdService,
+    private historialService: HistorialService,
   ) {
     super(store, httpSv);
 
@@ -86,6 +89,9 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
     this.obtenerPaciente(this.obtenerId());
+    // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
+    //   this.patientTimeline = res;
+    // });
     this.getData('assets/data/patient-timeline.json', 'patientTimeline');
     this.getData('assets/data/patient-billings.json', 'billings');
   }
@@ -108,10 +114,13 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       img: [],
       nombre: [data.nombre, Validators.required],
       telefono: [data.telefono, Validators.required],
+      correo: [data.correo, Validators.required],
+      fNac: [data.fNac.toDate(), Validators.required],
       domicilio: [data.domicilio, Validators.required],
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
       edad: [data.edad, Validators.required],
       id: [data.id, Validators.required],
+      rut: [data.rut, Validators.required]
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]
     });

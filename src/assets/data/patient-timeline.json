@@ -6,51 +6,51 @@
     },
     "sectionData": [
       {
-        "date": "March 27",
-        "title": "New prescription",
+        "date": "25 de Junio",
+        "title": "Atención domicilio",
         "content": "Aenean lacinia bibendum nulla sed consectetur. Nullam id dolor id nibh ultricies vehicula ut id elit.",
         "iconBg": "#ed5564",
         "iconColor": "#fff"
       },
       {
-        "date": "March 20",
-        "title": "Appointment",
+        "date": "19 de Junio",
+        "title": "Atención domicilio",
         "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate.",
         "iconBg": "#64B5F6",
         "iconColor": "#fff"
       },
       {
-        "date": "March 12",
-        "title": "Medication",
+        "date": "10 de Junio",
+        "title": "Atención domicilio",
         "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur nam nisi veniam.",
         "iconBg": "#ED6C9C",
         "iconColor": "#fff"
       },
       {
-        "date": "March 7",
-        "title": "Operation",
+        "date": "30 de Mayo",
+        "title": "Atención clínica",
         "content": "Aenean lacinia bibendum nulla sed consectetur. Nullam id dolor id nibh ultricies vehicula ut id elit.",
         "icon": "icofont-injection-syringe",
         "iconBg": "",
         "iconColor": ""
       },
       {
-        "date": "March 1",
-        "title": "Examination",
+        "date": "22 de Mayo",
+        "title": "Atención domicilio",
         "content": "Lorem ipsum dolor sit.",
         "iconBg": "#e9e165",
         "iconColor": "#000"
       },
       {
-        "date": "February 15",
-        "title": "Examination",
+        "date": "16 de Mayo",
+        "title": "Atención domicilio",
         "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur nam nisi veniam.",
         "iconBg": "#CE8557",
         "iconColor": "#fff"
       },
       {
-        "date": "February 6",
-        "title": "Examination",
+        "date": "4 de Mayo",
+        "title": "Atención domicilio",
         "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur nam nisi veniam.",
         "iconBg": "#ed5564",
         "iconColor": "#fff"
