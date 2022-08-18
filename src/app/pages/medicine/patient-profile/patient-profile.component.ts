@@ -6,6 +6,11 @@ import { BasePageComponent } from '../../base-page';
 import { IAppState } from '../../../interfaces/app-state';
 import { HttpService } from '../../../services/http/http.service';
 import { IOption } from '../../../ui/interfaces/option';
+import { PacienteService } from 'src/app/services/paciente/paciente.service';
+import { Paciente } from 'src/app/interfaces/paciente';
+import { IdService } from 'src/app/services/idService/id.service';
+import { HistorialService } from 'src/app/services/historial/historial.service';
+import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
 
 @Component({
   selector: 'page-patient-profile',
@@ -23,37 +28,44 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   changes: boolean;
   billings: any[];
 
+  patientName: string;
+
+  idPaciente: string;
+
   constructor(
     store: Store<IAppState>,
     httpSv: HttpService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private pacienteService: PacienteService,
+    private idService: IdService,
+    private historialService: HistorialService,
   ) {
     super(store, httpSv);
 
     this.pageData = {
-      title: 'Patient profile page',
+      title: 'Perfil del paciente',
       breadcrumbs: [
         {
-          title: 'Medicine',
+          title: 'Inicio',
           route: 'default-dashboard'
         },
         {
-          title: 'Patients',
+          title: 'Lista de pacientes',
           route: 'patients'
         },
         {
-          title: 'Dr. Sophie'
+          title: 'Perfil del paciente'
         }
       ]
     };
     this.gender = [
       {
-        label: 'Male',
-        value: 'male'
+        label: 'Hombre',
+        value: 'hombre'
       },
       {
-        label: 'Female',
-        value: 'female'
+        label: 'Mujer',
+        value: 'mujer'
       }
     ];
     this.status = [
@@ -75,7 +87,11 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   ngOnInit() {
     super.ngOnInit();
 
-    this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
+    //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
+    this.obtenerPaciente(this.obtenerId());
+    // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
+    //   this.patientTimeline = res;
+    // });
     this.getData('assets/data/patient-timeline.json', 'patientTimeline');
     this.getData('assets/data/patient-billings.json', 'billings');
   }
@@ -87,22 +103,26 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   loadedDetect() {
     this.setLoaded();
 
-    this.currentAvatar = this.patientInfo.img;
+    // this.currentAvatar = this.patientInfo.img;
     this.initPatientForm(this.patientInfo);
   }
 
   // init form
-  initPatientForm(data: any) {
+  initPatientForm(data: Paciente) {
+    this.patientName = data.nombre;
     this.patientForm = this.formBuilder.group({
-      img: [this.currentAvatar],
-      name: [data.name, Validators.required],
-      number: [data.number, Validators.required],
-      address: [data.address, Validators.required],
-      gender: [data.gender, Validators.required],
-      age: [data.age, Validators.required],
+      img: [],
+      nombre: [data.nombre, Validators.required],
+      telefono: [data.telefono, Validators.required],
+      correo: [data.correo, Validators.required],
+      fNac: [data.fNac.toDate(), Validators.required],
+      domicilio: [data.domicilio, Validators.required],
+      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
+      edad: [data.edad, Validators.required],
       id: [data.id, Validators.required],
-      lastVisit: [data.lastVisit, Validators.required],
-      status: [data.status, Validators.required]
+      rut: [data.rut, Validators.required]
+      // lastVisit: [data.lastVisit, Validators.required],
+      // status: [data.status, Validators.required]
     });
 
     // detect form changes
@@ -131,4 +151,28 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
     reader.readAsDataURL(file);
   }
+
+  obtenerPaciente(id: string){
+    var paciente = this.pacienteService.getPaciente(id);
+
+    paciente.snapshotChanges().subscribe(datos =>{
+      this.patientInfo = datos.payload.data();
+      this.loadedDetect();
+    });
+  }
+
+  obtenerId(): string{
+    return this.idService.devuelveDatos();
+  }
+
+  updatePatient(form: FormGroup) {
+    if (form.valid) {
+      let newPatient: Paciente = form.value;
+
+      this.pacienteService.update(newPatient.id, newPatient).then( () =>{
+        console.log('Paciente actualizado con éxito!!!')
+      });
+    }
+  }
+
 }

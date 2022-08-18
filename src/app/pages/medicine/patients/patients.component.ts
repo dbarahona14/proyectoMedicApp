@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ModuleWithComponentFactories, OnDestroy, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -11,6 +11,10 @@ import { IOption } from '../../../ui/interfaces/option';
 import { Content } from '../../../ui/interfaces/modal';
 import * as PatientsActions from '../../../store/actions/patients.actions';
 import { TCModalService } from '../../../ui/services/modal/modal.service';
+import { Paciente } from 'src/app/interfaces/paciente';
+import { PacienteService } from 'src/app/services/paciente/paciente.service';
+import { map } from 'rxjs/operators';
+import { IdService } from 'src/app/services/idService/id.service';
 
 @Component({
   selector: 'page-patients',
@@ -18,7 +22,7 @@ import { TCModalService } from '../../../ui/services/modal/modal.service';
   styleUrls: ['./patients.component.scss']
 })
 export class PagePatientsComponent extends BasePageComponent implements OnInit, OnDestroy {
-  patients: IPatient[];
+  patients: Paciente[];
   patientForm: FormGroup;
   gender: IOption[];
   status: IOption[];
@@ -29,31 +33,33 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
     store: Store<IAppState>,
     httpSv: HttpService,
     private fb: FormBuilder,
-    private modal: TCModalService
+    private modal: TCModalService,
+    private pacienteService: PacienteService,
+    private idService: IdService,
   ) {
     super(store, httpSv);
 
     this.pageData = {
-      title: 'Patients',
+      title: 'Lista de pacientes',
       breadcrumbs: [
         {
-          title: 'Medicine',
+          title: 'Inicio',
           route: 'default-dashboard'
         },
         {
-          title: 'Patients'
+          title: 'Lista de pacientes'
         }
       ]
     };
     this.patients = [];
     this.gender = [
       {
-        label: 'Male',
-        value: 'male'
+        label: 'Hombre',
+        value: 'hombre'
       },
       {
-        label: 'Female',
-        value: 'female'
+        label: 'Mujer',
+        value: 'mujer'
       }
     ];
     this.status = [
@@ -73,13 +79,27 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   ngOnInit() {
     super.ngOnInit();
 
-    this.store.select('patients').subscribe(patients => {
-      if (patients && patients.length) {
-        this.patients = patients;
+    this.pacienteService.getAll().snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c =>
+          ({ id: c.payload.doc.id, ...c.payload.doc.data() })
+        )
+      )
+    ).subscribe(data => {
+      if (data && data.length) {
+        this.patients = data;
 
         !this.pageData.loaded ? this.setLoaded() : null;
       }
     });
+
+    // this.store.select('patients').subscribe(patients => {
+    //   if (patients && patients.length) {
+    //     this.patients = patients;
+
+    //     !this.pageData.loaded ? this.setLoaded() : null;
+    //   }
+    // });
   }
 
   ngOnDestroy() {
@@ -92,7 +112,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   }
 
   // open modal window
-  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, row: IPatient) {
+  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, row: Paciente) {
     this.initPatientForm(row);
 
     this.modal.open({
@@ -123,30 +143,40 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   }
 
   // init form
-  initPatientForm(data: IPatient) {
-    this.currentAvatar = data.img ? data.img : this.defaultAvatar;
+  initPatientForm(data: Paciente) {
+    // this.currentAvatar = data.img ? data.img : this.defaultAvatar;
 
     this.patientForm = this.fb.group({
       id: data.id,
       img: [this.currentAvatar],
-      name: [data.name ? data.name : '', Validators.required],
-      number: [data.number ? data.number : '', Validators.required],
-      age: [data.age ? data.age : '', Validators.required],
-      lastVisit: [data.lastVisit ? data.lastVisit : '', Validators.required],
-      gender: [data.gender ? data.gender.toLowerCase() : '', Validators.required],
-      address: [data.address ? data.address : '', Validators.required],
-      status: [data.status ? data.status.toLowerCase() : '', Validators.required]
+      nombre: [data.nombre ? data.nombre : '', Validators.required],
+      rut: [data.rut? data.rut : '', Validators.required],
+      fNac: [data.fNac? data.fNac.toDate(): '', Validators.required],
+      email: [data.correo? data.correo : '', Validators.required],
+      telefono: [data.telefono ? data.telefono : '', Validators.required],
+      edad: [data.edad ? data.edad : '', Validators.required],
+      // lastVisit: [data.lastVisit ? data.lastVisit : '', Validators.required],
+      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
+      domicilio: [data.domicilio ? data.domicilio : '', Validators.required],
+      // status: [data.status ? data.status.toLowerCase() : '', Validators.required]
     });
   }
 
   // update patient
   updatePatient(form: FormGroup) {
     if (form.valid) {
-      let newPatient: IPatient = form.value;
+      let newPatient: Paciente = form.value;
 
-      this.store.dispatch(new PatientsActions.Edit(newPatient));
+      this.pacienteService.update(newPatient.id, newPatient).then( () =>{
+        console.log('Paciente actualizado con éxito!!!')
+      });
+      // this.store.dispatch(new PatientsActions.Edit(newPatient));
       this.closeModal();
       this.patientForm.reset();
     }
+  }
+
+  cambiarId( id: string){
+    this.idService.recibeDatos(id);
   }
 }

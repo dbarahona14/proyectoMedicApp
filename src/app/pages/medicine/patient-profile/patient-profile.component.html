@@ -28,7 +28,12 @@
 
       <tc-form-group>
         <tc-form-label>Nombre completo</tc-form-label>
-        <tc-input [placeholder]="'Name'" formControlName="name"></tc-input>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>RUT</tc-form-label>
+        <tc-input [placeholder]="'RUT del paciente'" formControlName="rut"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
@@ -36,33 +41,48 @@
         <tc-input [placeholder]="'Id'" formControlName="id" [readonly]="true"></tc-input>
       </tc-form-group>
 
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac" >
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Edad</tc-form-label>
-            <tc-input [placeholder]="'Edad'" formControlName="age" [type]="'number'"></tc-input>
+            <tc-input [placeholder]="'Edad'" formControlName="edad" [type]="'number'"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Género</tc-form-label>
-            <tc-select [placeholder]="'Género'" formControlName="gender" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" [formControl]="patientForm.controls['genero']" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
       <tc-form-group>
+        <tc-form-label>Correo</tc-form-label>
+        <tc-input [placeholder]="'algo@example.cl'" formControlName="correo"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
         <tc-form-label>Número de teléfono</tc-form-label>
-        <tc-input [placeholder]="'Número de teléfono'" formControlName="number"></tc-input>
+        <tc-input [placeholder]="'Número de teléfono'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
         <tc-form-label>Dirección</tc-form-label>
-        <tc-textarea [placeholder]="'Dirección'" formControlName="address"></tc-textarea>
+        <tc-textarea [placeholder]="'Dirección'" formControlName="domicilio"></tc-textarea>
       </tc-form-group>
 
-      <tc-form-group>
+      <!-- <tc-form-group>
         <tc-form-label>Última visita</tc-form-label>
         <tc-input [placeholder]="'Última atención'" formControlName="lastVisit" [readonly]="true"></tc-input>
       </tc-form-group>
@@ -70,20 +90,20 @@
       <tc-form-group>
         <tc-form-label>Estado</tc-form-label>
         <tc-select [placeholder]="'Estado'" formControlName="status" [options]="status"></tc-select>
-      </tc-form-group>
+      </tc-form-group> -->
 
-      <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid">
+      <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid" (click)="updatePatient(patientForm)">
         Guardar cambios
       </button>
     </form>
   </div>
 
   <div class="col col-12 col-md-6 mb-4">
-    <tc-v-timeline [data]="patientTimeline" [showIcons]="false" [align]="'left'"></tc-v-timeline>
+    <tc-v-timeline [data]="patientTimeline" [showIcons]="true" [align]="'left'"></tc-v-timeline>
   </div>
 </div>
 
-<tc-card [title]="'Billings'" class="mb-0 mt-4">
+<!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
   <tc-table [rows]="billings" [hovered]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
     <tc-table-col [columnTitle]="'Bill NO'" [columnName]="'billNo'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
@@ -114,4 +134,4 @@
       </ng-template>
     </tc-table-col>
   </tc-table>
-</tc-card>
+</tc-card> -->

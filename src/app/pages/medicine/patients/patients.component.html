@@ -1,31 +1,38 @@
 <tc-card class="mb-0">
   <tc-table [rows]="patients" [hovered]="true" [pagination]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
-    <tc-table-col [columnTitle]="'Foto'" [columnName]="'img'">
+    <tc-table-col [columnTitle]="''" [columnName]="'id'">
       <ng-template #tableTDTemplate let-value>
-        <tc-avatar [src]="value"></tc-avatar>
+        <tc-icon class="icofont-ui-user"></tc-icon>
+        <!-- <tc-avatar [src]="value"></tc-avatar> -->
       </ng-template>
     </tc-table-col>
-    <tc-table-col [columnTitle]="'Nombre'" [columnName]="'name'" [enableSorting]="true">
+    <tc-table-col [columnTitle]="'Nombre'" [columnName]="'nombre'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
         <strong>{{ value }}</strong>
       </ng-template>
     </tc-table-col>
-    <tc-table-col [columnTitle]="'ID'" [columnName]="'id'" [enableSorting]="true">
+
+    <tc-table-col [columnTitle]="'RUT'" [columnName]="'rut'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <strong>{{ value }}</strong>
+      </ng-template>
+    </tc-table-col>
+    <!-- <tc-table-col [columnTitle]="'ID'" [columnName]="'id'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
         <span [tcColor]="'#a5a5a5'" #id>{{ value }}</span>
       </ng-template>
-    </tc-table-col>
-    <tc-table-col [columnTitle]="'Edad'" [columnName]="'age'" [enableSorting]="true">
+    </tc-table-col> -->
+    <tc-table-col [columnTitle]="'Edad'" [columnName]="'edad'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
         <span [tcColor]="'#a5a5a5'">{{ value }}</span>
       </ng-template>
     </tc-table-col>
-    <tc-table-col [columnTitle]="'Dirección'" [columnName]="'address'">
+    <tc-table-col [columnTitle]="'Dirección'" [columnName]="'domicilio'">
       <ng-template #tableTDTemplate let-value>
         <div class="address-col">{{ value }}</div>
       </ng-template>
     </tc-table-col>
-    <tc-table-col [columnTitle]="'Número'" [columnName]="'number'">
+    <tc-table-col [columnTitle]="'Número'" [columnName]="'telefono'">
       <ng-template #tableTDTemplate let-value>
       <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
         <tc-icon [iconClass]="'icofont-ui-cell-phone'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon>
@@ -33,17 +40,19 @@
       </span>
       </ng-template>
     </tc-table-col>
-    <tc-table-col [columnTitle]="'Última visita'" [columnName]="'lastVisit'">
+    <!-- <tc-table-col [columnTitle]="'Última visita'" [columnName]="'lastVisit'">
       <ng-template #tableTDTemplate let-value>
+        <span class="nowrap" [tcColor]="'#a5a5a5'">22-06-2022</span>
         <span class="nowrap" [tcColor]="'#a5a5a5'">{{ value }}</span>
       </ng-template>
     </tc-table-col>
     <tc-table-col [columnTitle]="'Estado'" [columnName]="'status'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
+        <tc-badge [view]="value === 'Approved' ? 'success' : 'warning'">Approved</tc-badge>
         <tc-badge [view]="value === 'Approved' ? 'success' : 'warning'">{{ value }}</tc-badge>
       </ng-template>
-    </tc-table-col>
-    <tc-table-col [columnTitle]="'Acciones'" [columnName]="'actions'">
+    </tc-table-col> -->
+    <tc-table-col [columnTitle]="'Acciones'" [columnName]="'id'">
       <ng-template #tableTDTemplate let-row="row">
         <div class="actions">
           <a
@@ -54,6 +63,7 @@
             [square]="true"
             [tcShape]="500"
             [size]="'sm'"
+            (click)="cambiarId(row.id)"
           ></a>
 
           <button
@@ -73,6 +83,7 @@
             [square]="true"
             [tcShape]="500"
             [size]="'sm'"
+            disabled="true"
             (click)="remove(row.id)"
           ></button>
         </div>
@@ -103,33 +114,51 @@
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'Nombre'" formControlName="name"></tc-input>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'Número contacto'" [type]="'number'" formControlName="number"></tc-input>
+        <tc-input [placeholder]="'RUT'" formControlName="rut"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac" >
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Correo'" type="email" formControlName="email"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Número contacto'" [type]="'number'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="age"></tc-input>
+            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-select [placeholder]="'Género'" formControlName="gender" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
-      <tc-form-group>
-        <tc-select [placeholder]="'Estado'" formControlName="status" [options]="status"></tc-select>
-      </tc-form-group>
+      <!-- <tc-form-group>
+        <tc-select [placeholder]="'Estado'" formControlName="estado" [options]="status"></tc-select>
+      </tc-form-group> -->
 
       <tc-form-group class="mb-0">
-        <tc-textarea [placeholder]="'Dirección'" formControlName="address"></tc-textarea>
+        <tc-textarea [placeholder]="'Dirección'" formControlName="domicilio"></tc-textarea>
       </tc-form-group>
     </form>
   </ng-template>

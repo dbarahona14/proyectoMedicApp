@@ -1,19 +1,9 @@
-<div
-  class="app-container"
-  [ngClass]="{ boxed: appSettings.boxed, scrolled: scrolled, loaded: loaded }"
-  *ngIf="appSettings"
->
+<div class="app-container" [ngClass]="{ boxed: appSettings.boxed, scrolled: scrolled, loaded: loaded }"
+  *ngIf="appSettings">
   <!-- Horizontal navbar -->
-  <navbar
-    [boxed]="appSettings.boxed"
-    [tcBgColor]="appSettings.topbarBg"
-    [tcColor]="appSettings.topbarColor"
-    [minHeight]="'4.28571429rem'"
-  >
-    <button
-      class="no-style navbar-toggle d-lg-none"
-      (click)="toggleSidebar(true)"
-    >
+  <navbar [boxed]="appSettings.boxed" [tcBgColor]="appSettings.topbarBg" [tcColor]="appSettings.topbarColor"
+    [minHeight]="'4.28571429rem'">
+    <button class="no-style navbar-toggle d-lg-none" (click)="toggleSidebar(true)">
       <span></span><span></span><span></span>
     </button>
 
@@ -26,29 +16,21 @@
   <!-- end Horizontal navbar -->
 
   <!-- Vertical navbar -->
-  <navbar
-    [orientation]="'vertical'"
-    [tcBgColor]="appSettings.sidebarBg"
-    [tcColor]="appSettings.sidebarColor"
-    [opened]="appSettings.sidebarOpened"
-  >
-    <button
-      class="no-style navbar-close icofont-close-line d-lg-none"
-      (click)="toggleSidebar(false)"
-    ></button>
+  <navbar [orientation]="'vertical'" [tcBgColor]="appSettings.sidebarBg" [tcColor]="appSettings.sidebarColor"
+    [opened]="appSettings.sidebarOpened">
+    <button class="no-style navbar-close icofont-close-line d-lg-none" (click)="toggleSidebar(false)"></button>
 
     <logo [src]="'assets/img/serfinsalud-logo.png'" [width]="294" [height]="66"></logo>
 
     <app-menu [src]="'assets/data/menu.json'"></app-menu>
 
+    <!-- Boton para buscar paciente -->
     <div class="add-patient">
-      <button
-        tc-button
-        [view]="'accent'"
-        [block]="true"
-        [beforeIcon]="'icofont-plus'"
-        (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)"
-      >Agregar Paciente</button>
+      <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-search'"
+        (click)="openModal(modalBodyTwo, 'Buscar paciente', modalFooterTwo)">Buscar Paciente</button>
+
+      <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-plus'"
+        (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
     </div>
 
     <menu class="assistant-menu">
@@ -90,42 +72,53 @@
         <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
 
         <tc-avatar [src]="currentAvatar"></tc-avatar>
-        <button
-          tc-button
-          [type]="'button'"
-          [afterIcon]="'icofont-ui-user'"
-          [view]="'accent'"
-          [outline]="true"
-          (click)="fileInput.click()"
-        >
+        <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true"
+          (click)="fileInput.click()">
           Seleccionar imagen
         </button>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'Nombre'" formControlName="name"></tc-input>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="number"></tc-input>
+        <tc-input [placeholder]="'RUT con puntos y guión'" formControlName="rut"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker ></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+      <tc-form-group>
+        <tc-input [placeholder]="'Correo'" type="email" formControlName="correo"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="age"></tc-input>
+            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-select [placeholder]="'Género'" formControlName="gender" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
       <tc-form-group class="mb-0">
-        <tc-textarea [placeholder]="'Dirección'" formControlName="address"></tc-textarea>
+        <tc-textarea [placeholder]="'Domicilio'" formControlName="domicilio"></tc-textarea>
       </tc-form-group>
     </form>
   </ng-template>
@@ -140,3 +133,21 @@
   </ng-template>
 </ng-container>
 <!-- end Modal window -->
+
+<ng-container>
+  <ng-template #modalBodyTwo>
+    <div class="inputSearch">
+      <form class="search-wrap" [formGroup]="searchForm">
+        <tc-autocomplete formControlName="search" [suffixIcon]="'icofont icofont-search'" [data]="data"
+          [key]="'nombreRut'" [placeholder]="'Ingrese nombre o RUT del paciente...'"
+          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, 'patients')"></tc-autocomplete>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooterTwo>
+    <div class="actions justify-content-center">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+    </div>
+  </ng-template>
+</ng-container>
