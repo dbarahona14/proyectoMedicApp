@@ -6,11 +6,13 @@ import { BasePageComponent } from '../../base-page';
 import { IAppState } from '../../../interfaces/app-state';
 import { HttpService } from '../../../services/http/http.service';
 import { IOption } from '../../../ui/interfaces/option';
+import { Content } from '../../../ui/interfaces/modal';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { IdService } from 'src/app/services/idService/id.service';
 import { HistorialService } from 'src/app/services/historial/historial.service';
 import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
+import { TCModalService } from 'src/app/ui/services/modal/modal.service';
 
 @Component({
   selector: 'page-patient-profile',
@@ -18,7 +20,7 @@ import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
   styleUrls: ['./patient-profile.component.scss']
 })
 export class PagePatientProfileComponent extends BasePageComponent implements OnInit, OnDestroy {
-  patientInfo: any;
+  patientInfo: Paciente;
   patientTimeline: any;
   patientForm: FormGroup;
   gender: IOption[];
@@ -39,6 +41,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     private pacienteService: PacienteService,
     private idService: IdService,
     private historialService: HistorialService,
+    private modal: TCModalService,
   ) {
     super(store, httpSv);
 
@@ -107,6 +110,27 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     this.initPatientForm(this.patientInfo);
   }
 
+  // open modal window
+  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null) {
+    // this.initPatientForm();
+    // this.initSearchForm();
+
+    this.modal.open({
+      header: header,
+      footer: footer,
+      options: options,
+      body: body,
+    });
+  }
+
+  // close modal window
+  closeModal() {
+    this.modal.close();
+    // this.patientForm.reset();
+    // this.searchForm.reset();
+    //this.currentAvatar = this.defaultAvatar;
+  }
+
   // init form
   initPatientForm(data: Paciente) {
     this.patientName = data.nombre;
@@ -157,6 +181,12 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
     paciente.snapshotChanges().subscribe(datos =>{
       this.patientInfo = datos.payload.data();
+      if (this.patientInfo.genero === 'hombre'){
+        this.currentAvatar = 'assets/content/male-icon.png';
+      }
+      else {
+        this.currentAvatar = 'assets/content/female-icon.png';
+      }
       this.loadedDetect();
     });
   }

@@ -26,11 +26,15 @@
 
     <!-- Boton para buscar paciente -->
     <div class="add-patient">
-      <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-search'"
+      <div class="row">
+        <button   class= "mb-2" tc-button [view]="'accent'" [beforeIcon]="'icofont-search'"
         (click)="openModal(modalBodyTwo, 'Buscar paciente', modalFooterTwo)">Buscar Paciente</button>
-
-      <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-plus'"
+      </div>
+      
+      <div class="row">
+      <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
         (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
+      </div>
     </div>
 
     <menu class="assistant-menu">
