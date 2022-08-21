@@ -10,7 +10,7 @@ import { UIModule } from '../ui/ui.module';
 import { BaseLayoutComponent } from './base-layout';
 import { HorizontalLayoutComponent } from './horizontal';
 import { VerticalLayoutComponent } from './vertical';
-//import { PublicLayoutComponent } from './public';
+import { PublicLayoutComponent } from './public';
 import { NavbarComponent } from './components/navbar';
 import { MenuComponent } from './components/menu';
 import { FooterComponent } from './components/footer';
@@ -27,7 +27,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { PublicComponent } from './public/';
+
 
 @NgModule({
   imports: [
@@ -54,12 +54,11 @@ import { PublicComponent } from './public/';
     LogoComponent,
     SearchComponent,
     ActionsComponent,
-    // PublicLayoutComponent,
+    PublicLayoutComponent,
     LoginFormComponent,
     RegisterFormComponent,
     NavbarSkeletonComponent,
-    SettingsComponent,
-    PublicComponent
+    SettingsComponent
   ],
   exports: [
     LoginFormComponent,

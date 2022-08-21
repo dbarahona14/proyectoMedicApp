@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-public',
+  selector: 'public-layout',
   templateUrl: './public.component.html',
   styleUrls: ['./public.component.scss']
 })
-export class PublicComponent implements OnInit {
-
+export class PublicLayoutComponent implements OnInit {
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit() { }
 }

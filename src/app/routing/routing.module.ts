@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { VerticalLayoutComponent } from '../layout/vertical';
 import { HorizontalLayoutComponent } from '../layout/horizontal';
-// import { PublicLayoutComponent } from '../layout/public';
+ import { PublicLayoutComponent } from '../layout/public';
 
 import { PageDashboardComponent } from '../pages/dashboards/dashboard-1';
 import { PageButtonsComponent } from '../pages/ui/components/buttons';
@@ -61,7 +61,6 @@ import { Page404Component } from '../pages/apps/sessions/page-404';
 import { Page500Component } from '../pages/apps/sessions/page-500';
 import { PageDatepickersComponent } from '../pages/ui/components/datepickers';
 import { PageAntTableComponent } from '../pages/ui/tables/ant-table';
-import { PublicComponent } from '../layout/public';
 
 const privateRoutes: Routes = [
   { path: 'default-dashboard', component: PageDashboardComponent },
@@ -146,12 +145,12 @@ export const ROUTES: Routes = [
   },
   {
     path: 'public',
-    component: PublicComponent,
+    component: PublicLayoutComponent,
     children: publicRoutes
   },
   {
     path: '**',
-    component: PublicComponent,
+    component: PublicLayoutComponent,
     children: publicRoutes
   }
 ];
