@@ -12,23 +12,23 @@ export class HistorialService {
   constructor(private db: AngularFirestore) {
   }
   getAll(pacienteId: string): AngularFirestoreCollection<FichaClinica> {
-    this.fichasRef = this.db.collection('/pacientes/'+pacienteId+'/historial');
+    this.fichasRef = this.db.collection('pacientes').doc(pacienteId).collection('historial');
     return this.fichasRef;
   }
   getFicha(pacienteId: string, id: string) {
-    this.fichasRef = this.db.collection('/pacientes/'+pacienteId+'/historial');
+    this.fichasRef = this.db.collection('pacientes').doc(pacienteId).collection('historial');
     return this.fichasRef.doc(id);
   }
   create(pacienteId: string, ficha: FichaClinica): any {
-    this.fichasRef = this.db.collection('/pacientes/'+pacienteId+'/historial');
+    this.fichasRef = this.db.collection('pacientes').doc(pacienteId).collection('historial');
     return this.fichasRef.add({ ...ficha });
   }
   update(pacienteId: string, id: string, data: any): Promise<void> {
-    this.fichasRef = this.db.collection('/pacientes/'+pacienteId+'/historial');
+    this.fichasRef = this.db.collection('pacientes').doc(pacienteId).collection('historial');
     return this.fichasRef.doc(id).update(data);
   }
   delete(pacienteId: string, id: string): Promise<void> {
-    this.fichasRef = this.db.collection('/pacientes/'+pacienteId+'/historial');
+    this.fichasRef = this.db.collection('pacientes').doc(pacienteId).collection('historial');
     return this.fichasRef.doc(id).delete();
   }
 }

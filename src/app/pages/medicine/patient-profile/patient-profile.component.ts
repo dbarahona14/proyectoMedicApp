@@ -13,6 +13,7 @@ import { IdService } from 'src/app/services/idService/id.service';
 import { HistorialService } from 'src/app/services/historial/historial.service';
 import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
 import { TCModalService } from 'src/app/ui/services/modal/modal.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'page-patient-profile',
@@ -21,8 +22,10 @@ import { TCModalService } from 'src/app/ui/services/modal/modal.service';
 })
 export class PagePatientProfileComponent extends BasePageComponent implements OnInit, OnDestroy {
   patientInfo: Paciente;
+  historialInfo: FichaClinica;
   patientTimeline: any;
   patientForm: FormGroup;
+  historialForm: FormGroup;
   gender: IOption[];
   status: IOption[];
   currentAvatar: string | ArrayBuffer;
@@ -42,6 +45,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     private idService: IdService,
     private historialService: HistorialService,
     private modal: TCModalService,
+    private actRoute : ActivatedRoute,
   ) {
     super(store, httpSv);
 
@@ -91,12 +95,18 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     super.ngOnInit();
 
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
-    this.obtenerPaciente(this.obtenerId());
+    this.actRoute.params
+      .subscribe( ({ id }) => {
+        this.idPaciente = id;
+        //console.log (id);
+      });
+
+    this.obtenerPaciente(this.idPaciente);
     // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
     //   this.patientTimeline = res;
     // });
     this.getData('assets/data/patient-timeline.json', 'patientTimeline');
-    this.getData('assets/data/patient-billings.json', 'billings');
+    //this.getData('assets/data/patient-billings.json', 'billings');
   }
 
   ngOnDestroy() {
@@ -112,8 +122,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   // open modal window
   openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null) {
-    // this.initPatientForm();
-    // this.initSearchForm();
+    this.initHistorialForm(this.historialInfo, this.patientInfo);
 
     this.modal.open({
       header: header,
@@ -147,7 +156,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       rut: [data.rut, Validators.required]
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]
-    });
+    });  
 
     // detect form changes
     this.patientForm.valueChanges.subscribe(() => {
@@ -161,6 +170,25 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       this.patientInfo = form.value;
       this.changes = false;
     }
+  }
+
+  initHistorialForm(data: FichaClinica, patient: Paciente) {
+    this.historialForm = this.formBuilder.group({
+      nombre: [patient.nombre, Validators.required],
+      nombreFuncionario: ['Patricio Fuentes Díaz', Validators.required],
+      fecha: [new Date(), Validators.required],
+      alergias: ['Sin alergias.', Validators.required],
+      antMorbidos: ['Sin antecedentes morbidos.', Validators.required],
+      PA: ['128/79', Validators.required],
+      FC: ['84', Validators.required],
+      FR: ['0000', Validators.required],
+      temperatura: ['36.9', Validators.required],
+      sat: ['0000', Validators.required],
+      title: ['Atención domicilio', Validators.required],
+      content: ['Se procede a atender al paciente.', Validators.required],
+      indicaciones: ['Sin indicaciones.', Validators.required],
+      observaciones: ['Sin observaciones.', Validators.required],
+    });
   }
 
   // upload new file
@@ -191,9 +219,9 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     });
   }
 
-  obtenerId(): string{
-    return this.idService.devuelveDatos();
-  }
+  // obtenerId(): string{
+  //   return this.idService.devuelveDatos();
+  // }
 
   updatePatient(form: FormGroup) {
     if (form.valid) {
@@ -201,6 +229,16 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
       this.pacienteService.update(newPatient.id, newPatient).then( () =>{
         console.log('Paciente actualizado con éxito!!!')
+      });
+    }
+  }
+
+  agregaHistorial(form: FormGroup){
+    if (form.valid){
+      let newHistorial: FichaClinica = form.value;
+
+      this.historialService.create(this.idPaciente, newHistorial).then ( () =>{
+        console.log('Historial agregado correctamente!!!');
       });
     }
   }
