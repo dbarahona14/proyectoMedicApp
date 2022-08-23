@@ -39,6 +39,7 @@ export class SearchComponent implements OnInit {
       });
 
       if (currentPage && currentPage.routing) {
+        console.log("ESTO ES EL ROUTING: "+ currentPage.routing);
         this.router.navigate([currentPage.layout ? currentPage.layout : this.layout, currentPage.routing]);
       }
     }

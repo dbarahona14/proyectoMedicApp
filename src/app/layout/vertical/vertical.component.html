@@ -144,7 +144,7 @@
       <form class="search-wrap" [formGroup]="searchForm">
         <tc-autocomplete formControlName="search" [suffixIcon]="'icofont icofont-search'" [data]="data"
           [key]="'nombreRut'" [placeholder]="'Ingrese nombre o RUT del paciente...'"
-          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, 'patients')"></tc-autocomplete>
+          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, searchForm.value.search)"></tc-autocomplete>
       </form>
     </div>
   </ng-template>

@@ -241,6 +241,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
         console.log('Historial agregado correctamente!!!');
       });
     }
+    this.closeModal();
+    this.historialForm.reset();
   }
 
 }

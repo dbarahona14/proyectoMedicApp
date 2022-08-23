@@ -142,11 +142,12 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       let currentPage;
 
       currentPage = this.data.find(item => {
-        return item.id === value;
+        return item.nombreRut === value;
       });
 
-      if (currentPage && currentPage.routing) {
-        this.router.navigate([currentPage.layout ? currentPage.layout : this.layout, 'patients']);
+      if (currentPage) {
+        this.router.navigate(['./vertical/patient-profile/', currentPage.id]);
+        this.closeModal();
       }
     }
   }
