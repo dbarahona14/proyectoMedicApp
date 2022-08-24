@@ -1,19 +1,26 @@
 <div class="row">
   <div class="col col-12 col-md-6 mb-4">
-    <form
-      [formGroup]="patientForm"
-      novalidate
-      class="new-doctor-form"
-      (ngSubmit)="saveData(patientForm)"
-      *ngIf="patientInfo"
-    >
+    <form [formGroup]="patientForm" novalidate class="new-doctor-form" (ngSubmit)="saveData(patientForm)"
+      *ngIf="patientInfo">
       <tc-form-group>
-        <tc-form-label>Foto</tc-form-label>
+        <!-- <div class="align-items-center">
+        <tc-form-label>Avatar</tc-form-label>
         <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+        </div> -->
 
-        <div class="d-flex align-items-center">
-          <tc-avatar [src]="currentAvatar" [size]="100"></tc-avatar>
-          <button
+        <div class="row container">
+          <div class="container mb-2">
+            <tc-avatar [src]="currentAvatar" [size]="120"></tc-avatar>
+          </div>
+          <div class="add-patient row">
+            <!-- <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-plus'"
+            >Agregar atención</button> -->
+            <button tc-button [beforeIcon]="'icofont-patient-file'" [view]="'accent'"
+              (click)="openModal(modalBody, 'Registrar atención', modalFooter)">
+              Registrar Atención
+            </button>
+          </div>
+          <!-- <button
             tc-button
             [type]="'button'"
             [afterIcon]="'icofont-ui-user'"
@@ -22,7 +29,7 @@
             (click)="fileInput.click()"
           >
             Cambiar foto
-          </button>
+          </button> -->
         </div>
       </tc-form-group>
 
@@ -36,15 +43,15 @@
         <tc-input [placeholder]="'RUT del paciente'" formControlName="rut"></tc-input>
       </tc-form-group>
 
-      <tc-form-group>
+      <!-- <tc-form-group>
         <tc-form-label>Id</tc-form-label>
         <tc-input [placeholder]="'Id'" formControlName="id" [readonly]="true"></tc-input>
-      </tc-form-group>
+      </tc-form-group> -->
 
       <tc-form-group>
         <mat-form-field appearance="fill">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fNac" >
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
           <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
@@ -62,7 +69,8 @@
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Género</tc-form-label>
-            <tc-select [placeholder]="'Género'" [formControl]="patientForm.controls['genero']" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" [formControl]="patientForm.controls['genero']" [options]="gender">
+            </tc-select>
           </tc-form-group>
         </div>
       </div>
@@ -92,18 +100,28 @@
         <tc-select [placeholder]="'Estado'" formControlName="status" [options]="status"></tc-select>
       </tc-form-group> -->
 
-      <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid" (click)="updatePatient(patientForm)">
+      <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid"
+        (click)="updatePatient(patientForm)">
         Guardar cambios
       </button>
     </form>
   </div>
 
-  <div class="col col-12 col-md-6 mb-4">
+  <div class="col col-12 col-md-6 mb-4" *ngIf="noData == false">
     <tc-v-timeline [data]="patientTimeline" [showIcons]="true" [align]="'left'"></tc-v-timeline>
   </div>
-</div>
 
-<!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
+  <div class="col col-12 col-md-6 mb-4" *ngIf="noData">
+    <tc-alert class="mb-4 alert-info custom-shape close" style="border-radius: 500px;">
+      <div class="content">
+        <span class="message"><strong> Este paciente no cuenta con
+          un historial.</strong>
+        </span>
+      </div>
+    </tc-alert>
+  </div>
+
+  <!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
   <tc-table [rows]="billings" [hovered]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
     <tc-table-col [columnTitle]="'Bill NO'" [columnName]="'billNo'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
@@ -135,3 +153,120 @@
     </tc-table-col>
   </tc-table>
 </tc-card> -->
+
+  <!-- Modal window -->
+  <ng-container>
+    <ng-template #modalBody>
+      <form [formGroup]="historialForm" class="new-patient-form">
+        <!-- <tc-form-group class="avatar-box d-flex">
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+        <div class="container mb-2">
+          <tc-avatar [src]="currentAvatar" [size]="120"></tc-avatar>
+        </div>
+         <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true"
+          (click)="fileInput.click()">
+          Seleccionar imagen
+        </button>
+      </tc-form-group> -->
+
+        <tc-form-group>
+          <tc-form-label>Nombre paciente</tc-form-label>
+          <tc-input [placeholder]="'Nombre'" formControlName="nombre" [readonly]="true"></tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Nombre funcionario</tc-form-label>
+          <tc-input [placeholder]="'Nombre funcionario'" formControlName="nombreFuncionario" [readonly]="true">
+          </tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha de hoy</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fecha">
+            <mat-hint>DD/MM/AAAA</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Alergias</tc-form-label>
+          <tc-input [placeholder]="'Alergias'" formControlName="alergias" [readonly]="true"></tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Antecedentes mórbidos</tc-form-label>
+          <tc-input [placeholder]="'ant. mórbidos'" formControlName="antMorbidos" [readonly]="true"></tc-input>
+        </tc-form-group>
+
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            <tc-form-group>
+              <tc-form-label>PA</tc-form-label>
+              <tc-input [placeholder]="'Presión arterial'" formControlName="PA"></tc-input>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-4">
+            <tc-form-group>
+              <tc-form-label>FC</tc-form-label>
+              <tc-input [placeholder]="'Fr. cardíaca'" formControlName="FC"></tc-input>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-4">
+            <tc-form-group>
+              <tc-form-label>FR</tc-form-label>
+              <tc-input [placeholder]="'Fr. respiratoria'" formControlName="FR"></tc-input>
+            </tc-form-group>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <tc-form-group>
+              <tc-form-label>Temperatura</tc-form-label>
+              <tc-input [placeholder]="'Temperatura'" formControlName="temperatura"></tc-input>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-6">
+            <tc-form-group>
+              <tc-form-label>Sat.</tc-form-label>
+              <tc-input [placeholder]="'Sat.'" formControlName="sat"></tc-input>
+            </tc-form-group>
+          </div>
+        </div>
+
+        <tc-form-group>
+          <tc-form-label>Nombre procedimiento</tc-form-label>
+          <tc-input [placeholder]="'Procedimiento'" formControlName="title"></tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Descripción</tc-form-label>
+          <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content"></tc-textarea>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Indicaciones</tc-form-label>
+          <tc-input [placeholder]="'Indicaciones'" formControlName="indicaciones"></tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Observaciones</tc-form-label>
+          <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
+        </tc-form-group>
+
+      </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+      <div class="actions justify-content-between">
+        <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+        <button tc-button [view]="'info'" [disabled]="historialForm.invalid" (click)="agregaHistorial(historialForm)">
+          Registrar
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
+  <!-- end Modal window -->

@@ -5,6 +5,8 @@ import { IPageData } from '../../interfaces/page-data';
 import { IAppState } from '../../interfaces/app-state';
 import { HttpService } from '../../services/http/http.service';
 import * as PageActions from '../../store/actions/page.actions';
+import { HistorialService } from 'src/app/services/historial/historial.service';
+import { FichaClinica, ITimeline, ITimelineBox } from '../../interfaces/ficha-clinica';
 
 @Component({
   selector: 'base-page',
@@ -16,7 +18,7 @@ export class BasePageComponent implements OnInit, OnDestroy {
 
   constructor(
     public store: Store<IAppState>,
-    public httpSv: HttpService
+    public httpSv: HttpService,
   ) { }
 
   ngOnInit() {
@@ -44,6 +46,23 @@ export class BasePageComponent implements OnInit, OnDestroy {
         (callbackFnName && typeof this[callbackFnName] === 'function') ? this[callbackFnName](this[dataName]) : null;
       }
     );
+  }
+
+  getDataHistorial(dataName: string, timeline: ITimelineBox[], callbackFnName?: string) {
+    console.log(timeline);
+    this[dataName] = timeline;
+    // this.httpSv.getData(url).subscribe(
+    //   data => {
+    //     this[dataName] = data;
+    //     //this.cargarFichas(dataName, fichasClinicas);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   },
+    //   () => {
+    //     (callbackFnName && typeof this[callbackFnName] === 'function') ? this[callbackFnName](this[dataName]) : null;
+    //   }
+    // );
   }
 
   setLoaded(during: number = 0) {

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { VerticalLayoutComponent } from '../layout/vertical';
 import { HorizontalLayoutComponent } from '../layout/horizontal';
-import { PublicLayoutComponent } from '../layout/public';
+ import { PublicLayoutComponent } from '../layout/public';
 
 import { PageDashboardComponent } from '../pages/dashboards/dashboard-1';
 import { PageButtonsComponent } from '../pages/ui/components/buttons';
@@ -67,7 +67,7 @@ const privateRoutes: Routes = [
   { path: 'doctors', component: PageDoctorsComponent },
   { path: 'doctor-profile', component: PageDoctorProfileComponent },
   { path: 'patients', component: PagePatientsComponent },
-  { path: 'patient-profile', component: PagePatientProfileComponent },
+  { path: 'patient-profile/:id', component: PagePatientProfileComponent },
   { path: 'payments', component: PagePaymentsComponent },
   { path: 'appointments', component: PageAppointmentsComponent },
   { path: 'departments', component: PageDepartmentsComponent },

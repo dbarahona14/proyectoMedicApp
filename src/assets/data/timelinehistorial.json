@@ -1,0 +1,17 @@
+[
+    {
+      "sectionLabel": {
+        "text": "Today",
+        "view": "accent"
+      },
+      "sectionData": [
+        {
+          "date": "25 de Junio",
+          "title": "Atención domicilio",
+          "content": "Aenean lacinia bibendum nulla sed consectetur. Nullam id dolor id nibh ultricies vehicula ut id elit.",
+          "iconBg": "#ed5564",
+          "iconColor": "#fff"
+        }
+      ]
+    }
+  ]

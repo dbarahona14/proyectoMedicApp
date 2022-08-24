@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
@@ -6,11 +6,17 @@ import { BasePageComponent } from '../../base-page';
 import { IAppState } from '../../../interfaces/app-state';
 import { HttpService } from '../../../services/http/http.service';
 import { IOption } from '../../../ui/interfaces/option';
+import { Content } from '../../../ui/interfaces/modal';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { IdService } from 'src/app/services/idService/id.service';
 import { HistorialService } from 'src/app/services/historial/historial.service';
 import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
+import { TCModalService } from 'src/app/ui/services/modal/modal.service';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { ITimelineBox } from '../../../ui/interfaces/timeline';
+import { ITimeline } from '../../../interfaces/ficha-clinica';
 
 @Component({
   selector: 'page-patient-profile',
@@ -18,15 +24,23 @@ import { FichaClinica } from 'src/app/interfaces/ficha-clinica';
   styleUrls: ['./patient-profile.component.scss']
 })
 export class PagePatientProfileComponent extends BasePageComponent implements OnInit, OnDestroy {
-  patientInfo: any;
-  patientTimeline: any;
+  patientInfo: Paciente;
+  historialInfo: ITimelineBox;
+  patientTimeline: ITimelineBox;
   patientForm: FormGroup;
+  historialForm: FormGroup;
   gender: IOption[];
   status: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
   changes: boolean;
   billings: any[];
+
+  timeline: ITimelineBox[];
+
+  fichasClinicas : ITimelineBox[];
+  noData : boolean = true;
+
 
   patientName: string;
 
@@ -37,8 +51,9 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     httpSv: HttpService,
     private formBuilder: FormBuilder,
     private pacienteService: PacienteService,
-    private idService: IdService,
     private historialService: HistorialService,
+    private modal: TCModalService,
+    private actRoute : ActivatedRoute,
   ) {
     super(store, httpSv);
 
@@ -82,18 +97,29 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
     this.billings = [];
+    this.actRoute.params
+      .subscribe( ({ id }) => {
+        this.idPaciente = id;
+        //console.log (id);
+      });
+
+    this.obtenerPaciente(this.idPaciente);
   }
 
   ngOnInit() {
     super.ngOnInit();
 
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
-    this.obtenerPaciente(this.obtenerId());
+    this.obtenerHistorial(this.idPaciente);
+    console.log(this.fichasClinicas);
+    
+    
+
     // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
     //   this.patientTimeline = res;
     // });
-    this.getData('assets/data/patient-timeline.json', 'patientTimeline');
-    this.getData('assets/data/patient-billings.json', 'billings');
+    // this.getDataHistorial('assets/data/timelinehistorial.json', 'patientTimeline', this.fichasClinicas);
+    //this.getData('assets/data/patient-billings.json', 'billings');
   }
 
   ngOnDestroy() {
@@ -105,6 +131,26 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
     // this.currentAvatar = this.patientInfo.img;
     this.initPatientForm(this.patientInfo);
+  }
+
+  // open modal window
+  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null) {
+    this.initHistorialForm(this.historialInfo, this.patientInfo);
+
+    this.modal.open({
+      header: header,
+      footer: footer,
+      options: options,
+      body: body,
+    });
+  }
+
+  // close modal window
+  closeModal() {
+    this.modal.close();
+    // this.patientForm.reset();
+    // this.searchForm.reset();
+    //this.currentAvatar = this.defaultAvatar;
   }
 
   // init form
@@ -123,7 +169,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       rut: [data.rut, Validators.required]
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]
-    });
+    });  
 
     // detect form changes
     this.patientForm.valueChanges.subscribe(() => {
@@ -137,6 +183,25 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       this.patientInfo = form.value;
       this.changes = false;
     }
+  }
+
+  initHistorialForm(data: ITimelineBox, patient: Paciente) {
+    this.historialForm = this.formBuilder.group({
+      nombre: [patient.nombre, Validators.required],
+      nombreFuncionario: ['Patricio Fuentes Díaz', Validators.required],
+      fecha: [new Date(), Validators.required],
+      alergias: ['Sin alergias.', Validators.required],
+      antMorbidos: ['Sin antecedentes morbidos.', Validators.required],
+      PA: ['128/79', Validators.required],
+      FC: ['84', Validators.required],
+      FR: ['0000', Validators.required],
+      temperatura: ['36.9', Validators.required],
+      sat: ['0000', Validators.required],
+      title: ['Atención domicilio', Validators.required],
+      content: ['Se procede a atender al paciente.', Validators.required],
+      indicaciones: ['Sin indicaciones.', Validators.required],
+      observaciones: ['Sin observaciones.', Validators.required],
+    });
   }
 
   // upload new file
@@ -154,16 +219,46 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   obtenerPaciente(id: string){
     var paciente = this.pacienteService.getPaciente(id);
-
     paciente.snapshotChanges().subscribe(datos =>{
       this.patientInfo = datos.payload.data();
+      if (this.patientInfo.genero === 'hombre'){
+        this.currentAvatar = 'assets/content/male-icon.png';
+      }
+      else {
+        this.currentAvatar = 'assets/content/female-icon.png';
+      }
       this.loadedDetect();
+      
     });
+    
   }
 
-  obtenerId(): string{
-    return this.idService.devuelveDatos();
+  obtenerHistorial(idPaciente: string) {
+    this.historialService.getAll(idPaciente).snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c =>
+          ({ id: c.payload.doc.id, ...c.payload.doc.data() })
+        )
+      )
+    ).subscribe(data => {
+      if (data && data.length) {
+        this.noData = false;
+        console.log(this.noData);
+        this.fichasClinicas = data;
+        console.log(this.fichasClinicas);
+        this.getDataHistorial('patientTimeline', this.fichasClinicas);
+        this.setLoaded();
+      }
+      else{
+        this.noData = true;
+      }
+    });
+
   }
+
+  // obtenerId(): string{
+  //   return this.idService.devuelveDatos();
+  // }
 
   updatePatient(form: FormGroup) {
     if (form.valid) {
@@ -173,6 +268,49 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
         console.log('Paciente actualizado con éxito!!!')
       });
     }
+  }
+
+  agregaHistorial(form: FormGroup){
+    if (form.valid){
+      
+      let newTimeLine: ITimeline = {title:"", content: "", date: "", iconBg: "", iconColor: ""};
+      let newHistorial: ITimelineBox = {sectionLabel:{text: "", view: ""}, sectionData: [], sectionFicha:{FC: "string",
+        FR: "string",
+        PA: "string",
+        alergias: "string",
+        antMorbidos: "string",
+        fecha: "any",
+        indicaciones: "string",
+        observaciones: "string",
+        procedimiento: "string",
+        sat: "string",
+        temperatura: "string",
+        content: "string",
+        title: "string",
+        date: "any",
+        nombreFuncionario: "string"}, fecha: ""};
+
+      console.log(form.get('title').value);
+
+      newTimeLine.title = form.get('title').value;
+      newTimeLine.content = form.get('content').value;
+      newTimeLine.date = form.get('fecha').value;
+      newTimeLine.iconBg = "#ed5564";
+      newTimeLine.iconColor = "#fff";
+
+      newHistorial.sectionLabel.text = "Today"
+      newHistorial.sectionLabel.view = "accent"
+
+      newHistorial.sectionData.push(newTimeLine);
+      newHistorial.fecha = form.get('fecha').value;
+      newHistorial.sectionFicha = form.value;
+
+      this.historialService.create(this.idPaciente, newHistorial).then ( () =>{
+        console.log('Historial agregado correctamente!!!');
+      });
+    }
+    this.closeModal();
+    this.historialForm.reset();
   }
 
 }

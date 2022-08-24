@@ -26,11 +26,15 @@
 
     <!-- Boton para buscar paciente -->
     <div class="add-patient">
-      <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-search'"
+      <div class="row">
+        <button   class= "mb-2" tc-button [view]="'accent'" [beforeIcon]="'icofont-search'"
         (click)="openModal(modalBodyTwo, 'Buscar paciente', modalFooterTwo)">Buscar Paciente</button>
-
-      <button class="button" tc-button [view]="'accent'" [block]="true" [beforeIcon]="'icofont-plus'"
+      </div>
+      
+      <div class="row">
+      <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
         (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
+      </div>
     </div>
 
     <menu class="assistant-menu">
@@ -140,7 +144,7 @@
       <form class="search-wrap" [formGroup]="searchForm">
         <tc-autocomplete formControlName="search" [suffixIcon]="'icofont icofont-search'" [data]="data"
           [key]="'nombreRut'" [placeholder]="'Ingrese nombre o RUT del paciente...'"
-          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, 'patients')"></tc-autocomplete>
+          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, searchForm.value.search)"></tc-autocomplete>
       </form>
     </div>
   </ng-template>
