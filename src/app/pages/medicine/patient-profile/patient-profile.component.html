@@ -107,12 +107,21 @@
     </form>
   </div>
 
-  <div class="col col-12 col-md-6 mb-4">
+  <div class="col col-12 col-md-6 mb-4" *ngIf="noData == false">
     <tc-v-timeline [data]="patientTimeline" [showIcons]="true" [align]="'left'"></tc-v-timeline>
   </div>
-</div>
 
-<!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
+  <div class="col col-12 col-md-6 mb-4" *ngIf="noData">
+    <tc-alert class="mb-4 alert-info custom-shape close" style="border-radius: 500px;">
+      <div class="content">
+        <span class="message"><strong> Este paciente no cuenta con
+          un historial.</strong>
+        </span>
+      </div>
+    </tc-alert>
+  </div>
+
+  <!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
   <tc-table [rows]="billings" [hovered]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
     <tc-table-col [columnTitle]="'Bill NO'" [columnName]="'billNo'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
@@ -145,11 +154,11 @@
   </tc-table>
 </tc-card> -->
 
-<!-- Modal window -->
-<ng-container>
-  <ng-template #modalBody>
-    <form [formGroup]="historialForm" class="new-patient-form">
-      <!-- <tc-form-group class="avatar-box d-flex">
+  <!-- Modal window -->
+  <ng-container>
+    <ng-template #modalBody>
+      <form [formGroup]="historialForm" class="new-patient-form">
+        <!-- <tc-form-group class="avatar-box d-flex">
         <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
 
         <div class="container mb-2">
@@ -161,102 +170,103 @@
         </button>
       </tc-form-group> -->
 
-      <tc-form-group>
-        <tc-form-label>Nombre paciente</tc-form-label>
-        <tc-input [placeholder]="'Nombre'" formControlName="nombre" [readonly]="true"></tc-input>
-      </tc-form-group>
+        <tc-form-group>
+          <tc-form-label>Nombre paciente</tc-form-label>
+          <tc-input [placeholder]="'Nombre'" formControlName="nombre" [readonly]="true"></tc-input>
+        </tc-form-group>
 
-      <tc-form-group>
-        <tc-form-label>Nombre funcionario</tc-form-label>
-        <tc-input [placeholder]="'Nombre funcionario'" formControlName="nombreFuncionario" [readonly]="true"></tc-input>
-      </tc-form-group>
+        <tc-form-group>
+          <tc-form-label>Nombre funcionario</tc-form-label>
+          <tc-input [placeholder]="'Nombre funcionario'" formControlName="nombreFuncionario" [readonly]="true">
+          </tc-input>
+        </tc-form-group>
 
-      <tc-form-group>
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha de hoy</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fecha">
-          <mat-hint>DD/MM/AAAA</mat-hint>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </tc-form-group>
+        <tc-form-group>
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha de hoy</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fecha">
+            <mat-hint>DD/MM/AAAA</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </tc-form-group>
 
-      <tc-form-group>
-        <tc-form-label>Alergias</tc-form-label>
-        <tc-input [placeholder]="'Alergias'" formControlName="alergias" [readonly]="true"></tc-input>
-      </tc-form-group>
+        <tc-form-group>
+          <tc-form-label>Alergias</tc-form-label>
+          <tc-input [placeholder]="'Alergias'" formControlName="alergias" [readonly]="true"></tc-input>
+        </tc-form-group>
 
-      <tc-form-group>
-        <tc-form-label>Antecedentes mórbidos</tc-form-label>
-        <tc-input [placeholder]="'ant. mórbidos'" formControlName="antMorbidos" [readonly]="true"></tc-input>
-      </tc-form-group>
+        <tc-form-group>
+          <tc-form-label>Antecedentes mórbidos</tc-form-label>
+          <tc-input [placeholder]="'ant. mórbidos'" formControlName="antMorbidos" [readonly]="true"></tc-input>
+        </tc-form-group>
 
-      <div class="row">
-        <div class="col-12 col-sm-4">
-          <tc-form-group>
-            <tc-form-label>PA</tc-form-label>
-            <tc-input [placeholder]="'Presión arterial'" formControlName="PA"></tc-input>
-          </tc-form-group>
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            <tc-form-group>
+              <tc-form-label>PA</tc-form-label>
+              <tc-input [placeholder]="'Presión arterial'" formControlName="PA"></tc-input>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-4">
+            <tc-form-group>
+              <tc-form-label>FC</tc-form-label>
+              <tc-input [placeholder]="'Fr. cardíaca'" formControlName="FC"></tc-input>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-4">
+            <tc-form-group>
+              <tc-form-label>FR</tc-form-label>
+              <tc-input [placeholder]="'Fr. respiratoria'" formControlName="FR"></tc-input>
+            </tc-form-group>
+          </div>
         </div>
-        <div class="col-12 col-sm-4">
-          <tc-form-group>
-            <tc-form-label>FC</tc-form-label>
-            <tc-input [placeholder]="'Fr. cardíaca'" formControlName="FC"></tc-input>
-          </tc-form-group>
+
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <tc-form-group>
+              <tc-form-label>Temperatura</tc-form-label>
+              <tc-input [placeholder]="'Temperatura'" formControlName="temperatura"></tc-input>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-6">
+            <tc-form-group>
+              <tc-form-label>Sat.</tc-form-label>
+              <tc-input [placeholder]="'Sat.'" formControlName="sat"></tc-input>
+            </tc-form-group>
+          </div>
         </div>
-        <div class="col-12 col-sm-4">
-          <tc-form-group>
-            <tc-form-label>FR</tc-form-label>
-            <tc-input [placeholder]="'Fr. respiratoria'" formControlName="FR"></tc-input>
-          </tc-form-group>
-        </div>
+
+        <tc-form-group>
+          <tc-form-label>Nombre procedimiento</tc-form-label>
+          <tc-input [placeholder]="'Procedimiento'" formControlName="title"></tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Descripción</tc-form-label>
+          <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content"></tc-textarea>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Indicaciones</tc-form-label>
+          <tc-input [placeholder]="'Indicaciones'" formControlName="indicaciones"></tc-input>
+        </tc-form-group>
+
+        <tc-form-group>
+          <tc-form-label>Observaciones</tc-form-label>
+          <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
+        </tc-form-group>
+
+      </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+      <div class="actions justify-content-between">
+        <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+        <button tc-button [view]="'info'" [disabled]="historialForm.invalid" (click)="agregaHistorial(historialForm)">
+          Registrar
+        </button>
       </div>
-
-      <div class="row">
-        <div class="col-12 col-sm-6">
-          <tc-form-group>
-            <tc-form-label>Temperatura</tc-form-label>
-            <tc-input [placeholder]="'Temperatura'" formControlName="temperatura"></tc-input>
-          </tc-form-group>
-        </div>
-        <div class="col-12 col-sm-6">
-          <tc-form-group>
-            <tc-form-label>Sat.</tc-form-label>
-            <tc-input [placeholder]="'Sat.'" formControlName="sat"></tc-input>
-          </tc-form-group>
-        </div>
-      </div>
-
-      <tc-form-group>
-        <tc-form-label>Nombre procedimiento</tc-form-label>
-        <tc-input [placeholder]="'Procedimiento'" formControlName="title"></tc-input>
-      </tc-form-group>
-
-      <tc-form-group>
-        <tc-form-label>Descripción</tc-form-label>
-        <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content"></tc-textarea>
-      </tc-form-group>
-
-      <tc-form-group>
-        <tc-form-label>Indicaciones</tc-form-label>
-        <tc-input [placeholder]="'Indicaciones'" formControlName="indicaciones"></tc-input>
-      </tc-form-group>
-
-      <tc-form-group>
-        <tc-form-label>Observaciones</tc-form-label>
-        <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
-      </tc-form-group>
-
-    </form>
-  </ng-template>
-
-  <ng-template #modalFooter>
-    <div class="actions justify-content-between">
-      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
-      <button tc-button [view]="'info'" [disabled]="historialForm.invalid" (click)="agregaHistorial(historialForm)">
-        Registrar
-      </button>
-    </div>
-  </ng-template>
-</ng-container>
-<!-- end Modal window -->
+    </ng-template>
+  </ng-container>
+  <!-- end Modal window -->

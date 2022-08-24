@@ -14,5 +14,29 @@ export interface FichaClinica {
     content: string;
     title: string;
     date: any;
-    nombreFuncionario: string;
+    nombreFuncionario: string; 
 }
+
+export interface ITimelineBox {
+    sectionLabel: ITimelineLabel;
+    sectionData: ITimeline[];
+    sectionFicha: FichaClinica;
+    fecha: any;
+  }
+  
+  export interface ITimelineLabel {
+    text: string;
+    view?: string;
+  }
+  export interface ITimeline {
+    date: string;
+    content: string;
+    title: string;
+    icon?: string;
+    iconBg?: string;
+    iconColor?: string;
+  }
+
+
+
+
