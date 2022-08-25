@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { ITimelineBox } from '../../../ui/interfaces/timeline';
 import { ITimeline } from '../../../interfaces/ficha-clinica';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'page-patient-profile',
@@ -54,6 +55,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     private historialService: HistorialService,
     private modal: TCModalService,
     private actRoute : ActivatedRoute,
+    private notificationService: NotificationService,
   ) {
     super(store, httpSv);
 
@@ -311,6 +313,11 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     }
     this.closeModal();
     this.historialForm.reset();
+  }
+
+  mostrar(){
+    console.log("SI ENTRA");
+    this.notificationService.showSuccess("Título", "Mensaje");
   }
 
 }
