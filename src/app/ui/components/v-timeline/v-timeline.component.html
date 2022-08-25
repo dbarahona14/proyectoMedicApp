@@ -18,7 +18,7 @@
         <div class="item-header">
           <h3 class="h5 item-title" *ngIf="item.title">{{ item.title }}</h3>
 
-          <div class="item-date" *ngIf="item.date"><span>{{ item.date.toDate() | date:'full' }}</span></div>
+          <div class="item-date" *ngIf="item.date"><span>{{ item.date.toDate() | date:'EEEE, MMMM d, y, h:mm a' }}</span></div>
         </div>
 
         <div class="item-desc" [innerHTML]="item.content" *ngIf="item.content"></div>
