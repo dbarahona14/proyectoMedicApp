@@ -34,10 +34,10 @@
     </tc-table-col>
     <tc-table-col [columnTitle]="'Número'" [columnName]="'telefono'">
       <ng-template #tableTDTemplate let-value>
-      <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
-        <tc-icon [iconClass]="'icofont-ui-cell-phone'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon>
-        {{ value }}
-      </span>
+        <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
+          <tc-icon [iconClass]="'icofont-ui-cell-phone'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon>
+          {{ value }}
+        </span>
       </ng-template>
     </tc-table-col>
     <!-- <tc-table-col [columnTitle]="'Última visita'" [columnName]="'lastVisit'">
@@ -55,37 +55,14 @@
     <tc-table-col [columnTitle]="'Acciones'" [columnName]="'id'">
       <ng-template #tableTDTemplate let-row="row">
         <div class="actions">
-          <a
-            href="#"
-            tc-button
-            [routerLink]="['../patient-profile/', row.id]"
-            [afterIcon]="'icofont-external-link'"
-            [square]="true"
-            [tcShape]="500"
-            [size]="'sm'"
-            (click)="cambiarId(row.id)"
-          ></a>
+          <a href="#" tc-button [routerLink]="['../patient-profile/', row.id]" [afterIcon]="'icofont-external-link'"
+            [square]="true" [tcShape]="500" [size]="'sm'" (click)="cambiarId(row.id)"></a>
 
-          <button
-            tc-button
-            [afterIcon]="'icofont-ui-edit'"
-            [view]="'info'"
-            [square]="true"
-            [tcShape]="500"
-            [size]="'sm'"
-            (click)="openModal(modalBody, 'Actualizar información paciente', modalFooter, row)"
-          ></button>
+          <button tc-button [afterIcon]="'icofont-ui-edit'" [view]="'info'" [square]="true" [tcShape]="500"
+            [size]="'sm'" (click)="openModal(modalBody, 'Actualizar información paciente', modalFooter, row)"></button>
 
-          <button
-            tc-button
-            [afterIcon]="'icofont-ui-delete'"
-            [view]="'error'"
-            [square]="true"
-            [tcShape]="500"
-            [size]="'sm'"
-            disabled="true"
-            (click)="remove(row.id)"
-          ></button>
+          <button tc-button [afterIcon]="'icofont-ui-delete'" [view]="'error'" [square]="true" [tcShape]="500"
+            [size]="'sm'" disabled="true" (click)="remove(row.id)"></button>
         </div>
       </ng-template>
     </tc-table-col>
@@ -101,14 +78,8 @@
         <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
 
         <tc-avatar [src]="currentAvatar"></tc-avatar>
-        <button
-          tc-button
-          [type]="'button'"
-          [afterIcon]="'icofont-ui-user'"
-          [view]="'accent'"
-          [outline]="true"
-          (click)="fileInput.click()"
-        >
+        <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true"
+          (click)="fileInput.click()">
           Selecciona imagen
         </button>
       </tc-form-group>
@@ -118,13 +89,17 @@
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'RUT'" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="patientForm.controls.rut.touched && patientForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
       </tc-form-group>
 
       <tc-form-group>
         <mat-form-field appearance="fill">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fNac" >
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
           <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>

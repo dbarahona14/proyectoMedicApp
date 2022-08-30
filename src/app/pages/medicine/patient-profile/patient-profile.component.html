@@ -19,6 +19,11 @@
               (click)="openModal(modalBody, 'Registrar atención', modalFooter)">
               Registrar Atención
             </button>
+
+            <!-- <button tc-button [beforeIcon]="'icofont-patient-file'" [view]="'accent'"
+              (click)="mostrar()">
+              PRUEBA :)
+            </button> -->
           </div>
           <!-- <button
             tc-button
@@ -112,13 +117,8 @@
   </div>
 
   <div class="col col-12 col-md-6 mb-4" *ngIf="noData">
-    <tc-alert class="mb-4 alert-info custom-shape close" style="border-radius: 500px;">
-      <div class="content">
-        <span class="message"><strong> Este paciente no cuenta con
-          un historial.</strong>
-        </span>
-      </div>
-    </tc-alert>
+    <tc-alert [tcShape]="500" [removable]="true" [view]="'info'" class="mb-4"><strong> Paciente no cuenta con un
+        historial.</strong></tc-alert>
   </div>
 
   <!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">

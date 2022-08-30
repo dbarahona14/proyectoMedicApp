@@ -26,10 +26,12 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import localeEs from '@angular/common/locales/es-CL';
 import { registerLocaleData } from '@angular/common';
+import { NotificationService } from './services/notification/notification.service';
+import { ToastrModule } from 'ngx-toastr';
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -45,6 +47,11 @@ registerLocaleData(localeEs);
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ToastrModule.forRoot(
+      {
+        timeOut: 3000,
+      }
+    ),
     RouterModule.forRoot(ROUTES, { relativeLinkResolution: 'legacy' }),
     StoreModule.forRoot({
       pageData: pageDataReducer,
@@ -63,7 +70,8 @@ registerLocaleData(localeEs);
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: LOCALE_ID, useValue: 'es-CL' },
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
+    NotificationService,
   ],
   bootstrap: [AppComponent],
   schemas: [

@@ -44,6 +44,7 @@
     "ng2-charts": "3.0.6",
     "ngx-echarts": "8.0.1",
     "ngx-malihu-scrollbar": "9.0.0",
+    "ngx-toastr": "^14.3.0",
     "resize-observer-polyfill": "1.5.1",
     "rxjs": "7.5.1",
     "tslib": "2.3.1",
