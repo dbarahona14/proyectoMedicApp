@@ -8,10 +8,11 @@
   <div class="box-items">
     <div class="item" *ngFor="let item of box.sectionData">
       <div class="icon-block">
-        <div
+        <button
           class="item-icon {{ item.icon || 'icofont-clock-time' }}"
           [ngStyle]="{ 'background': item.iconBg, 'color': item.iconColor }"
-        ></div>
+          (click)="openModal(modalBody, 'Historial de atención', modalFooter, null , box)"
+        ></button>
       </div>
 
       <div class="content-block">
@@ -26,3 +27,120 @@
     </div>
   </div>
 </div>
+
+<!-- Modal window -->
+<ng-container>
+  <ng-template #modalBody>
+    <form [formGroup]="historialForm" class="new-patient-form">
+      <!-- <tc-form-group class="avatar-box d-flex">
+      <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+      <div class="container mb-2">
+        <tc-avatar [src]="currentAvatar" [size]="120"></tc-avatar>
+      </div>
+       <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true"
+        (click)="fileInput.click()">
+        Seleccionar imagen
+      </button>
+    </tc-form-group> -->
+
+      <!-- <tc-form-group>
+        <tc-form-label>Nombre paciente</tc-form-label>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre" [readonly]="true"></tc-input>
+      </tc-form-group> -->
+
+      <tc-form-group>
+        <tc-form-label>Nombre funcionario</tc-form-label>
+        <tc-input [placeholder]="'Nombre funcionario'" formControlName="nombreFuncionario" [readonly]="true">
+        </tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de atención</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fecha">
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Alergias</tc-form-label>
+        <tc-input [placeholder]="'Alergias'" formControlName="alergias" [readonly]="true"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Antecedentes mórbidos</tc-form-label>
+        <tc-input [placeholder]="'ant. mórbidos'" formControlName="antMorbidos" [readonly]="true"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col-12 col-sm-4">
+          <tc-form-group>
+            <tc-form-label>PA</tc-form-label>
+            <tc-input [placeholder]="'Presión arterial'" formControlName="PA"></tc-input>
+          </tc-form-group>
+        </div>
+        <div class="col-12 col-sm-4">
+          <tc-form-group>
+            <tc-form-label>FC</tc-form-label>
+            <tc-input [placeholder]="'Fr. cardíaca'" formControlName="FC"></tc-input>
+          </tc-form-group>
+        </div>
+        <div class="col-12 col-sm-4">
+          <tc-form-group>
+            <tc-form-label>FR</tc-form-label>
+            <tc-input [placeholder]="'Fr. respiratoria'" formControlName="FR"></tc-input>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-form-label>Temperatura</tc-form-label>
+            <tc-input [placeholder]="'Temperatura'" formControlName="temperatura"></tc-input>
+          </tc-form-group>
+        </div>
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-form-label>Sat.</tc-form-label>
+            <tc-input [placeholder]="'Sat.'" formControlName="sat"></tc-input>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <tc-form-group>
+        <tc-form-label>Nombre procedimiento</tc-form-label>
+        <tc-input [placeholder]="'Procedimiento'" formControlName="title"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Descripción</tc-form-label>
+        <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content"></tc-textarea>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Indicaciones</tc-form-label>
+        <tc-input [placeholder]="'Indicaciones'" formControlName="indicaciones"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-form-label>Observaciones</tc-form-label>
+        <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
+      </tc-form-group>
+
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+      <button tc-button [view]="'info'" [disabled]= "true">
+        Guardar cambios
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- end Modal window -->

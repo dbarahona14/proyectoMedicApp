@@ -41,13 +41,19 @@ import { TCModalComponent } from './components/modal';
 
 import { TCColorPickerComponent } from './components/color-picker/color-picker.component';
 import { TCPickerComponent } from './components/color-picker/picker/picker.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule
   ],
   declarations: [
     TCBgColorDirective,

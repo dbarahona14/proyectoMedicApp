@@ -297,8 +297,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       newTimeLine.title = form.get('title').value;
       newTimeLine.content = form.get('content').value;
       newTimeLine.date = form.get('fecha').value;
-      newTimeLine.iconBg = "#ed5564";
-      newTimeLine.iconColor = "#fff";
+      newTimeLine.iconBg = "#64B5F6";
+      newTimeLine.iconColor = "";
 
       newHistorial.sectionLabel.text = "Today"
       newHistorial.sectionLabel.view = "accent"

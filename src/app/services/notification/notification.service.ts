@@ -10,18 +10,18 @@ export class NotificationService {
 
   showSuccess (message : string, title : string) {
     console.log(message);
-    this.toastrService.success(message, title)
+    this.toastrService.success(title, message)
   }
 
   showError (message : string, title : string) {
-    this.toastrService.error(message, title)
+    this.toastrService.error(title, message)
   }
 
   showInfo (message : string, title : string) {
-    this.toastrService.info(message, title)
+    this.toastrService.info(title, message)
   }
 
   showWarning (message : string, title : string) {
-    this.toastrService.warning(message, title)
+    this.toastrService.warning(title, message)
   }
 }
