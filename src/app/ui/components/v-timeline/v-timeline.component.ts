@@ -93,12 +93,12 @@ export class TCVTimelineComponent implements OnInit {
     return true;
   }
 
-  // updatePatient(form: FormGroup) {
+  // updateHistorial(form: FormGroup) {
   //   if (form.valid) {
-  //     let newPatient: Paciente = form.value;
+  //     let newPatient: ITimelineBox = form.value;
 
   //     this.historialService.update().then( () =>{
-  //       console.log('Paciente actualizado con éxito!!!')
+  //       console.log('Historial actualizado con éxito!!!')
   //     });
   //   }
   // }
