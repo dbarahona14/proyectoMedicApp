@@ -257,6 +257,21 @@
           <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
         </tc-form-group>
 
+        <tc-form-group>
+          <div class="row">
+            <div class="col-12 col-sm-6 container">
+              <input type="file" accept="*" (change)="onFileChanged($event)" #fileInput hidden multiple>
+              <button tc-button [type]="'button'" [beforeIcon]="'icofont-clip'" [view]="'accent'" [outline]="true"
+                (click)="fileInput.click()">
+                Adjuntar Archivos
+              </button>
+            </div>
+            <div class="col-12 col-sm-6 mt-2">
+              <tc-form-label>{{labelDocuments}}</tc-form-label>
+            </div>
+          </div>
+        </tc-form-group>
+
       </form>
     </ng-template>
 

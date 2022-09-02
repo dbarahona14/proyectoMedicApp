@@ -15,6 +15,7 @@ import { Paciente } from 'src/app/interfaces/paciente';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { map } from 'rxjs/operators';
 import { IdService } from 'src/app/services/idService/id.service';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'page-patients',
@@ -36,6 +37,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
     private modal: TCModalService,
     private pacienteService: PacienteService,
     private idService: IdService,
+    private notificationService: NotificationService
   ) {
     super(store, httpSv);
 
@@ -168,7 +170,8 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       let newPatient: Paciente = form.value;
 
       this.pacienteService.update(newPatient.id, newPatient).then( () =>{
-        console.log('Paciente actualizado con éxito!!!')
+        this.notificationService.showSuccess('Listo', 'Actualización de realizada correctamente')
+        //console.log('Paciente actualizado con éxito!!!')
       });
       // this.store.dispatch(new PatientsActions.Edit(newPatient));
       this.closeModal();

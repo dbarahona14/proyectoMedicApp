@@ -32,6 +32,8 @@ import localeEs from '@angular/common/locales/es-CL';
 import { registerLocaleData } from '@angular/common';
 import { NotificationService } from './services/notification/notification.service';
 import { ToastrModule } from 'ngx-toastr';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { provideStorage,getStorage } from '@angular/fire/storage';
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -39,7 +41,7 @@ registerLocaleData(localeEs);
     AppComponent
   ],
   imports: [
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
@@ -65,7 +67,9 @@ registerLocaleData(localeEs);
     LayoutModule,
     NzTimePickerModule,
     UIModule,
-    PagesModule
+    PagesModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideStorage(() => getStorage())
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },

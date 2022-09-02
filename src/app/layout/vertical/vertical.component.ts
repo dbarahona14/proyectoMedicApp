@@ -15,6 +15,8 @@ import * as SettingsActions from '../../store/actions/app-settings.actions';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { map } from 'rxjs/operators';
+import { NotificationService } from 'src/app/services/notification/notification.service';
+import { getStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'vertical-layout',
@@ -42,7 +44,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     router: Router,
     elRef: ElementRef,
     private modal: TCModalService,
-    private pacienteService: PacienteService
+    private pacienteService: PacienteService,
+    private notificationService: NotificationService
   ) {
     super(store, fb, httpSv, router, elRef);
 
@@ -144,7 +147,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       currentPage = this.data.find(item => {
         return item.nombreRut === value;
       });
-
+      
       if (currentPage) {
         this.router.navigate(['./vertical/patient-profile/', currentPage.id]);
         this.closeModal();
@@ -154,7 +157,10 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
 
   agregarPaciente(paciente : Paciente){
     this.pacienteService.create(paciente).then (res =>{
-      console.log('Paciente agregado correctamente!!!');
+      paciente.id = res.id;
+      this.pacienteService.update(res.id, paciente).then (res => {
+        this.notificationService.showSuccess('Listo', 'Paciente agregado correctamente');
+      });
     });
   }
 

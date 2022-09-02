@@ -18,6 +18,7 @@ import { map } from 'rxjs/operators';
 import { ITimelineBox } from '../../../ui/interfaces/timeline';
 import { ITimeline } from '../../../interfaces/ficha-clinica';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { Storage, ref, uploadBytes } from '@angular/fire/storage';
 
 @Component({
   selector: 'page-patient-profile',
@@ -47,6 +48,10 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   idPaciente: string;
 
+  file_store: FileList;
+  file_list: Array<string> = [];
+  labelDocuments : string = 'Sin archivos adjuntos.';
+
   constructor(
     store: Store<IAppState>,
     httpSv: HttpService,
@@ -56,6 +61,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     private modal: TCModalService,
     private actRoute : ActivatedRoute,
     private notificationService: NotificationService,
+    private storage: Storage
   ) {
     super(store, httpSv);
 
@@ -99,20 +105,22 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
     this.billings = [];
-    this.actRoute.params
-      .subscribe( ({ id }) => {
-        this.idPaciente = id;
-        //console.log (id);
-      });
+    
 
-    this.obtenerPaciente(this.idPaciente);
+    
   }
 
   ngOnInit() {
     super.ngOnInit();
-
+    this.actRoute.params
+      .subscribe( ({ id }) => {
+        this.idPaciente = id;
+        this.obtenerPaciente(this.idPaciente);
+        this.obtenerHistorial(this.idPaciente);
+      });
+      
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
-    this.obtenerHistorial(this.idPaciente);
+    
     console.log(this.fichasClinicas);
     
     
@@ -207,17 +215,35 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   }
 
   // upload new file
-  onFileChanged(inputValue: any) {
-    let file: File = inputValue.target.files[0];
-    let reader: FileReader = new FileReader();
+  onFileChanged($inputValue: any) {
+    this.file_store = $inputValue;
+    console.log($inputValue);
+    if ($inputValue) {
+      const f = $inputValue.target.files[0];
+      console.log($inputValue.target.files.length);
+      const count = $inputValue.target.files.length > 1 ? `(+${$inputValue.target.files.length - 1} archivo(s))` : "";
+      this.labelDocuments=`${f.name}${count}`;
+    } else {
+      this.labelDocuments = "Sin archivos adjuntos.";
+    }
 
-    reader.onloadend = () => {
-      this.currentAvatar = reader.result;
-      this.changes = true;
-    };
 
-    reader.readAsDataURL(file);
+    // const imgRef = ref(this.storage, `images/${file.name}`);
+
+    // uploadBytes(imgRef, file)
+    //   .then(response => console.log(response))
+    //   .catch(error => console.log(error));
+
+    // let reader: FileReader = new FileReader();
+
+    // reader.onloadend = () => {
+    //   this.currentAvatar = reader.result;
+    //   this.changes = true;
+    // };
+
+    // reader.readAsDataURL(file);
   }
+
 
   obtenerPaciente(id: string){
     var paciente = this.pacienteService.getPaciente(id);
@@ -267,7 +293,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       let newPatient: Paciente = form.value;
 
       this.pacienteService.update(newPatient.id, newPatient).then( () =>{
-        console.log('Paciente actualizado con éxito!!!')
+        this.notificationService.showSuccess('Listo', 'Actualización de paciente realizada correctamente')
+        // console.log('Paciente actualizado con éxito!!!')
       });
     }
   }
@@ -308,7 +335,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       newHistorial.sectionFicha = form.value;
 
       this.historialService.create(this.idPaciente, newHistorial).then ( () =>{
-        console.log('Historial agregado correctamente!!!');
+        this.notificationService.showSuccess('Listo', 'Atención registrada correctamente');
+        // console.log('Historial agregado correctamente!!!');
       });
     }
     this.closeModal();
