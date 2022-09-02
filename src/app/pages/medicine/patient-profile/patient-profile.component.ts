@@ -157,6 +157,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   // close modal window
   closeModal() {
+    this.labelDocuments = 'Sin archivos adjuntos.';
+    this.file_list = [];
     this.modal.close();
     // this.patientForm.reset();
     // this.searchForm.reset();
@@ -226,6 +228,14 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     } else {
       this.labelDocuments = "Sin archivos adjuntos.";
     }
+
+    //ESTE CODIGO SE DEBE EDITAR.
+    // var fd = new FormData();
+    // this.file_list = [];
+    // for (let i = 0; i < this.file_store.length; i++) {
+    //   fd.append("files", this.file_store[i], this.file_store[i].name);
+    //   this.file_list.push(this.file_store[i].name);
+    // }
 
 
     // const imgRef = ref(this.storage, `images/${file.name}`);

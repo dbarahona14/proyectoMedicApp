@@ -117,8 +117,10 @@
   </div>
 
   <div class="col col-12 col-md-6 mb-4" *ngIf="noData">
-    <tc-alert [tcShape]="500" [removable]="true" [view]="'info'" class="mb-4"><strong> Paciente no cuenta con un
-        historial.</strong></tc-alert>
+    <tc-alert [tcShape]="500" [removable]="false" [view]="'info'" [beforeIcon]="'icofont-info-circle'" class="mb-4">
+      <strong> Paciente no cuenta con un
+        historial.</strong>
+    </tc-alert>
   </div>
 
   <!-- <tc-card [title]="'Billings'" class="mb-0 mt-4">
@@ -257,20 +259,36 @@
           <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
         </tc-form-group>
 
-        <tc-form-group>
+
+        <div class="row">
+          <div class="col-12 col-sm-6 container">
+            <input type="file" accept="*" (change)="onFileChanged($event)" #fileInput hidden multiple>
+            <button tc-button [type]="'button'" [beforeIcon]="'icofont-clip'" [view]="'accent'" [outline]="true"
+              (click)="fileInput.click()">
+              Adjuntar Archivos
+            </button>
+          </div>
+          <div class="col-12 col-sm-6 mt-2" >
+            <tc-form-label>{{labelDocuments}}</tc-form-label>
+          </div>
+        </div>
+
+        <div class="mt-4" *ngIf="false">
+          <br>
           <div class="row">
-            <div class="col-12 col-sm-6 container">
-              <input type="file" accept="*" (change)="onFileChanged($event)" #fileInput hidden multiple>
-              <button tc-button [type]="'button'" [beforeIcon]="'icofont-clip'" [view]="'accent'" [outline]="true"
-                (click)="fileInput.click()">
-                Adjuntar Archivos
+            <tc-form-label>Archivo(s) adjunto(s)</tc-form-label>
+          </div>
+
+          <div class="row">
+            <div class="col-10">
+              <tc-input [value]="'Archivo.pdf'" [readonly]="true"></tc-input>
+            </div>
+            <div class="col-2">
+              <button tc-button [afterIcon]="'icofont-bin'" [view]="'accent'" [square]="true" [outline]="true">
               </button>
             </div>
-            <div class="col-12 col-sm-6 mt-2">
-              <tc-form-label>{{labelDocuments}}</tc-form-label>
-            </div>
           </div>
-        </tc-form-group>
+        </div>
 
       </form>
     </ng-template>
