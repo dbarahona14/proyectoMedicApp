@@ -40,17 +40,20 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   timeline: ITimelineBox[];
 
-  fichasClinicas : ITimelineBox[];
-  noData : boolean = true;
+  fichasClinicas: ITimelineBox[];
+  noData: boolean = true;
 
 
   patientName: string;
 
   idPaciente: string;
 
-  file_store: FileList;
+  file_store: Array<FileList> = [];
   file_list: Array<string> = [];
-  labelDocuments : string = 'Sin archivos adjuntos.';
+  fd: FormData;
+
+  newFileList: Array<File> = [];
+  labelDocuments: string = 'Sin archivos adjuntos.';
 
   constructor(
     store: Store<IAppState>,
@@ -59,7 +62,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     private pacienteService: PacienteService,
     private historialService: HistorialService,
     private modal: TCModalService,
-    private actRoute : ActivatedRoute,
+    private actRoute: ActivatedRoute,
     private notificationService: NotificationService,
     private storage: Storage
   ) {
@@ -105,25 +108,25 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
     this.billings = [];
-    
 
-    
+
+
   }
 
   ngOnInit() {
     super.ngOnInit();
     this.actRoute.params
-      .subscribe( ({ id }) => {
+      .subscribe(({ id }) => {
         this.idPaciente = id;
         this.obtenerPaciente(this.idPaciente);
         this.obtenerHistorial(this.idPaciente);
       });
-      
+
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
-    
+
     console.log(this.fichasClinicas);
-    
-    
+
+
 
     // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
     //   this.patientTimeline = res;
@@ -159,6 +162,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   closeModal() {
     this.labelDocuments = 'Sin archivos adjuntos.';
     this.file_list = [];
+    this.newFileList = [];
     this.modal.close();
     // this.patientForm.reset();
     // this.searchForm.reset();
@@ -181,7 +185,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       rut: [data.rut, Validators.required]
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]
-    });  
+    });
 
     // detect form changes
     this.patientForm.valueChanges.subscribe(() => {
@@ -218,26 +222,22 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   // upload new file
   onFileChanged($inputValue: any) {
-    this.file_store = $inputValue;
-    console.log($inputValue);
-    if ($inputValue) {
-      const f = $inputValue.target.files[0];
-      console.log($inputValue.target.files.length);
-      const count = $inputValue.target.files.length > 1 ? `(+${$inputValue.target.files.length - 1} archivo(s))` : "";
-      this.labelDocuments=`${f.name}${count}`;
-    } else {
-      this.labelDocuments = "Sin archivos adjuntos.";
+    if (this.newFileList.length == 0) {
+      this.newFileList = Array.from($inputValue.target.files); // Arreglar
+    }
+    else {
+      var aux : Array <File> = Array.from($inputValue.target.files);
+      this.newFileList = this.newFileList.concat(aux);
+    }
+    this.file_store = $inputValue.target.files;
+
+
+    for (let i = 0; i < $inputValue.target.files.length; i++) {
+      var selectedFile = $inputValue.target.files[i];
+      this.file_list.push(selectedFile.name)
     }
 
-    //ESTE CODIGO SE DEBE EDITAR.
-    // var fd = new FormData();
-    // this.file_list = [];
-    // for (let i = 0; i < this.file_store.length; i++) {
-    //   fd.append("files", this.file_store[i], this.file_store[i].name);
-    //   this.file_list.push(this.file_store[i].name);
-    // }
-
-
+    this.updateLabel();
     // const imgRef = ref(this.storage, `images/${file.name}`);
 
     // uploadBytes(imgRef, file)
@@ -254,21 +254,38 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     // reader.readAsDataURL(file);
   }
 
+  updateLabel() {
+    if (this.file_list.length > 0) {
+      const count = this.file_list.length > 1 ? ` (+${this.file_list.length - 1} archivo(s))` : "";
+      this.labelDocuments = `${this.file_list[0]}${count}`;
+    } else {
+      this.labelDocuments = "Sin archivos adjuntos.";
+    }
+  }
 
-  obtenerPaciente(id: string){
+  deleteDoc(index: number) {
+    this.newFileList.splice(index, 1);
+    this.file_list.splice(index, 1);
+    this.updateLabel();
+  }
+
+
+
+
+  obtenerPaciente(id: string) {
     var paciente = this.pacienteService.getPaciente(id);
-    paciente.snapshotChanges().subscribe(datos =>{
+    paciente.snapshotChanges().subscribe(datos => {
       this.patientInfo = datos.payload.data();
-      if (this.patientInfo.genero === 'hombre'){
+      if (this.patientInfo.genero === 'hombre') {
         this.currentAvatar = 'assets/content/male-icon.png';
       }
       else {
         this.currentAvatar = 'assets/content/female-icon.png';
       }
       this.loadedDetect();
-      
+
     });
-    
+
   }
 
   obtenerHistorial(idPaciente: string) {
@@ -287,7 +304,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
         this.getDataHistorial('patientTimeline', this.fichasClinicas);
         this.setLoaded();
       }
-      else{
+      else {
         this.noData = true;
       }
     });
@@ -302,32 +319,36 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     if (form.valid) {
       let newPatient: Paciente = form.value;
 
-      this.pacienteService.update(newPatient.id, newPatient).then( () =>{
+      this.pacienteService.update(newPatient.id, newPatient).then(() => {
         this.notificationService.showSuccess('Listo', 'Actualización de paciente realizada correctamente')
         // console.log('Paciente actualizado con éxito!!!')
       });
     }
   }
 
-  agregaHistorial(form: FormGroup){
-    if (form.valid){
-      
-      let newTimeLine: ITimeline = {title:"", content: "", date: "", iconBg: "", iconColor: ""};
-      let newHistorial: ITimelineBox = {sectionLabel:{text: "", view: ""}, sectionData: [], sectionFicha:{FC: "string",
-        FR: "string",
-        PA: "string",
-        alergias: "string",
-        antMorbidos: "string",
-        fecha: "any",
-        indicaciones: "string",
-        observaciones: "string",
-        procedimiento: "string",
-        sat: "string",
-        temperatura: "string",
-        content: "string",
-        title: "string",
-        date: "any",
-        nombreFuncionario: "string"}, fecha: ""};
+  agregaHistorial(form: FormGroup) {
+    if (form.valid) {
+
+      let newTimeLine: ITimeline = { title: "", content: "", date: "", iconBg: "", iconColor: "" };
+      let newHistorial: ITimelineBox = {
+        sectionLabel: { text: "", view: "" }, sectionData: [], sectionFicha: {
+          FC: "string",
+          FR: "string",
+          PA: "string",
+          alergias: "string",
+          antMorbidos: "string",
+          fecha: "any",
+          indicaciones: "string",
+          observaciones: "string",
+          procedimiento: "string",
+          sat: "string",
+          temperatura: "string",
+          content: "string",
+          title: "string",
+          date: "any",
+          nombreFuncionario: "string"
+        }, fecha: ""
+      };
 
       console.log(form.get('title').value);
 
@@ -344,7 +365,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       newHistorial.fecha = form.get('fecha').value;
       newHistorial.sectionFicha = form.value;
 
-      this.historialService.create(this.idPaciente, newHistorial).then ( () =>{
+      this.historialService.create(this.idPaciente, newHistorial).then(() => {
         this.notificationService.showSuccess('Listo', 'Atención registrada correctamente');
         // console.log('Historial agregado correctamente!!!');
       });
@@ -353,7 +374,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     this.historialForm.reset();
   }
 
-  mostrar(){
+  mostrar() {
     console.log("SI ENTRA");
     this.notificationService.showSuccess("Título", "Mensaje");
   }

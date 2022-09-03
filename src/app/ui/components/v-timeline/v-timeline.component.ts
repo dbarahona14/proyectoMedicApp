@@ -69,20 +69,21 @@ export class TCVTimelineComponent implements OnInit {
 
   initHistorialForm(data: ITimelineBox) {
     this.historialForm = this.formBuilder.group({
-      nombreFuncionario: [data.sectionFicha.nombreFuncionario, Validators.required],
+      nombreFuncionario: [{value: data.sectionFicha.nombreFuncionario, disabled: true}, Validators.required],
       fecha: [data.fecha.toDate() , Validators.required],
-      alergias: [data.sectionFicha.alergias, Validators.required],
-      antMorbidos: [data.sectionFicha.antMorbidos, Validators.required],
-      PA: [data.sectionFicha.PA, Validators.required],
-      FC: [data.sectionFicha.FC, Validators.required],
-      FR: [data.sectionFicha.FR, Validators.required],
-      temperatura: [data.sectionFicha.temperatura, Validators.required],
-      sat: [data.sectionFicha.sat, Validators.required],
-      title: [data.sectionFicha.title, Validators.required],
-      content: [data.sectionFicha.content, Validators.required],
-      indicaciones: [data.sectionFicha.indicaciones, Validators.required],
-      observaciones: [data.sectionFicha.observaciones, Validators.required],
+      alergias: [{value: data.sectionFicha.alergias, disabled: true}, Validators.required],
+      antMorbidos: [{value: data.sectionFicha.antMorbidos, disabled: true}, Validators.required],
+      PA: [{value: data.sectionFicha.PA, disabled: true}, Validators.required],
+      FC: [{value: data.sectionFicha.FC, disabled: true}, Validators.required],
+      FR: [{value: data.sectionFicha.FR, disabled: true}, Validators.required],
+      temperatura: [{value: data.sectionFicha.temperatura, disabled: true}, Validators.required],
+      sat: [{value: data.sectionFicha.sat, disabled: true}, Validators.required],
+      title: [{value: data.sectionFicha.title, disabled: true}, Validators.required],
+      content: [{value: data.sectionFicha.content, disabled: true}, Validators.required],
+      indicaciones: [{value: data.sectionFicha.indicaciones, disabled: true}, Validators.required],
+      observaciones: [{value: data.sectionFicha.observaciones, disabled: true}, Validators.required],
     });
+
     this.historialForm.valueChanges.subscribe(() => {
       this.changes = true;
     });

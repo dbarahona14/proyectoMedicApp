@@ -262,7 +262,7 @@
 
         <div class="row">
           <div class="col-12 col-sm-6 container">
-            <input type="file" accept="*" (change)="onFileChanged($event)" #fileInput hidden multiple>
+            <input type="file" accept="*" (change)="onFileChanged($event)" #fileInput hidden multiple id="files">
             <button tc-button [type]="'button'" [beforeIcon]="'icofont-clip'" [view]="'accent'" [outline]="true"
               (click)="fileInput.click()">
               Adjuntar Archivos
@@ -273,18 +273,18 @@
           </div>
         </div>
 
-        <div class="mt-4" *ngIf="false">
+        <div class="mt-4" *ngIf="this.file_list.length > 0">
           <br>
           <div class="row">
             <tc-form-label>Archivo(s) adjunto(s)</tc-form-label>
           </div>
 
-          <div class="row">
+          <div class="row mb-2" *ngFor="let file of this.file_list; let i = index">
             <div class="col-10">
-              <tc-input [value]="'Archivo.pdf'" [readonly]="true"></tc-input>
+              <tc-input value= {{file}} [readonly]="true"[prefixIcon]="'icofont-papers'"></tc-input>
             </div>
             <div class="col-2">
-              <button tc-button [afterIcon]="'icofont-bin'" [view]="'accent'" [square]="true" [outline]="true">
+              <button tc-button [afterIcon]="'icofont-bin'" [view]="'error'" [square]="true" [outline]="true" (click)="deleteDoc(i)">
               </button>
             </div>
           </div>
