@@ -162,7 +162,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   closeModal() {
     this.labelDocuments = 'Sin archivos adjuntos.';
     this.file_list = [];
-    this.newFileList = [];
+    // this.newFileList = [];
     this.modal.close();
     // this.patientForm.reset();
     // this.searchForm.reset();
@@ -202,6 +202,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   }
 
   initHistorialForm(data: ITimelineBox, patient: Paciente) {
+    this.newFileList = [];
     this.historialForm = this.formBuilder.group({
       nombre: [patient.nombre, Validators.required],
       nombreFuncionario: ['Patricio Fuentes Díaz', Validators.required],
@@ -226,7 +227,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       this.newFileList = Array.from($inputValue.target.files); // Arreglar
     }
     else {
-      var aux : Array <File> = Array.from($inputValue.target.files);
+      var aux: Array<File> = Array.from($inputValue.target.files);
       this.newFileList = this.newFileList.concat(aux);
     }
     this.file_store = $inputValue.target.files;
@@ -238,11 +239,6 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     }
 
     this.updateLabel();
-    // const imgRef = ref(this.storage, `images/${file.name}`);
-
-    // uploadBytes(imgRef, file)
-    //   .then(response => console.log(response))
-    //   .catch(error => console.log(error));
 
     // let reader: FileReader = new FileReader();
 
@@ -365,7 +361,16 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       newHistorial.fecha = form.get('fecha').value;
       newHistorial.sectionFicha = form.value;
 
-      this.historialService.create(this.idPaciente, newHistorial).then(() => {
+      this.historialService.create(this.idPaciente, newHistorial).then(resp => {
+        if (this.newFileList.length > 0) {
+          for (let index = 0; index < this.newFileList.length; index++) {
+            const element = this.newFileList[index];
+            const imgRef = ref(this.storage, `historial/${this.idPaciente}/${resp.id}/${element.name}`);
+            uploadBytes(imgRef, element)
+              .then(response => console.log(response))
+              .catch(error => console.log(error));
+          }
+        }
         this.notificationService.showSuccess('Listo', 'Atención registrada correctamente');
         // console.log('Historial agregado correctamente!!!');
       });
