@@ -131,6 +131,23 @@
         <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
       </tc-form-group>
 
+      <div *ngIf="isDocument">
+        <br>
+        <div class="row">
+          <tc-form-label>Archivo(s) adjunto(s)</tc-form-label>
+        </div>
+
+        <div class="row mb-2" *ngFor="let file of this.documentos; let i = index">
+          <div class="col-10">
+            <tc-input value= {{file.name}} [readonly]="true"[prefixIcon]="'icofont-papers'"></tc-input>
+          </div>
+          <div class="col-2">
+            <button tc-button [afterIcon]="'icofont-download'" [view]="'success'" [square]="true" [outline]="true" (click)="downloadDocument(i)">
+            </button>
+          </div>
+        </div>
+      </div>
+
     </form>
   </ng-template>
 

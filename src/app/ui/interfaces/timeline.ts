@@ -22,6 +22,8 @@ export interface ITimelineBox {
   sectionData: ITimeline[];
   sectionFicha: FichaClinica;
   fecha: any;
+  id: string;
+  documents?: boolean;
 }
 
 export interface ITimelineLabel {

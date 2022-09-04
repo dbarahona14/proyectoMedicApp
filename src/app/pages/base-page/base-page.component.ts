@@ -49,7 +49,6 @@ export class BasePageComponent implements OnInit, OnDestroy {
   }
 
   getDataHistorial(dataName: string, timeline: ITimelineBox[], callbackFnName?: string) {
-    console.log(timeline);
     this[dataName] = timeline;
     // this.httpSv.getData(url).subscribe(
     //   data => {

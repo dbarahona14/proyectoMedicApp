@@ -18,7 +18,8 @@ import { map } from 'rxjs/operators';
 import { ITimelineBox } from '../../../ui/interfaces/timeline';
 import { ITimeline } from '../../../interfaces/ficha-clinica';
 import { NotificationService } from 'src/app/services/notification/notification.service';
-import { Storage, ref, uploadBytes } from '@angular/fire/storage';
+import { Storage, ref, uploadBytes, listAll } from '@angular/fire/storage';
+import { async } from '@firebase/util';
 
 @Component({
   selector: 'page-patient-profile',
@@ -123,11 +124,6 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       });
 
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
-
-    console.log(this.fichasClinicas);
-
-
-
     // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
     //   this.patientTimeline = res;
     // });
@@ -294,9 +290,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     ).subscribe(data => {
       if (data && data.length) {
         this.noData = false;
-        console.log(this.noData);
         this.fichasClinicas = data;
-        console.log(this.fichasClinicas);
         this.getDataHistorial('patientTimeline', this.fichasClinicas);
         this.setLoaded();
       }
@@ -343,10 +337,10 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
           title: "string",
           date: "any",
           nombreFuncionario: "string"
-        }, fecha: ""
+        }, fecha: "",
+        id: "",
+        documents: false,
       };
-
-      console.log(form.get('title').value);
 
       newTimeLine.title = form.get('title').value;
       newTimeLine.content = form.get('content').value;
@@ -363,15 +357,24 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
       this.historialService.create(this.idPaciente, newHistorial).then(resp => {
         if (this.newFileList.length > 0) {
+          newHistorial.documents = true;
           for (let index = 0; index < this.newFileList.length; index++) {
             const element = this.newFileList[index];
-            const imgRef = ref(this.storage, `historial/${this.idPaciente}/${resp.id}/${element.name}`);
+            const imgRef = ref(this.storage, `historial/${resp.id}/${element.name}`);
             uploadBytes(imgRef, element)
               .then(response => console.log(response))
               .catch(error => console.log(error));
           }
         }
-        this.notificationService.showSuccess('Listo', 'Atención registrada correctamente');
+        else{
+          newHistorial.documents = false;
+        }
+        newHistorial.id = resp.id;
+        this.historialService.update(this.idPaciente, resp.id, newHistorial).then(resp =>{
+          this.notificationService.showSuccess('Listo', 'Atención registrada correctamente');
+        })
+
+        
         // console.log('Historial agregado correctamente!!!');
       });
     }
