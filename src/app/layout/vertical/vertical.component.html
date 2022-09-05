@@ -92,7 +92,11 @@
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'RUT con puntos y guión'" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="patientForm.controls.rut.touched && patientForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
       </tc-form-group>
 
       <tc-form-group>

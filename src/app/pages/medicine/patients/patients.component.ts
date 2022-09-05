@@ -75,7 +75,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       }
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
-    this.currentAvatar = this.defaultAvatar;
+    //this.currentAvatar = this.defaultAvatar;
   }
 
   ngOnInit() {
@@ -128,8 +128,8 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   // close modal window
   closeModal() {
     this.modal.close();
-    this.patientForm.reset();
-    this.currentAvatar = this.defaultAvatar;
+    //this.patientForm.reset();
+    //this.currentAvatar = this.defaultAvatar;
   }
 
   // upload new file
@@ -162,6 +162,13 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       domicilio: [data.domicilio ? data.domicilio : '', Validators.required],
       // status: [data.status ? data.status.toLowerCase() : '', Validators.required]
     });
+
+    if (data.genero === 'hombre') {
+      this.currentAvatar = 'assets/content/male-icon.png';
+    }
+    else {
+      this.currentAvatar = 'assets/content/female-icon.png';
+    }
   }
 
   // update patient

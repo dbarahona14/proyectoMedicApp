@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
 import { BasePageComponent } from '../../base-page';
@@ -178,7 +178,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
       edad: [data.edad, Validators.required],
       id: [data.id, Validators.required],
-      rut: [data.rut, Validators.required]
+      rut: [data.rut, [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]]
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]
     });
@@ -386,5 +386,69 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     console.log("SI ENTRA");
     this.notificationService.showSuccess("Título", "Mensaje");
   }
+
+  checkVerificatorDigit(control: AbstractControl) {
+    let run = control;
+    if (run.value == null || run.value == "") return null;
+
+    //Limpiar run de puntos y guión
+    var runClean = run.value.replace(/[^0-9kK]+/g, '').toUpperCase();
+
+    // Aislar Cuerpo y Dígito Verificador
+    let body = runClean.slice(0, -1);
+    let dv = runClean.slice(-1).toUpperCase();
+
+    // Calcular Dígito Verificador
+    let suma = 0;
+    let multiplo = 2;
+
+    // Para cada dígito del Cuerpo
+    for (let i = 1; i <= body.length; i++) {
+      // Obtener su Producto con el Múltiplo Correspondiente
+      let index = multiplo * runClean.charAt(body.length - i);
+      // Sumar al Contador General
+      suma = suma + index;
+      // Consolidar Múltiplo dentro del rango [2,7]
+      if (multiplo < 7) {
+        multiplo = multiplo + 1;
+      } else {
+        multiplo = 2;
+      }
+    }
+
+    // Calcular Dígito Verificador en base al Módulo 11
+    let dvEsperado = 11 - (suma % 11);
+
+    // Casos Especiales (0 y K)
+    dv = (dv == 'K') ? 10 : dv;
+    dv = (dv == 0) ? 11 : dv;
+
+    // Validar que el Cuerpo coincide con su Dígito Verificador
+    if (dvEsperado != dv) {
+      return { verificator: true };
+    }
+    else null;
+  }
+
+  checkRun() {
+    let run = this.f['rut'];
+    if(run){
+      console.log(run.value);
+      var runClean = run.value.replace(/[^0-9kK]+/g, '').toUpperCase();
+      if (runClean.length <= 1) {
+        return;
+      }
+      var result = runClean.slice(-4, -1) + "-" + runClean.substr(runClean.length - 1);
+      for (var i = 4; i < runClean.length; i += 3) {
+        result = runClean.slice(-3 - i, -i) + "." + result;
+      }
+      run.setValue(result);
+
+    }
+  }
+
+  get f() { return this.patientForm.controls; }
+
+  get fValue() { return this.patientForm.value; }
 
 }

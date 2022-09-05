@@ -45,7 +45,11 @@
 
       <tc-form-group>
         <tc-form-label>RUT</tc-form-label>
-        <tc-input [placeholder]="'RUT del paciente'" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="patientForm.controls.rut.touched && patientForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
       </tc-form-group>
 
       <!-- <tc-form-group>
@@ -106,7 +110,7 @@
       </tc-form-group> -->
 
       <button tc-button [view]="'completado'" [block]="true" [disabled]="!changes || patientForm.invalid"
-        (click)="updatePatient(patientForm)">
+        (click)="updatePatient(patientForm)" [view]="'accent'" [outline]="true">
         Guardar cambios
       </button>
     </form>
