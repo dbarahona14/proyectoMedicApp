@@ -27,13 +27,13 @@
     <!-- Boton para buscar paciente -->
     <div class="add-patient">
       <div class="row">
-        <button   class= "mb-2" tc-button [view]="'accent'" [beforeIcon]="'icofont-search'"
-        (click)="openModal(modalBodyTwo, 'Buscar paciente', modalFooterTwo)">Buscar Paciente</button>
+        <button class="mb-2" tc-button [view]="'accent'" [beforeIcon]="'icofont-search'"
+          (click)="openModal(modalBodyTwo, 'Buscar paciente', modalFooterTwo)">Buscar Paciente</button>
       </div>
-      
+
       <div class="row">
-      <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
-        (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
+        <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
+          (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
       </div>
     </div>
 
@@ -72,7 +72,12 @@
 <ng-container>
   <ng-template #modalBody>
     <form [formGroup]="patientForm" novalidate class="new-patient-form">
-      <tc-form-group class="avatar-box d-flex">
+
+      <div class="container">
+        <tc-icon class="icofont-users-alt-4 mb-4" [tcShape]="'50%'" [tcColor]="'#000000'" [tcBgColor]="'#FFFFFF'"
+          [tcBorderColor]="'#000000'" [tcFontSize]="70"></tc-icon>
+      </div>
+      <!-- <tc-form-group class="avatar-box d-flex">
         <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
 
         <tc-avatar [src]="currentAvatar"></tc-avatar>
@@ -80,14 +85,18 @@
           (click)="fileInput.click()">
           Seleccionar imagen
         </button>
-      </tc-form-group>
+      </tc-form-group> -->
 
       <tc-form-group>
         <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'RUT con puntos y guión'" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="patientForm.controls.rut.touched && patientForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
       </tc-form-group>
 
       <tc-form-group>
@@ -96,7 +105,7 @@
           <input matInput [matDatepicker]="picker" formControlName="fNac">
           <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker ></mat-datepicker>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </tc-form-group>
       <tc-form-group>
@@ -144,7 +153,8 @@
       <form class="search-wrap" [formGroup]="searchForm">
         <tc-autocomplete formControlName="search" [suffixIcon]="'icofont icofont-search'" [data]="data"
           [key]="'nombreRut'" [placeholder]="'Ingrese nombre o RUT del paciente...'"
-          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, searchForm.value.search)"></tc-autocomplete>
+          (keydown.enter)="goTo($event, searchForm.value.search)" (click)="goTo($event, searchForm.value.search)">
+        </tc-autocomplete>
       </form>
     </div>
   </ng-template>

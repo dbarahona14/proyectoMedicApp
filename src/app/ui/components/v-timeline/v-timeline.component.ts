@@ -5,6 +5,7 @@ import { TCModalService } from '../../services/modal/modal.service';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { Content } from '../../interfaces/modal';
 import { HistorialService } from 'src/app/services/historial/historial.service';
+import { listAll, ref, Storage, getDownloadURL } from '@angular/fire/storage';
 
 @Component({
   selector: 'tc-v-timeline',
@@ -16,7 +17,7 @@ export class TCVTimelineComponent implements OnInit {
     return 'tc-v-timeline';
   };
   @HostBinding('class.show-years') @Input() showLabels: boolean;
-  @HostBinding('class.dots')  get dots() {
+  @HostBinding('class.dots') get dots() {
     return !this.showIcons;
   };
   @HostBinding('class.align-left') get left() {
@@ -38,10 +39,12 @@ export class TCVTimelineComponent implements OnInit {
   //Editado por mi
   historialForm: FormGroup;
   changes: boolean;
+  documentos: any;
+  isDocument: boolean;
 
   constructor(private modal: TCModalService,
     private formBuilder: FormBuilder,
-    private historialService: HistorialService) {
+    private storage: Storage) {
     this.align = 'left';
     this.showLabels = false;
     this.showIcons = true;
@@ -52,9 +55,12 @@ export class TCVTimelineComponent implements OnInit {
 
   //Editado por mi
   // open modal window
-  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null, data : ITimelineBox) {
+  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null, data: ITimelineBox) {
     this.initHistorialForm(data);
-
+    if (data.documents) {
+      this.getDocuments(data.id);
+      this.isDocument = true;
+    }
     this.modal.open({
       header: header,
       footer: footer,
@@ -64,33 +70,49 @@ export class TCVTimelineComponent implements OnInit {
   }
 
   closeModal() {
+    this.documentos = [];
+    this.isDocument = false;
     this.modal.close();
   }
 
   initHistorialForm(data: ITimelineBox) {
     this.historialForm = this.formBuilder.group({
-      nombreFuncionario: [data.sectionFicha.nombreFuncionario, Validators.required],
-      fecha: [data.fecha.toDate() , Validators.required],
-      alergias: [data.sectionFicha.alergias, Validators.required],
-      antMorbidos: [data.sectionFicha.antMorbidos, Validators.required],
-      PA: [data.sectionFicha.PA, Validators.required],
-      FC: [data.sectionFicha.FC, Validators.required],
-      FR: [data.sectionFicha.FR, Validators.required],
-      temperatura: [data.sectionFicha.temperatura, Validators.required],
-      sat: [data.sectionFicha.sat, Validators.required],
-      title: [data.sectionFicha.title, Validators.required],
-      content: [data.sectionFicha.content, Validators.required],
-      indicaciones: [data.sectionFicha.indicaciones, Validators.required],
-      observaciones: [data.sectionFicha.observaciones, Validators.required],
+      nombreFuncionario: [{ value: data.sectionFicha.nombreFuncionario, disabled: true }, Validators.required],
+      fecha: [data.fecha.toDate(), Validators.required],
+      alergias: [{ value: data.sectionFicha.alergias, disabled: true }, Validators.required],
+      antMorbidos: [{ value: data.sectionFicha.antMorbidos, disabled: true }, Validators.required],
+      PA: [{ value: data.sectionFicha.PA, disabled: true }, Validators.required],
+      FC: [{ value: data.sectionFicha.FC, disabled: true }, Validators.required],
+      FR: [{ value: data.sectionFicha.FR, disabled: true }, Validators.required],
+      temperatura: [{ value: data.sectionFicha.temperatura, disabled: true }, Validators.required],
+      sat: [{ value: data.sectionFicha.sat, disabled: true }, Validators.required],
+      title: [{ value: data.sectionFicha.title, disabled: true }, Validators.required],
+      content: [{ value: data.sectionFicha.content, disabled: true }, Validators.required],
+      indicaciones: [{ value: data.sectionFicha.indicaciones, disabled: true }, Validators.required],
+      observaciones: [{ value: data.sectionFicha.observaciones, disabled: true }, Validators.required],
     });
+
     this.historialForm.valueChanges.subscribe(() => {
       this.changes = true;
     });
   }
 
-  moreInfo(){
+  moreInfo() {
     console.log("CLICK!")
     return true;
+  }
+
+  getDocuments(id: string) {
+    const documentsRef = ref(this.storage, `historial/${id}`);
+
+    listAll(documentsRef).then(response => {
+      this.documentos = response.items;
+    }).catch(error => console.log(error));
+  }
+
+  async downloadDocument (index: number) {
+    const url = await getDownloadURL(this.documentos[index]);
+    window.open(url, "_blank");
   }
 
   // updateHistorial(form: FormGroup) {
@@ -105,5 +127,5 @@ export class TCVTimelineComponent implements OnInit {
 
   ngOnInit() { }
 
-  
+
 }

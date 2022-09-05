@@ -47,3 +47,8 @@
   z-index: 100000 !important; /* set value you need */
 }
 
+.container {
+  display: grid;
+  place-content: center;
+}
+
