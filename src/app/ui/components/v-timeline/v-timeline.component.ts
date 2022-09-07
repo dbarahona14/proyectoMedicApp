@@ -110,9 +110,11 @@ export class TCVTimelineComponent implements OnInit {
     }).catch(error => console.log(error));
   }
 
-  async downloadDocument (index: number) {
-    const url = await getDownloadURL(this.documentos[index]);
-    window.open(url, "_blank");
+  downloadDocument (index: number) {
+    getDownloadURL(this.documentos[index]).then(resp =>{
+      window.open(resp, "_blank");
+  });
+    
   }
 
   // updateHistorial(form: FormGroup) {

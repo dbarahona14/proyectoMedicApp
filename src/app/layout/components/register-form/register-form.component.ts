@@ -19,7 +19,7 @@ export class RegisterFormComponent implements OnInit {
     apellido: 'Barahona',
     rut: '18.988.397-8',
     fNac: '20 de febrero de 1995',
-    email: 'diego@gmail.com',
+    email: 'diego@yahoo.com',
     rol: 'administrador',
     nickName: 'diegob',
     especialidad: 'Medico',
@@ -44,7 +44,8 @@ export class RegisterFormComponent implements OnInit {
   registrar(){
     var mail = this.usuario.email;
     var contra = this.pass;
-    this.auth.registro(mail, contra).then(res =>{
+    this.auth.register(mail, contra).then(res =>{
+
       console.log("El uid es: " + res.user.uid);
       this.usuario.uid = res.user.uid;
       this.db.create(this.usuario).then(() => {

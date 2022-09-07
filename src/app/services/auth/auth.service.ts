@@ -1,33 +1,42 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Usuario } from 'src/app/interfaces/usuario';
+import { CrudUsuarioService } from '../usuario/crud-usuario.service';
+import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private _auth : AngularFireAuth) { }
+  constructor(private _auth: AngularFireAuth, private usuarioService: CrudUsuarioService, private ngZone: NgZone, private router: Router) {}
 
-  async login(email: string, password: string){
-    try {
-      return await this._auth.signInWithEmailAndPassword(email, password);
-    } catch (error) {
-        alert("No se ha podido hacer el login correctamente. Error: "+ error);
-        console.log("Error al hacer el login!!! Error: " + error);
-        return null;
-    }
+  login( email: string, password:string ) {
+    return this._auth
+      .signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        this.usuarioService.getUserById(result.user.uid).get().subscribe(data =>{
+          localStorage.setItem('userData', JSON.stringify(data.data()));
+          this.router.navigate(['vertical/default-dashboard']);
+        });
+        localStorage.setItem('user', JSON.stringify(result.user));
+        // this.ngZone.run(() => {
+        //   this.router.navigate(['vertical/default-dashboard']);
+        // });
+      })
+      .catch((error) => {
+        window.alert(error.message);
+      });
   }
 
-  async registro(email: string, password: string){
-    try {
-      return await this._auth.createUserWithEmailAndPassword(email, password);
-    } catch (error) {
-      alert("No se ha podido hacer el registro correctamente!!. Error: "+ error);
-      return null;
-    }
+  register(email: string, password: string ) {
+    return this._auth.createUserWithEmailAndPassword(email, password);
   }
 
-  async logout(){
-    this._auth.signOut();
+  logout() {
+    localStorage.clear();
+    return this._auth.signOut();
   }
 }
