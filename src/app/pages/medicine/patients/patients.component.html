@@ -22,11 +22,11 @@
         <span [tcColor]="'#a5a5a5'" #id>{{ value }}</span>
       </ng-template>
     </tc-table-col> -->
-    <tc-table-col [columnTitle]="'Edad'" [columnName]="'edad'" [enableSorting]="true">
+    <!-- <tc-table-col [columnTitle]="'Edad'" [columnName]="'edad'" [enableSorting]="true">
       <ng-template #tableTDTemplate let-value>
         <span [tcColor]="'#a5a5a5'">{{ value }}</span>
       </ng-template>
-    </tc-table-col>
+    </tc-table-col> -->
     <tc-table-col [columnTitle]="'Dirección'" [columnName]="'domicilio'">
       <ng-template #tableTDTemplate let-value>
         <div class="address-col">{{ value }}</div>
@@ -115,7 +115,7 @@
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad"></tc-input>
+            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad" [disabled]="true"></tc-input>
           </tc-form-group>
         </div>
 

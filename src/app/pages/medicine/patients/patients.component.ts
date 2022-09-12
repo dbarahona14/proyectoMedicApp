@@ -30,6 +30,8 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
 
+  edad: any;
+
   constructor(
     store: Store<IAppState>,
     httpSv: HttpService,
@@ -147,7 +149,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   // init form
   initPatientForm(data: Paciente) {
     // this.currentAvatar = data.img ? data.img : this.defaultAvatar;
-
+    this.edad = this.calcularEdad(data.fNac.toDate());
     this.patientForm = this.fb.group({
       id: data.id,
       img: [this.currentAvatar],
@@ -156,7 +158,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       fNac: [data.fNac? data.fNac.toDate(): '', Validators.required],
       email: [data.correo? data.correo : '', Validators.required],
       telefono: [data.telefono ? data.telefono : '', Validators.required],
-      edad: [data.edad ? data.edad : '', Validators.required],
+      edad: [this.edad ? this.edad : '', Validators.required],
       // lastVisit: [data.lastVisit ? data.lastVisit : '', Validators.required],
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
       domicilio: [data.domicilio ? data.domicilio : '', Validators.required],
@@ -170,6 +172,19 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       this.currentAvatar = 'assets/content/female-icon.png';
     }
   }
+
+  calcularEdad(fecha) {
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    return edad;
+}
 
   // update patient
   updatePatient(form: FormGroup) {

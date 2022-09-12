@@ -114,7 +114,7 @@ const privateRoutes: Routes = [
   { path: 'pricing', component: PagePricingComponent },
   { path: 'events-timeline', component: PageTimelineComponent },
   { path: 'user-profile', component: PageUserProfileComponent },
-  { path: 'edit-account', component: PageEditAccountComponent },
+  { path: 'edit-account/:id', component: PageEditAccountComponent },
   { path: 'events-calendar', component: PageCalendarComponent },
   { path: 'settings', component: PageSettingsComponent }
 ];

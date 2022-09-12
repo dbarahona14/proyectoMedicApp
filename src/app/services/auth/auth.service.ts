@@ -1,8 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Usuario } from 'src/app/interfaces/usuario';
 import { CrudUsuarioService } from '../usuario/crud-usuario.service';
-import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 
@@ -25,9 +23,9 @@ export class AuthService {
         // this.ngZone.run(() => {
         //   this.router.navigate(['vertical/default-dashboard']);
         // });
-      })
-      .catch((error) => {
-        window.alert(error.message);
+      },
+       err => {
+        window.alert(err.message);
       });
   }
 

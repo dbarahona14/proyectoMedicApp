@@ -22,6 +22,7 @@ export class ActionsComponent implements OnInit {
   @Input() layout: string;
 
   usuarioLogIn: Usuario;
+  img: string;
 
 
   constructor(
@@ -41,6 +42,7 @@ export class ActionsComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogIn = JSON.parse(localStorage.getItem('userData'));
+    this.img = 'assets/content/male-icon.png';
     this.getData('assets/data/navbar-notifications.json', 'notifications');
     this.getData('assets/data/navbar-messages.json', 'messages');
     this.getData('assets/data/navbar-files.json', 'files');
@@ -62,11 +64,14 @@ export class ActionsComponent implements OnInit {
   }
 
   goTo(event: Event, link: string, layout: string = '') {
-    this.auth.logout();
+    if (link == 'sign-in') {
+      this.auth.logout();
+    }
+
     event.preventDefault();
     this.onCloseDropdown();
     setTimeout(() => {
-      this.router.navigate([layout ? layout : this.layout, link]);
+      this.router.navigate(['../vertical/edit-account/', this.usuarioLogIn.uid]);
     });
   }
 }

@@ -5,6 +5,9 @@ import { IAppState } from '../../../../interfaces/app-state';
 import { HttpService } from '../../../../services/http/http.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../../../ui/interfaces/option';
+import { Usuario } from 'src/app/interfaces/usuario';
+import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'page-edit-account',
@@ -20,38 +23,42 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
   defaultAvatar: string;
   changes: boolean;
 
+  currentUser: Usuario;
+
   constructor(
     store: Store<IAppState>,
     httpSv: HttpService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private userService: CrudUsuarioService,
+    private actRoute: ActivatedRoute
   ) {
     super(store, httpSv);
 
     this.pageData = {
-      title: 'Edit account',
+      title: 'Editar cuenta',
       loaded: true,
       breadcrumbs: [
         {
-          title: 'Apps',
+          title: 'Inicio',
           route: 'default-dashboard'
         },
+        // {
+        //   title: 'Service pages',
+        //   route: 'default-dashboard'
+        // },
         {
-          title: 'Service pages',
-          route: 'default-dashboard'
-        },
-        {
-          title: 'Edit account'
+          title: 'Editar cuenta'
         }
       ]
     };
     this.gender = [
       {
-        label: 'Male',
-        value: 'male'
+        label: 'Hombre',
+        value: 'hombre'
       },
       {
-        label: 'Female',
-        value: 'female'
+        label: 'Mujer',
+        value: 'mujer'
       }
     ];
     this.status = [
@@ -67,12 +74,17 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
+    
   }
 
   ngOnInit() {
     super.ngOnInit();
+    this.actRoute.params
+      .subscribe(({ id }) => {
+        this.obtenerUsuario(id);
+      });
 
-    this.getData('assets/data/account-data.json', 'userInfo', 'loadedDetect');
+    // this.getData('assets/data/account-data.json', 'userInfo', 'loadedDetect');
   }
 
   ngOnDestroy() {
@@ -82,22 +94,26 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
   loadedDetect() {
     this.setLoaded();
 
-    this.currentAvatar = this.userInfo.img;
-    this.inituserForm(this.userInfo);
+    //this.currentAvatar = this.userInfo.img;
+    this.inituserForm(this.currentUser);
   }
 
   // init form
-  inituserForm(data: any) {
+  inituserForm(data: Usuario) {
+    var edad = this.calcularEdad(data.fNac.toDate());
     this.userForm = this.formBuilder.group({
-      img: [this.currentAvatar],
-      firstName: [data.firstName, Validators.required],
-      lastName: [data.lastName, Validators.required],
-      number: [data.number, Validators.required],
-      address: [data.address, Validators.required],
-      gender: [data.gender, Validators.required],
-      age: [data.age, Validators.required],
-      lastVisit: [data.lastVisit, Validators.required],
-      status: [data.status, Validators.required]
+      //img: [this.currentAvatar],
+      nombre: [data.nombre, Validators.required],
+      apellido: [data.apellido, Validators.required],
+      rut: [data.rut, Validators.required],
+      telefono: [data.telefono, Validators.required],
+      domicilio: [data.domicilio, Validators.required],
+      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
+      fNac: [data.fNac.toDate(), Validators.required],
+      email: [data.email, Validators.required],
+      edad: [edad, Validators.required],
+      // lastVisit: [data.lastVisit, Validators.required],
+      // status: [data.status, Validators.required]
     });
 
     // detect form changes
@@ -105,6 +121,19 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
       this.changes = true;
     });
   }
+
+  calcularEdad(fecha) {
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    return edad;
+}
 
   // save form data
   saveData(form: FormGroup) {
@@ -125,5 +154,20 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     };
 
     reader.readAsDataURL(file);
+  }
+
+  obtenerUsuario(id: string) {
+    var paciente = this.userService.getUserById(id);
+    paciente.snapshotChanges().subscribe(datos => {
+      this.currentUser = datos.payload.data();
+      if (this.currentUser.genero === 'hombre') {
+        this.currentAvatar = 'assets/content/male-icon.png';
+      }
+      else {
+        this.currentAvatar = 'assets/content/female-icon.png';
+      }
+      this.loadedDetect();
+
+    });
   }
 }

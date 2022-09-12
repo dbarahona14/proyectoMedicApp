@@ -168,6 +168,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   // init form
   initPatientForm(data: Paciente) {
     this.patientName = data.nombre;
+    var edad = this.calcularEdad(data.fNac.toDate());
     this.patientForm = this.formBuilder.group({
       img: [],
       nombre: [data.nombre, Validators.required],
@@ -176,7 +177,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       fNac: [data.fNac.toDate(), Validators.required],
       domicilio: [data.domicilio, Validators.required],
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
-      edad: [data.edad, Validators.required],
+      edad: [edad, Validators.required],
       id: [data.id, Validators.required],
       rut: [data.rut, [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]]
       // lastVisit: [data.lastVisit, Validators.required],
@@ -188,6 +189,19 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       this.changes = true;
     });
   }
+
+  calcularEdad(fecha) {
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    return edad;
+}
 
   // save form data
   saveData(form: FormGroup) {

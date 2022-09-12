@@ -24,7 +24,10 @@ export class RegisterFormComponent implements OnInit {
     nickName: 'diegob',
     especialidad: 'Medico',
     estado: true,
-    acceso: '14 de junio de 2022'
+    acceso: '14 de junio de 2022',
+    genero: 'hombre',
+    telefono: '985026258',
+    domicilio: 'Heriberto Soto 1039, San Fernando'
   };
 
   pass: string = '123456';
@@ -48,7 +51,7 @@ export class RegisterFormComponent implements OnInit {
 
       console.log("El uid es: " + res.user.uid);
       this.usuario.uid = res.user.uid;
-      this.db.create(this.usuario).then(() => {
+      this.db.createWithId(this.usuario, res.user.uid).then(() => {
         console.log('Created new user successfully!');
         alert('Se creó el usuario correctamente! :)');
       });
