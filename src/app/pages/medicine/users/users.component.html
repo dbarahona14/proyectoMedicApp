@@ -1,0 +1,181 @@
+<tc-card class="mb-0">
+  <tc-table [rows]="usuarios" [hovered]="true" [search]="true" [pagination]="true" [headerBgColor]="'#336cfb'"
+    [headerColor]="'#fff'">
+    <tc-table-col [columnTitle]="''" [columnName]="'id'">
+      <ng-template #tableTDTemplate let-value>
+        <tc-icon class="icofont-ui-user"></tc-icon>
+        <!-- <tc-avatar [src]="value"></tc-avatar> -->
+      </ng-template>
+    </tc-table-col>
+    <tc-table-col [columnTitle]="'Nombre'" [columnName]="'nombre'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <strong>{{ value }}</strong>
+      </ng-template>
+    </tc-table-col>
+
+    <tc-table-col [columnTitle]="'Apellidos'" [columnName]="'apellidos'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <strong>{{ value }}</strong>
+      </ng-template>
+    </tc-table-col>
+
+    <tc-table-col [columnTitle]="'RUT'" [columnName]="'rut'" [enableSorting]="true">
+      <ng-template #tableTDTemplate let-value>
+        <strong>{{ value }}</strong>
+      </ng-template>
+    </tc-table-col>
+    <!-- <tc-table-col [columnTitle]="'ID'" [columnName]="'id'" [enableSorting]="true">
+        <ng-template #tableTDTemplate let-value>
+          <span [tcColor]="'#a5a5a5'" #id>{{ value }}</span>
+        </ng-template>
+      </tc-table-col> -->
+    <!-- <tc-table-col [columnTitle]="'Edad'" [columnName]="'edad'" [enableSorting]="true">
+        <ng-template #tableTDTemplate let-value>
+          <span [tcColor]="'#a5a5a5'">{{ value }}</span>
+        </ng-template>
+      </tc-table-col> -->
+    <tc-table-col [columnTitle]="'Correo'" [columnName]="'email'">
+      <ng-template #tableTDTemplate let-value>
+        <div class="address-col">{{ value }}</div>
+      </ng-template>
+    </tc-table-col>
+
+    <tc-table-col [columnTitle]="'Número'" [columnName]="'telefono'">
+      <ng-template #tableTDTemplate let-value>
+        <span class="d-flex align-items-center nowrap" [tcColor]="'#336cfb'">
+          <tc-icon [iconClass]="'icofont-ui-cell-phone'" [tcFontSize]="16" [padding]="0" class="me-1"></tc-icon>
+          {{ value }}
+        </span>
+      </ng-template>
+    </tc-table-col>
+    <!-- <tc-table-col [columnTitle]="'Última visita'" [columnName]="'lastVisit'">
+        <ng-template #tableTDTemplate let-value>
+          <span class="nowrap" [tcColor]="'#a5a5a5'">22-06-2022</span>
+          <span class="nowrap" [tcColor]="'#a5a5a5'">{{ value }}</span>
+        </ng-template>
+      </tc-table-col>
+      <tc-table-col [columnTitle]="'Estado'" [columnName]="'status'" [enableSorting]="true">
+        <ng-template #tableTDTemplate let-value>
+          <tc-badge [view]="value === 'Approved' ? 'success' : 'warning'">Approved</tc-badge>
+          <tc-badge [view]="value === 'Approved' ? 'success' : 'warning'">{{ value }}</tc-badge>
+        </ng-template>
+      </tc-table-col> -->
+    <tc-table-col [columnTitle]="'Acciones'" [columnName]="'id'">
+      <ng-template #tableTDTemplate let-row="row">
+        <div class="actions">
+          <!-- <a href="#" tc-button [routerLink]="['../edit-account', row.id]" [afterIcon]="'icofont-external-link'"
+              [square]="true" [tcShape]="500" [size]="'sm'" (click)="cambiarId(row.id)"></a> -->
+
+          <button tc-button [afterIcon]="'icofont-ui-edit'" [view]="'info'" [square]="true" [tcShape]="500"
+            [size]="'sm'" [tcFontSize]="15"
+            (click)="openModal(modalBody, 'Actualizar información usuario', modalFooter, row)"></button>
+
+          <button *ngIf="row.estado" tc-button [afterIcon]="'icofont-eye'" view="warning" [square]="true"
+            [tcShape]="500" [size]="'sm'" [tcFontSize]="15"
+            (click)="openModalTwo('', '¿Desea inhabilitar cuenta?', modalFooterTwo)"></button>
+
+          <button *ngIf="!row.estado" tc-button [afterIcon]="'icofont-eye-blocked'" view="warning" [square]="true"
+            [tcShape]="500" [size]="'sm'" [tcFontSize]="15" (click)="cambiarEstado(true)"></button>
+
+          <button tc-button [afterIcon]="'icofont-ui-delete'" [view]="'error'" [square]="true" [tcShape]="500"
+            [size]="'sm'" disabled="true" [tcFontSize]="15" (click)="remove(row.id)"></button>
+        </div>
+      </ng-template>
+    </tc-table-col>
+  </tc-table>
+</tc-card>
+
+
+<!-- edit patient Modal window -->
+<ng-container>
+  <ng-template #modalBody>
+    <form [formGroup]="userForm" novalidate class="new-patient-form">
+      <tc-form-group class="avatar-box d-flex">
+        <div class="row container">
+          <div class="container mb-2">
+            <tc-avatar [src]="currentAvatar" [size]="120"></tc-avatar>
+          </div>
+        </div>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'RUT'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="userForm.controls.rut.touched && userForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Correo'" type="email" formControlName="email"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Número contacto'" [type]="'number'" formControlName="telefono"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad" [disabled]="true"></tc-input>
+          </tc-form-group>
+        </div>
+
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <!-- <tc-form-group>
+          <tc-select [placeholder]="'Estado'" formControlName="estado" [options]="status"></tc-select>
+        </tc-form-group> -->
+
+      <tc-form-group class="mb-0">
+        <tc-textarea [placeholder]="'Dirección'" formControlName="domicilio"></tc-textarea>
+      </tc-form-group>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+      <button tc-button [view]="'info'" [disabled]="userForm.invalid" (click)="updateUser(userForm)">
+        Actualizar usuario
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- end Modal window -->
+
+<ng-container>
+  <ng-template #modalBodyTwo>
+    <div class="row container">
+      <p>¿Desea inhabilitar cuenta?</p>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooterTwo>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+      <button tc-button [view]="'info'" (click)="cambiarEstado(false)">
+        Confirmar
+      </button>
+    </div>
+  </ng-template>
+</ng-container>

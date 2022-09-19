@@ -32,8 +32,13 @@
       </div>
 
       <div class="row">
-        <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
+        <button class="mb-2" tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
           (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
+      </div>
+
+      <div class="row" *ngIf="usuarioActivo.rol == 'administrador' || usuarioActivo.rol == 'superadministrador'" >
+        <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
+          (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Usuario</button>
       </div>
     </div>
 

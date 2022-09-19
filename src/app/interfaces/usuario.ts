@@ -1,7 +1,7 @@
 export interface Usuario {
     uid?: string;
     nombre: string;
-    apellido: string;
+    apellidos: string;
     rut: string;
     fNac: any; //tipo Date
     email: string; 

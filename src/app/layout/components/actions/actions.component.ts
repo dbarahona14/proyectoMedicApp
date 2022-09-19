@@ -36,7 +36,7 @@ export class ActionsComponent implements OnInit {
     this.closeDropdown = new EventEmitter<boolean>();
     this.layout = 'vertical';
   }
-  
+
 
 
 
@@ -64,14 +64,18 @@ export class ActionsComponent implements OnInit {
   }
 
   goTo(event: Event, link: string, layout: string = '') {
-    if (link == 'sign-in') {
-      this.auth.logout();
-    }
-
     event.preventDefault();
     this.onCloseDropdown();
-    setTimeout(() => {
-      this.router.navigate(['../vertical/edit-account/', this.usuarioLogIn.uid]);
-    });
+    if (link == 'sign-in') {
+      this.auth.logout();
+      setTimeout(() => {
+        this.router.navigate(['../public/sign-in/']);
+      });
+    }
+    else {
+      setTimeout(() => {
+        this.router.navigate(['../vertical/edit-account/', this.usuarioLogIn.uid]);
+      });
+    }
   }
 }

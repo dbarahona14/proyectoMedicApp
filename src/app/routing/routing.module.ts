@@ -61,6 +61,7 @@ import { Page404Component } from '../pages/apps/sessions/page-404';
 import { Page500Component } from '../pages/apps/sessions/page-500';
 import { PageDatepickersComponent } from '../pages/ui/components/datepickers';
 import { PageAntTableComponent } from '../pages/ui/tables/ant-table';
+import { UsersComponent } from '../pages/medicine/users/users.component';
 
 const privateRoutes: Routes = [
   { path: 'default-dashboard', component: PageDashboardComponent },
@@ -72,6 +73,7 @@ const privateRoutes: Routes = [
   { path: 'appointments', component: PageAppointmentsComponent },
   { path: 'departments', component: PageDepartmentsComponent },
   { path: 'department', component: PageDepartmentComponent },
+  { path: 'users', component: UsersComponent },
 
   { path: 'alerts', component: PageAlertsComponent },
   { path: 'buttons', component: PageButtonsComponent },

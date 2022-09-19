@@ -17,6 +17,8 @@ import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { map } from 'rxjs/operators';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { getStorage } from '@angular/fire/storage';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Usuario } from 'src/app/interfaces/usuario';
 
 @Component({
   selector: 'vertical-layout',
@@ -33,6 +35,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
 
+  usuarioActivo: Usuario;
+
 
   data: Paciente[] = [];
   @Input() layout: string;
@@ -45,7 +49,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     elRef: ElementRef,
     private modal: TCModalService,
     private pacienteService: PacienteService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {
     super(store, fb, httpSv, router, elRef);
 
@@ -66,9 +71,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
 
   ngOnInit() {
     super.ngOnInit();
-
     this.store.dispatch(new SettingsActions.Update({ layout: 'vertical' }));
-
+    this.usuarioActivo = JSON.parse(localStorage.getItem('userData'));
     this.llenarData();
   }
 

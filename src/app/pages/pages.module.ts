@@ -26,6 +26,7 @@ import { pages } from '../helpers/constants/pages';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { UsersComponent } from './medicine/users/users.component';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
   ],
   declarations: [
     ...pages,
-    BasePageComponent
+    BasePageComponent,
+    UsersComponent
   ],
   exports: []
 })

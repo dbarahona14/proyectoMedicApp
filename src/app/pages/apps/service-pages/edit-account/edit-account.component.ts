@@ -104,7 +104,7 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     this.userForm = this.formBuilder.group({
       //img: [this.currentAvatar],
       nombre: [data.nombre, Validators.required],
-      apellido: [data.apellido, Validators.required],
+      apellido: [data.apellidos, Validators.required],
       rut: [data.rut, Validators.required],
       telefono: [data.telefono, Validators.required],
       domicilio: [data.domicilio, Validators.required],

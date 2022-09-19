@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { CrudUsuarioService } from '../usuario/crud-usuario.service';
 import { Router } from '@angular/router';
+import { Usuario } from 'src/app/interfaces/usuario';
 
 
 @Injectable({

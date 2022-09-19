@@ -16,7 +16,7 @@ export class RegisterFormComponent implements OnInit {
   usuario: Usuario = {
     uid: '',
     nombre: 'Diego',
-    apellido: 'Barahona',
+    apellidos: 'Barahona Leal',
     rut: '18.988.397-8',
     fNac: '20 de febrero de 1995',
     email: 'diego@yahoo.com',
