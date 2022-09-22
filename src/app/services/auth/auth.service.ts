@@ -1,33 +1,60 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { CrudUsuarioService } from '../usuario/crud-usuario.service';
+import { Router } from '@angular/router';
+import { Usuario } from 'src/app/interfaces/usuario';
+import { updateProfile } from '@firebase/auth';
+import { NotificationService } from 'src/app/services/notification/notification.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private _auth : AngularFireAuth) { }
+  constructor(private _auth: AngularFireAuth,
+    private usuarioService: CrudUsuarioService,
+    private ngZone: NgZone,
+    private router: Router,
+    private notificationService: NotificationService) { }
 
-  async login(email: string, password: string){
-    try {
-      return await this._auth.signInWithEmailAndPassword(email, password);
-    } catch (error) {
-        alert("No se ha podido hacer el login correctamente. Error: "+ error);
-        console.log("Error al hacer el login!!! Error: " + error);
-        return null;
-    }
+  login(email: string, password: string) {
+    return this._auth
+      .signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        this.usuarioService.getUserById(result.user.uid).get().subscribe(data => {
+          localStorage.setItem('userData', JSON.stringify(data.data()));
+          this.router.navigate(['vertical/default-dashboard']);
+        });
+        localStorage.setItem('user', JSON.stringify(result.user));
+        // this.ngZone.run(() => {
+        //   this.router.navigate(['vertical/default-dashboard']);
+        // });
+      },
+        err => {
+          // window.alert(err.message);
+          const mensajeError = err.message;
+          if (mensajeError.includes("user-disabled")) {
+            this.notificationService.showInfo("Usuario deshabilitado", "Su usuario está deshabilitado.");
+          }
+          else if (err.message.includes("user-not-found")) {
+            this.notificationService.showError("Usuario no encontrado", "No existe un usuario asociado al email ingresado");
+          }
+          else if (err.message.includes("wrong-password")) {
+            this.notificationService.showError("Contraseña incorrecta", "Ha ingresado una contraseña incorrecta");
+          }
+          else {
+            this.notificationService.showError(err.message, "Error");
+          }
+        });
   }
 
-  async registro(email: string, password: string){
-    try {
-      return await this._auth.createUserWithEmailAndPassword(email, password);
-    } catch (error) {
-      alert("No se ha podido hacer el registro correctamente!!. Error: "+ error);
-      return null;
-    }
+  register(email: string, password: string) {
+    return this._auth.createUserWithEmailAndPassword(email, password);
   }
 
-  async logout(){
-    this._auth.signOut();
+  logout() {
+    localStorage.clear();
+    return this._auth.signOut();
   }
 }

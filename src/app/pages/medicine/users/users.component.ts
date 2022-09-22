@@ -1,34 +1,38 @@
-import { Component, ModuleWithComponentFactories, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
 import { BasePageComponent } from '../../base-page';
 import { IAppState } from '../../../interfaces/app-state';
 import { HttpService } from '../../../services/http/http.service';
-import { IPatient } from '../../../interfaces/patient';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../../ui/interfaces/option';
 import { Content } from '../../../ui/interfaces/modal';
 import * as PatientsActions from '../../../store/actions/patients.actions';
 import { TCModalService } from '../../../ui/services/modal/modal.service';
-import { Paciente } from 'src/app/interfaces/paciente';
-import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { map } from 'rxjs/operators';
 import { IdService } from 'src/app/services/idService/id.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
+import { Usuario } from 'src/app/interfaces/usuario';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
-  selector: 'page-patients',
-  templateUrl: './patients.component.html',
-  styleUrls: ['./patients.component.scss']
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss']
 })
-export class PagePatientsComponent extends BasePageComponent implements OnInit, OnDestroy {
-  patients: Paciente[];
-  patientForm: FormGroup;
+export class UsersComponent extends BasePageComponent implements OnInit, OnDestroy {
+
+  usuarios: Usuario[];
+  userForm: FormGroup;
   gender: IOption[];
   status: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
+
+  usuarioActivo: Usuario;
+  changes: boolean;
 
   edad: any;
 
@@ -37,25 +41,26 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
     httpSv: HttpService,
     private fb: FormBuilder,
     private modal: TCModalService,
-    private pacienteService: PacienteService,
+    private usersService: CrudUsuarioService,
     private idService: IdService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {
     super(store, httpSv);
 
     this.pageData = {
-      title: 'Lista de pacientes',
+      title: 'Lista de usuarios',
       breadcrumbs: [
         {
           title: 'Inicio',
           route: 'default-dashboard'
         },
         {
-          title: 'Lista de pacientes'
+          title: 'Lista de usuarios'
         }
       ]
     };
-    this.patients = [];
+    this.usuarios = [];
     this.gender = [
       {
         label: 'Hombre',
@@ -77,13 +82,14 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       }
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
+    this.changes = false;
     //this.currentAvatar = this.defaultAvatar;
   }
 
   ngOnInit() {
     super.ngOnInit();
 
-    this.pacienteService.getAll().snapshotChanges().pipe(
+    this.usersService.getAll().snapshotChanges().pipe(
       map(changes =>
         changes.map(c =>
           ({ id: c.payload.doc.id, ...c.payload.doc.data() })
@@ -91,11 +97,13 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       )
     ).subscribe(data => {
       if (data && data.length) {
-        this.patients = data;
+        this.usuarios = data;
 
         !this.pageData.loaded ? this.setLoaded() : null;
       }
     });
+
+    this.usuarioActivo = JSON.parse(localStorage.getItem('userData'));
 
     // this.store.select('patients').subscribe(patients => {
     //   if (patients && patients.length) {
@@ -116,9 +124,18 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   }
 
   // open modal window
-  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, row: Paciente) {
-    this.initPatientForm(row);
+  openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, row: Usuario) {
+    this.initUserForm(row);
 
+    this.modal.open({
+      body: body,
+      header: header,
+      footer: footer,
+      options: null
+    });
+  }
+
+  openModalTwo<T>(body: Content<T> = null, header: Content<T> = null, footer: Content<T> = null) {
     this.modal.open({
       body: body,
       header: header,
@@ -130,7 +147,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   // close modal window
   closeModal() {
     this.modal.close();
-    //this.patientForm.reset();
+    this.userForm.reset();
     //this.currentAvatar = this.defaultAvatar;
   }
 
@@ -147,30 +164,35 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   }
 
   // init form
-  initPatientForm(data: Paciente) {
-    // this.currentAvatar = data.img ? data.img : this.defaultAvatar;
-    this.edad = this.calcularEdad(data.fNac.toDate());
-    this.patientForm = this.fb.group({
-      id: data.id,
-      img: [this.currentAvatar],
-      nombre: [data.nombre ? data.nombre : '', Validators.required],
-      rut: [data.rut? data.rut : '', [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
-      fNac: [data.fNac? data.fNac.toDate(): '', Validators.required],
-      email: [data.correo? data.correo : '', Validators.required],
-      telefono: [data.telefono ? data.telefono : '', Validators.required],
-      edad: [this.edad ? this.edad : '', Validators.required],
-      // lastVisit: [data.lastVisit ? data.lastVisit : '', Validators.required],
-      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
-      domicilio: [data.domicilio ? data.domicilio : '', Validators.required],
-      // status: [data.status ? data.status.toLowerCase() : '', Validators.required]
-    });
-
+  initUserForm(data: Usuario) {
+    var edad = this.calcularEdad(data.fNac.toDate());
     if (data.genero === 'hombre') {
       this.currentAvatar = 'assets/content/male-icon.png';
     }
     else {
       this.currentAvatar = 'assets/content/female-icon.png';
     }
+    this.userForm = this.fb.group({
+      // img: [this.currentAvatar],
+      
+      id: data.uid,
+      nombre: [data.nombre, Validators.required],
+      apellidos: [data.apellidos, Validators.required],
+      rut: [data.rut, [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
+      telefono: [data.telefono, Validators.required],
+      domicilio: [data.domicilio, Validators.required],
+      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
+      fNac: [data.fNac.toDate(), Validators.required],
+      email: [data.email, Validators.required],
+      edad: [edad, Validators.required],
+      // lastVisit: [data.lastVisit, Validators.required],
+      // status: [data.status, Validators.required]
+    });
+
+    // detect form changes
+    this.userForm.valueChanges.subscribe(() => {
+      this.changes = true;
+    });
   }
 
   calcularEdad(fecha) {
@@ -187,17 +209,16 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
 }
 
   // update patient
-  updatePatient(form: FormGroup) {
+  updateUser(form: FormGroup) {
     if (form.valid) {
-      let newPatient: Paciente = form.value;
-
-      this.pacienteService.update(newPatient.id, newPatient).then( () =>{
-        this.notificationService.showSuccess('Listo', 'Actualización de realizada correctamente')
+      let newUser = form.value;
+      this.usersService.update(newUser.id, newUser).then( () =>{
+        this.notificationService.showSuccess('Listo', 'Actualización realizada correctamente')
         //console.log('Paciente actualizado con éxito!!!')
       });
       // this.store.dispatch(new PatientsActions.Edit(newPatient));
       this.closeModal();
-      this.patientForm.reset();
+      this.userForm.reset();
     }
   }
 
@@ -265,7 +286,9 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
     }
   }
 
-  get f() { return this.patientForm.controls; }
+  get f() { return this.userForm.controls; }
 
-  get fValue() { return this.patientForm.value; }
+  get fValue() { return this.userForm.value; }
+
+  cambiarEstado(estado: boolean){}
 }

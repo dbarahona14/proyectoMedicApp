@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Usuario } from 'src/app/interfaces/usuario';
+import { AuthService } from 'src/app/services/auth/auth.service';
+
+
 
 import { HttpService } from '../../../services/http/http.service';
+
+
 
 @Component({
   selector: 'actions',
@@ -15,9 +21,14 @@ export class ActionsComponent implements OnInit {
   closeDropdown: EventEmitter<boolean>;
   @Input() layout: string;
 
+  usuarioLogIn: Usuario;
+  img: string;
+
+
   constructor(
+    private auth: AuthService,
     private httpSv: HttpService,
-    private router: Router
+    private router: Router,
   ) {
     this.notifications = [];
     this.messages = [];
@@ -26,7 +37,12 @@ export class ActionsComponent implements OnInit {
     this.layout = 'vertical';
   }
 
+
+
+
   ngOnInit() {
+    this.usuarioLogIn = JSON.parse(localStorage.getItem('userData'));
+    this.img = 'assets/content/male-icon.png';
     this.getData('assets/data/navbar-notifications.json', 'notifications');
     this.getData('assets/data/navbar-messages.json', 'messages');
     this.getData('assets/data/navbar-files.json', 'files');
@@ -49,11 +65,17 @@ export class ActionsComponent implements OnInit {
 
   goTo(event: Event, link: string, layout: string = '') {
     event.preventDefault();
-
     this.onCloseDropdown();
-
-    setTimeout(() => {
-      this.router.navigate([layout ? layout : this.layout, link]);
-    });
+    if (link == 'sign-in') {
+      this.auth.logout();
+      setTimeout(() => {
+        this.router.navigate(['../public/sign-in/']);
+      });
+    }
+    else {
+      setTimeout(() => {
+        this.router.navigate(['../vertical/edit-account/', this.usuarioLogIn.uid]);
+      });
+    }
   }
 }

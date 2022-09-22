@@ -1,0 +1,21 @@
+@use 'sass:math';
+@import '~src/assets/scss/variables';
+
+:host {
+  .address-col {
+    min-width: 130px;
+  }
+  .actions {
+    display: flex;
+    margin: math.div(-$module-rem, 4);
+
+    .tc-btn {
+      margin: math.div($module-rem, 4);
+    }
+  }
+}
+
+.container {
+  display: grid;
+  place-content: center;
+}

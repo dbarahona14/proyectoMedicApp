@@ -1,4 +1,4 @@
-<div class="row justify-content-center" *ngIf="userInfo">
+<div class="row justify-content-center" *ngIf="currentUser">
   <div class="col col-12 col-xl-8">
     <form
       [formGroup]="userForm"
@@ -6,13 +6,13 @@
       class="mb-4"
       (ngSubmit)="saveData(userForm)"
     >
-      <tc-form-group>
-        <tc-form-label>Photo</tc-form-label>
-        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+      <tc-form-group class="container ml-4">
+        <!-- <tc-form-label>Mi perfil</tc-form-label> -->
+        <!-- <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden> -->
 
-        <div class="d-flex align-items-center">
-          <tc-avatar [src]="currentAvatar" [size]="100"></tc-avatar>
-          <button
+        <div class="container">
+          <tc-avatar [src]="'assets/content/male-icon.png'" [size]="100"></tc-avatar>
+          <!-- <button
             tc-button
             [type]="'button'"
             [afterIcon]="'icofont-ui-user'"
@@ -21,63 +21,86 @@
             (click)="fileInput.click()"
           >
             Change photo
-          </button>
+          </button> -->
         </div>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-form-label>First name</tc-form-label>
-        <tc-input [placeholder]="'First name'" formControlName="firstName"></tc-input>
+        <tc-form-label>Nombre</tc-form-label>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-form-label>Last name</tc-form-label>
-        <tc-input [placeholder]="'Last name'" formControlName="lastName"></tc-input>
+        <tc-form-label>Apellidos</tc-form-label>
+        <tc-input [placeholder]="'Apellidos'" formControlName="apellidos"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'RUT'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="userForm.controls.rut.touched && userForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>
+        </mat-form-field>
       </tc-form-group>
 
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-form-label>Age</tc-form-label>
-            <tc-input [placeholder]="'Age'" formControlName="age" [type]="'number'"></tc-input>
+            <tc-form-label>Edad</tc-form-label>
+            <tc-input [placeholder]="'Edad'" formControlName="edad" [type]="'number'" [disabled]="true"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-form-label>Gender</tc-form-label>
-            <tc-select [placeholder]="'Gender'" formControlName="gender" [options]="gender"></tc-select>
+            <tc-form-label>Género</tc-form-label>
+            <tc-select [placeholder]="'Género'" [formControl]="userForm.controls['genero']" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
       <tc-form-group>
-        <tc-form-label>Phone number</tc-form-label>
-        <tc-input [placeholder]="'Number'" formControlName="number"></tc-input>
+        <tc-form-label>Email</tc-form-label>
+        <tc-input [placeholder]="'Email'" formControlName="email" [disabled]="true"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-form-label>Address</tc-form-label>
-        <tc-textarea [placeholder]="'Address'" formControlName="address"></tc-textarea>
+        <tc-form-label>Teléfono contacto</tc-form-label>
+        <tc-input [placeholder]="'Teléfono'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
+        <tc-form-label>Dirección</tc-form-label>
+        <tc-textarea [placeholder]="'Domicilio'" formControlName="domicilio"></tc-textarea>
+      </tc-form-group>
+
+      <!-- <tc-form-group>
         <tc-form-label>Last visit</tc-form-label>
         <tc-input [placeholder]="'Last visit'" formControlName="lastVisit" [readonly]="true"></tc-input>
-      </tc-form-group>
+      </tc-form-group> -->
 
-      <tc-form-group>
+      <!-- <tc-form-group>
         <tc-form-label>Status</tc-form-label>
         <tc-select [placeholder]="'Status'" formControlName="status" [options]="status"></tc-select>
-      </tc-form-group>
+      </tc-form-group> -->
 
       <div class="row">
         <div class="col">
           <button tc-button [view]="'success'" [disabled]="!changes || userForm.invalid">
-            Save changes
+            Guardar cambios
           </button>
         </div>
-        <div class="col text-right">
+        <!-- <div class="col text-right">
           <button
             tc-button
             [type]="'button'"
@@ -87,41 +110,41 @@
             <span class="d-none d-sm-block">Delete account</span>
             <span class="d-sm-none">Delete</span>
           </button>
-        </div>
+        </div> -->
       </div>
     </form>
 
     <hr>
 
-    <h4>Change password</h4>
+    <h4>Cambiar contraseña</h4>
 
     <form novalidate>
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-form-label>Current password</tc-form-label>
-            <tc-input [placeholder]="'Current password'"></tc-input>
+            <tc-form-label>Contraseña actual</tc-form-label>
+            <tc-input [placeholder]="'Contraseña actual'"></tc-input>
           </tc-form-group>
         </div>
       </div>
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-form-label>New password</tc-form-label>
-            <tc-input [placeholder]="'New password'"></tc-input>
+            <tc-form-label>Nueva contraseña</tc-form-label>
+            <tc-input [placeholder]="'Nueva contraseña'"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-form-label>Confirm new password</tc-form-label>
-            <tc-input [placeholder]="'Confirm new password'"></tc-input>
+            <tc-form-label>Confirme nueva contraseña</tc-form-label>
+            <tc-input [placeholder]="'Confirme nueva contraseña'"></tc-input>
           </tc-form-group>
         </div>
       </div>
 
       <button tc-button [view]="'default'" [outline]="true" [type]="'button'">
-        Change password
+        Cambiar contraseña
       </button>
     </form>
   </div>

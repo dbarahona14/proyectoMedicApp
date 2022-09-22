@@ -15,7 +15,7 @@
     "icon": {
       "class": "icofont-doctor"
     },
-    "routing": "doctors"
+    "routing": "users"
   },
   {
     "title": "Especialidades",

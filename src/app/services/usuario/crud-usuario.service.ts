@@ -16,8 +16,15 @@ export class CrudUsuarioService {
   getAll(): AngularFirestoreCollection<Usuario> {
     return this.tutorialsRef;
   }
+  getUserById(uid: string) {
+    return this.tutorialsRef.doc(uid);
+  }
   create(usuario: Usuario): any {
     return this.tutorialsRef.add({ ...usuario });
+  }
+
+  createWithId(usuario: Usuario, id: string) {
+    return this.tutorialsRef.doc(id).set(usuario);
   }
   update(id: string, data: any): Promise<void> {
     return this.tutorialsRef.doc(id).update(data);

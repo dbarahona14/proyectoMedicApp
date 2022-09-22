@@ -51,8 +51,8 @@
 <tc-dropdown class="item" [close]="closeDropdown">
   <tc-dropdown-button>
     <div class="d-flex align-items-center">
-      <tc-avatar [src]="'/assets/content/anonymous-400.jpg'" class="me-1"></tc-avatar>
-      <span>Diego Barahona</span>
+      <tc-avatar [src]="this.img" class="me-1"></tc-avatar>
+      <span> <b>¡Hola!, {{usuarioLogIn.nombre + ' ' + usuarioLogIn.apellidos }}</b> </span>
       <i class="icofont-simple-down"></i>
     </div>
   </tc-dropdown-button>
@@ -61,17 +61,17 @@
     <ul class="list">
       <li>
         <a href="#" (click)="goTo($event, 'edit-account')" class="align-items-center">
-          <span class="icon icofont-ui-home"></span>
+          <span class="icon icofont-ui-edit"></span>
           Editar cuenta
         </a>
       </li>
 
-      <li>
+      <!-- <li>
         <a href="#" (click)="goTo($event, 'user-profile')" class="align-items-center">
           <span class="icon icofont-ui-user"></span>
           Mi perfil
         </a>
-      </li>
+      </li> -->
 
       <!-- <li>
         <a href="#" (click)="goTo($event, 'events-calendar')" class="align-items-center">
@@ -80,12 +80,12 @@
         </a>
       </li> -->
 
-      <li>
+      <!-- <li>
         <a href="#" (click)="goTo($event, 'settings')" class="align-items-center">
           <span class="icon icofont-ui-settings"></span>
           Configuración
         </a>
-      </li>
+      </li> -->
 
       <li>
         <a href="#" (click)="goTo($event, 'sign-in', '../public/')" class="align-items-center">

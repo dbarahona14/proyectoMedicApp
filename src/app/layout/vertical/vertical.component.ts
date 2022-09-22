@@ -17,6 +17,9 @@ import { PacienteService } from 'src/app/services/paciente/paciente.service';
 import { map } from 'rxjs/operators';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { getStorage } from '@angular/fire/storage';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Usuario } from 'src/app/interfaces/usuario';
+import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
 
 @Component({
   selector: 'vertical-layout',
@@ -29,9 +32,14 @@ import { getStorage } from '@angular/fire/storage';
 export class VerticalLayoutComponent extends BaseLayoutComponent implements OnInit {
   patientForm: FormGroup;
   searchForm: FormGroup;
+  userForm: FormGroup;
   gender: IOption[];
+  rol: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
+  formActive: string;
+
+  usuarioActivo: Usuario;
 
 
   data: Paciente[] = [];
@@ -45,7 +53,9 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     elRef: ElementRef,
     private modal: TCModalService,
     private pacienteService: PacienteService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService,
+    private userService: CrudUsuarioService,
   ) {
     super(store, fb, httpSv, router, elRef);
 
@@ -59,6 +69,17 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
         value: 'mujer'
       }
     ];
+
+    this.rol = [
+      {
+        label: 'Administrador',
+        value: 'administrador'
+      },
+      {
+        label: 'Funcionario',
+        value: 'funcionario'
+      }
+    ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
 
@@ -66,14 +87,14 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
 
   ngOnInit() {
     super.ngOnInit();
-
     this.store.dispatch(new SettingsActions.Update({ layout: 'vertical' }));
-
+    this.usuarioActivo = JSON.parse(localStorage.getItem('userData'));
     this.llenarData();
   }
 
   // open modal window
   openModal<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null) {
+    this.formActive = 'patient';
     this.initPatientForm();
     this.initSearchForm();
 
@@ -85,12 +106,32 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     });
   }
 
+  openModalTwo<T>(body: Content<T>, header: Content<T> = null, footer: Content<T> = null, options: any = null) {
+    this.formActive = 'user';
+    this.initUserForm();
+    this.modal.open({
+      header: header,
+      footer: footer,
+      options: options,
+      body: body,
+    });
+  }
+
   // close modal window
-  closeModal() {
+  closeModalPatient() {
     this.modal.close();
     this.patientForm.reset();
+    //this.currentAvatar = this.defaultAvatar;
+  }
+
+  closeModalSearch(){
+    this.modal.close();
     this.searchForm.reset();
-    this.currentAvatar = this.defaultAvatar;
+  }
+
+  closeModalUser(){
+    this.modal.close();
+    this.userForm.reset();
   }
 
   // upload new file
@@ -111,12 +152,30 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       img: [],
       nombre: ['', Validators.required],
       correo: ['', Validators.required],
-      fNac: [],
+      fNac: [Validators.required],
       rut: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
       telefono: ['', Validators.required],
       edad: ['', Validators.required],
       genero: ['', Validators.required],
       domicilio: ['', Validators.required],
+    });
+  }
+
+  initUserForm() {
+    this.userForm = this.fb.group({
+      //img: [this.currentAvatar],
+      nombre: ['', Validators.required],
+      apellidos: ['', Validators.required],
+      rut: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
+      telefono: ['', Validators.required],
+      domicilio: ['', Validators.required],
+      genero: ['', Validators.required],
+      fNac: [Validators.required],
+      email: ['', Validators.required],
+      especialidad: ['', Validators.required],
+      rol: ['', Validators.required],
+      // lastVisit: [data.lastVisit, Validators.required],
+      // status: [data.status, Validators.required]
     });
   }
 
@@ -135,7 +194,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
 
       // this.store.dispatch(new PatientsActions.Add(newPatient));
       this.agregarPaciente(newPatient);
-      this.closeModal();
+      this.closeModalPatient();
       this.patientForm.reset();
     }
   }
@@ -150,7 +209,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       
       if (currentPage) {
         this.router.navigate(['./vertical/patient-profile/', currentPage.id]);
-        this.closeModal();
+        this.closeModalSearch();
       }
     }
   }
@@ -222,7 +281,6 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
   checkRun() {
     let run = this.f['rut'];
     if(run){
-      console.log(run.value);
       var runClean = run.value.replace(/[^0-9kK]+/g, '').toUpperCase();
       if (runClean.length <= 1) {
         return;
@@ -236,9 +294,37 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     }
   }
 
-  get f() { return this.patientForm.controls; }
+  get f() { 
+    if(this.formActive == 'patient'){
+      return this.patientForm.controls;
+    } else {
+      return this.userForm.controls; 
+    }
+  }
+  // get fValue() { return this.patientForm.value; }
 
-  get fValue() { return this.patientForm.value; }
+  registrar(form: FormGroup){
+
+    var mail = form.get('email').value;
+    var contra = form.get('rut').value;
+    var usuario: Usuario = form.value;
+    this.authService.register(mail, contra).then(res =>{
+      res.user.sendEmailVerification();
+      //console.log("El uid es: " + res.user.uid);
+      usuario.uid = res.user.uid;
+      this.userService.createWithId(usuario, res.user.uid).then(() => {
+        this.notificationService.showSuccess('Usuario agregado', 'Se ha creado el usuario correctamente');
+        // console.log('Created new user successfully!');
+        // alert('Se creó el usuario correctamente! :)');
+      }).catch(err =>{
+        this.notificationService.showError('Error', 'Usuario no agregado correctamente');
+        console.log(err);
+      });
+    });
+
+    this.closeModalUser();
+    this.patientForm.reset();
+  }
 
   // handleDateOpenChange(open: boolean): void {
   //   if (open) {

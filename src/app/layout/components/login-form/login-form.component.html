@@ -1,15 +1,23 @@
-<form [formGroup]="loginForm" novalidate>
+<form [formGroup]="loginForm">
   <tc-form-group>
     <tc-input [placeholder]="'Correo'" formControlName="login"></tc-input>
+    <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="loginForm.controls.login.touched && loginForm.controls.login.invalid">
+          Ingrese un correo
+        </tc-form-description>
   </tc-form-group>
 
   <tc-form-group>
     <tc-input [placeholder]="'Contraseña'" [type]="'password'" formControlName="pass"></tc-input>
+    <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="loginForm.controls.pass.touched && loginForm.controls.pass.invalid">
+          Ingrese una contraseña
+        </tc-form-description>
   </tc-form-group>
 
-  <tc-form-group>
+  <!-- <tc-form-group>
     <tc-switcher [value]="true">Recuérdame</tc-switcher>
-  </tc-form-group>
+  </tc-form-group> -->
 
   <div class="actions justify-content-between">
     <button tc-button [view]="'accent'" [beforeIcon]="'icofont-login'" (click)="logIn()">
