@@ -21,10 +21,8 @@ export class RegisterFormComponent implements OnInit {
     fNac: '20 de febrero de 1995',
     email: 'diego@yahoo.com',
     rol: 'administrador',
-    nickName: 'diegob',
     especialidad: 'Medico',
     estado: true,
-    acceso: '14 de junio de 2022',
     genero: 'hombre',
     telefono: '985026258',
     domicilio: 'Heriberto Soto 1039, San Fernando'

@@ -72,7 +72,7 @@
 
           <button *ngIf="row.estado" tc-button [afterIcon]="'icofont-eye'" view="warning" [square]="true"
             [tcShape]="500" [size]="'sm'" [tcFontSize]="15"
-            (click)="openModalTwo('', '¿Desea inhabilitar cuenta?', modalFooterTwo)"></button>
+            (click)="openModalTwo(modalBodyTwo, 'Inhabilitar cuenta', modalFooterTwo)"></button>
 
           <button *ngIf="!row.estado" tc-button [afterIcon]="'icofont-eye-blocked'" view="warning" [square]="true"
             [tcShape]="500" [size]="'sm'" [tcFontSize]="15" (click)="cambiarEstado(true)"></button>
@@ -100,6 +100,10 @@
 
       <tc-form-group>
         <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Apellidos'" formControlName="apellidos"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
@@ -155,8 +159,8 @@
   <ng-template #modalFooter>
     <div class="actions justify-content-between">
       <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
-      <button tc-button [view]="'info'" [disabled]="userForm.invalid" (click)="updateUser(userForm)">
-        Actualizar usuario
+      <button tc-button [view]="'info'" [disabled]="!changes || userForm.invalid" (click)="updateUser(userForm)">
+        Actualizar Usuario
       </button>
     </div>
   </ng-template>

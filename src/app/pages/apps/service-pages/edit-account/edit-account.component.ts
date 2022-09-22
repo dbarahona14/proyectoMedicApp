@@ -3,11 +3,12 @@ import { BasePageComponent } from '../../../base-page';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../../interfaces/app-state';
 import { HttpService } from '../../../../services/http/http.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { IOption } from '../../../../ui/interfaces/option';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'page-edit-account',
@@ -30,7 +31,8 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     httpSv: HttpService,
     private formBuilder: FormBuilder,
     private userService: CrudUsuarioService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private notificationService: NotificationService,
   ) {
     super(store, httpSv);
 
@@ -95,17 +97,17 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     this.setLoaded();
 
     //this.currentAvatar = this.userInfo.img;
-    this.inituserForm(this.currentUser);
+    this.initUserForm(this.currentUser);
   }
 
   // init form
-  inituserForm(data: Usuario) {
+  initUserForm(data: Usuario) {
     var edad = this.calcularEdad(data.fNac.toDate());
     this.userForm = this.formBuilder.group({
       //img: [this.currentAvatar],
       nombre: [data.nombre, Validators.required],
-      apellido: [data.apellidos, Validators.required],
-      rut: [data.rut, Validators.required],
+      apellidos: [data.apellidos, Validators.required],
+      rut: [data.rut, [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
       telefono: [data.telefono, Validators.required],
       domicilio: [data.domicilio, Validators.required],
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
@@ -139,6 +141,11 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
   saveData(form: FormGroup) {
     if (form.valid) {
       this.userInfo = form.value;
+      this.userService.update(this.currentUser.uid, this.userInfo).then( res =>{
+        this.notificationService.showSuccess('Actualizado', 'Perfil actualizado correctamente');
+      }).catch ( err =>{
+        this.notificationService.showError('Error', 'Error al actualizar');
+      });
       this.changes = false;
     }
   }
@@ -170,4 +177,82 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
 
     });
   }
+
+  checkVerificatorDigit(control: AbstractControl) {
+    let run = control;
+    if (run.value == null || run.value == "") return null;
+
+    //Limpiar run de puntos y guión
+    var runClean = run.value.replace(/[^0-9kK]+/g, '').toUpperCase();
+
+    // Aislar Cuerpo y Dígito Verificador
+    let body = runClean.slice(0, -1);
+    let dv = runClean.slice(-1).toUpperCase();
+
+    // Calcular Dígito Verificador
+    let suma = 0;
+    let multiplo = 2;
+
+    // Para cada dígito del Cuerpo
+    for (let i = 1; i <= body.length; i++) {
+      // Obtener su Producto con el Múltiplo Correspondiente
+      let index = multiplo * runClean.charAt(body.length - i);
+      // Sumar al Contador General
+      suma = suma + index;
+      // Consolidar Múltiplo dentro del rango [2,7]
+      if (multiplo < 7) {
+        multiplo = multiplo + 1;
+      } else {
+        multiplo = 2;
+      }
+    }
+
+    // Calcular Dígito Verificador en base al Módulo 11
+    let dvEsperado = 11 - (suma % 11);
+
+    // Casos Especiales (0 y K)
+    dv = (dv == 'K') ? 10 : dv;
+    dv = (dv == 0) ? 11 : dv;
+
+    // Validar que el Cuerpo coincide con su Dígito Verificador
+    if (dvEsperado != dv) {
+      return { verificator: true };
+    }
+    else null;
+  }
+
+  checkRun() {
+    let run = this.f['rut'];
+    if(run){
+      console.log(run.value);
+      var runClean = run.value.replace(/[^0-9kK]+/g, '').toUpperCase();
+      if (runClean.length <= 1) {
+        return;
+      }
+      var result = runClean.slice(-4, -1) + "-" + runClean.substr(runClean.length - 1);
+      for (var i = 4; i < runClean.length; i += 3) {
+        result = runClean.slice(-3 - i, -i) + "." + result;
+      }
+      run.setValue(result);
+
+    }
+  }
+
+  get f() { return this.userForm.controls; }
+
+  get fValue() { return this.userForm.value; }
+
+  // registrar(){
+  //   var mail = this.usuario.email;
+  //   var contra = this.pass;
+  //   this.auth.register(mail, contra).then(res =>{
+
+  //     console.log("El uid es: " + res.user.uid);
+  //     this.usuario.uid = res.user.uid;
+  //     this.db.createWithId(this.usuario, res.user.uid).then(() => {
+  //       console.log('Created new user successfully!');
+  //       alert('Se creó el usuario correctamente! :)');
+  //     });
+  //   });
+  // }
 }

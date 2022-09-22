@@ -33,6 +33,8 @@ export class LoginFormComponent implements OnInit {
     if (email && pass != "") {
       this._auth.login(email, pass).then(()=>{
         this.loginForm.reset();
+      }).catch((err)=>{
+        console.log(err.message);
       });
       
     }

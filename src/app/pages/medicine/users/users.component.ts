@@ -32,6 +32,7 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
   defaultAvatar: string;
 
   usuarioActivo: Usuario;
+  changes: boolean;
 
   edad: any;
 
@@ -81,6 +82,7 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
       }
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
+    this.changes = false;
     //this.currentAvatar = this.defaultAvatar;
   }
 
@@ -145,7 +147,7 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
   // close modal window
   closeModal() {
     this.modal.close();
-    //this.patientForm.reset();
+    this.userForm.reset();
     //this.currentAvatar = this.defaultAvatar;
   }
 
@@ -163,29 +165,34 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
 
   // init form
   initUserForm(data: Usuario) {
-    // this.currentAvatar = data.img ? data.img : this.defaultAvatar;
-    this.edad = this.calcularEdad(data.fNac.toDate());
-    this.userForm = this.fb.group({
-      id: data.uid,
-      img: [this.currentAvatar],
-      nombre: [data.nombre ? data.nombre : '', Validators.required],
-      rut: [data.rut? data.rut : '', [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
-      fNac: [data.fNac? data.fNac.toDate(): '', Validators.required],
-      email: [data.email? data.email : '', Validators.required],
-      telefono: [data.telefono ? data.telefono : '', Validators.required],
-      edad: [this.edad ? this.edad : '', Validators.required],
-      // lastVisit: [data.lastVisit ? data.lastVisit : '', Validators.required],
-      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
-      domicilio: [data.domicilio ? data.domicilio : '', Validators.required],
-      // status: [data.status ? data.status.toLowerCase() : '', Validators.required]
-    });
-
+    var edad = this.calcularEdad(data.fNac.toDate());
     if (data.genero === 'hombre') {
       this.currentAvatar = 'assets/content/male-icon.png';
     }
     else {
       this.currentAvatar = 'assets/content/female-icon.png';
     }
+    this.userForm = this.fb.group({
+      // img: [this.currentAvatar],
+      
+      id: data.uid,
+      nombre: [data.nombre, Validators.required],
+      apellidos: [data.apellidos, Validators.required],
+      rut: [data.rut, [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
+      telefono: [data.telefono, Validators.required],
+      domicilio: [data.domicilio, Validators.required],
+      genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
+      fNac: [data.fNac.toDate(), Validators.required],
+      email: [data.email, Validators.required],
+      edad: [edad, Validators.required],
+      // lastVisit: [data.lastVisit, Validators.required],
+      // status: [data.status, Validators.required]
+    });
+
+    // detect form changes
+    this.userForm.valueChanges.subscribe(() => {
+      this.changes = true;
+    });
   }
 
   calcularEdad(fecha) {
@@ -204,9 +211,8 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
   // update patient
   updateUser(form: FormGroup) {
     if (form.valid) {
-      let newUser: Usuario = form.value;
-
-      this.usersService.update(newUser.uid, newUser).then( () =>{
+      let newUser = form.value;
+      this.usersService.update(newUser.id, newUser).then( () =>{
         this.notificationService.showSuccess('Listo', 'Actualización realizada correctamente')
         //console.log('Paciente actualizado con éxito!!!')
       });

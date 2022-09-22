@@ -37,8 +37,8 @@
       </div>
 
       <div class="row" *ngIf="usuarioActivo.rol == 'administrador' || usuarioActivo.rol == 'superadministrador'" >
-        <button tc-button [view]="'accent'" [beforeIcon]="'icofont-plus'"
-          (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Usuario</button>
+        <button tc-button [view]="'accent'" [beforeIcon]="'icofont-live-messenger'"
+          (click)="openModalTwo(modalBodyThree, 'Agregar nuevo usuario', modalFooterThree)">Agregar Usuario</button>
       </div>
     </div>
 
@@ -143,7 +143,7 @@
 
   <ng-template #modalFooter>
     <div class="actions justify-content-between">
-      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModalPatient()">Cancelar</button>
       <button tc-button [view]="'info'" [disabled]="patientForm.invalid" (click)="addPatient(patientForm)">
         Agregar Paciente
       </button>
@@ -166,7 +166,93 @@
 
   <ng-template #modalFooterTwo>
     <div class="actions justify-content-center">
-      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModal()">Cancelar</button>
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModalSearch()">Cancelar</button>
     </div>
   </ng-template>
 </ng-container>
+
+<ng-container>
+  <ng-template #modalBodyThree>
+    <form [formGroup]="userForm" novalidate class="new-patient-form">
+
+      <div class="container">
+        <tc-icon class="icofont-live-messenger mb-4" [tcShape]="'50%'" [tcColor]="'#000000'" [tcBgColor]="'#FFFFFF'"
+          [tcBorderColor]="'#000000'" [tcFontSize]="70"></tc-icon>
+      </div>
+      <!-- <tc-form-group class="avatar-box d-flex">
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" #fileInput hidden>
+
+        <tc-avatar [src]="currentAvatar"></tc-avatar>
+        <button tc-button [type]="'button'" [afterIcon]="'icofont-ui-user'" [view]="'accent'" [outline]="true"
+          (click)="fileInput.click()">
+          Seleccionar imagen
+        </button>
+      </tc-form-group> -->
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Nombre'" formControlName="nombre"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Apellidos'" formControlName="apellidos"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'RUT del usuario'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="userForm.controls.rut.touched && userForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
+      </tc-form-group>
+
+      <tc-form-group>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <mat-hint>DD/MM/AAAA</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </tc-form-group>
+      <tc-form-group>
+        <tc-input [placeholder]="'Correo'" type="email" formControlName="email"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="telefono"></tc-input>
+      </tc-form-group>
+
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-select [placeholder]="'Rol'" formControlName="rol" [options]="rol"></tc-select>
+          </tc-form-group>
+        </div>
+
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
+          </tc-form-group>
+        </div>
+      </div>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Especialidad'" formControlName="especialidad"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group class="mb-0">
+        <tc-textarea [placeholder]="'Domicilio'" formControlName="domicilio"></tc-textarea>
+      </tc-form-group>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooterThree>
+    <div class="actions justify-content-between">
+      <button tc-button [type]="'button'" [view]="'error'" (click)="closeModalUser()">Cancelar</button>
+      <button tc-button [view]="'info'" [disabled]="userForm.invalid" (click)="registrar(userForm)">
+        Agregar Usuario
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- end Modal window -->

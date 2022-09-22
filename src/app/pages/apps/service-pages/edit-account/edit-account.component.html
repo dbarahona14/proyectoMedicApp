@@ -32,12 +32,15 @@
 
       <tc-form-group>
         <tc-form-label>Apellidos</tc-form-label>
-        <tc-input [placeholder]="'Apellidos'" formControlName="apellido"></tc-input>
+        <tc-input [placeholder]="'Apellidos'" formControlName="apellidos"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
-        <tc-form-label>RUT</tc-form-label>
-        <tc-input [placeholder]="'RUT'" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-form-description [tcColor]="'#e24d4d'"
+          *ngIf="userForm.controls.rut.touched && userForm.controls.rut.invalid">
+          RUT inválido
+        </tc-form-description>
       </tc-form-group>
 
       <tc-form-group>
@@ -61,14 +64,14 @@
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Género</tc-form-label>
-            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
+            <tc-select [placeholder]="'Género'" [formControl]="userForm.controls['genero']" [options]="gender"></tc-select>
           </tc-form-group>
         </div>
       </div>
 
       <tc-form-group>
         <tc-form-label>Email</tc-form-label>
-        <tc-input [placeholder]="'Email'" formControlName="email"></tc-input>
+        <tc-input [placeholder]="'Email'" formControlName="email" [disabled]="true"></tc-input>
       </tc-form-group>
 
       <tc-form-group>
