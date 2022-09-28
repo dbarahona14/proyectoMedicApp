@@ -8,18 +8,17 @@
   <div class="box-items">
     <div class="item" *ngFor="let item of box.sectionData">
       <div class="icon-block">
-        <button
-          class="item-icon {{ item.icon || 'icofont-clock-time' }}"
+        <button class="item-icon {{ item.icon || 'icofont-clock-time' }}"
           [ngStyle]="{ 'background': item.iconBg, 'color': item.iconColor }"
-          (click)="openModal(modalBody, 'Historial de atención', modalFooter, null , box)"
-        ></button>
+          (click)="openModal(modalBody, 'Historial de atención', modalFooter, null , box)"></button>
       </div>
 
       <div class="content-block">
         <div class="item-header">
           <h3 class="h5 item-title" *ngIf="item.title">{{ item.title }}</h3>
 
-          <div class="item-date" *ngIf="item.date"><span>{{ item.date.toDate() | date:'EEEE, MMMM d, y, h:mm a' }}</span></div>
+          <div class="item-date" *ngIf="item.date"><span>{{ item.date.toDate() | date:'EEEE, MMMM d, y, h:mm a'
+              }}</span></div>
         </div>
 
         <div class="item-desc" [innerHTML]="item.content" *ngIf="item.content"></div>
@@ -55,15 +54,27 @@
         </tc-input>
       </tc-form-group>
 
-      <tc-form-group>
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha de atención</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fecha" disabled>
-          <mat-hint>DD/MM/AAAA</mat-hint>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </tc-form-group>
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <tc-form-group>
+            <tc-form-label>Sucursal</tc-form-label>
+            <tc-select [placeholder]="'Sucursal'" [formControl]="historialForm.controls['sucursal']"
+              [options]="sucursales" [disabled]="true">
+            </tc-select>
+          </tc-form-group>
+        </div>
+        <div class="col-12 col-sm-6 mt-4">
+          <tc-form-group>
+            <mat-form-field appearance="fill">
+              <mat-label>Fecha de hoy</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="fecha" [disabled]="true">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </tc-form-group>
+        </div>
+      </div>
 
       <tc-form-group>
         <tc-form-label>Alergias</tc-form-label>
@@ -118,7 +129,8 @@
 
       <tc-form-group>
         <tc-form-label>Descripción</tc-form-label>
-        <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content" [readonly]="true"></tc-textarea>
+        <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content" [readonly]="true">
+        </tc-textarea>
       </tc-form-group>
 
       <tc-form-group>
@@ -139,10 +151,11 @@
 
         <div class="row mb-2" *ngFor="let file of this.documentos; let i = index">
           <div class="col-10">
-            <tc-input value= {{file.name}} [readonly]="true"[prefixIcon]="'icofont-papers'"></tc-input>
+            <tc-input value={{file.name}} [readonly]="true" [prefixIcon]="'icofont-papers'"></tc-input>
           </div>
           <div class="col-2">
-            <button tc-button [afterIcon]="'icofont-download'" [view]="'success'" [square]="true" [outline]="true" (click)="downloadDocument(i)">
+            <button tc-button [afterIcon]="'icofont-download'" [view]="'success'" [square]="true" [outline]="true"
+              (click)="downloadDocument(i)">
             </button>
           </div>
         </div>

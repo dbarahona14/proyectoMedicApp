@@ -57,4 +57,20 @@ export class AuthService {
     localStorage.clear();
     return this._auth.signOut();
   }
+
+  changePassword(newPass: string) {
+    return this._auth.currentUser.then(res => {
+      res.updatePassword(newPass).then(res => {
+        this.notificationService.showSuccess("Contraseña actualizada", "Su contraseña ha sido actualizada correctamente");
+      }).catch(err => {
+        const mensajeError = err.message;
+        if (mensajeError.includes("requires-recent-login")) {
+          this.notificationService.showError("Reingresar", "Para cambiar contraseña debe tener una sesión activa recientemente");
+        }
+        else {
+          this.notificationService.showError("Error", "Intente más tarde");
+        }
+      });
+    });
+  }
 }

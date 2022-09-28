@@ -9,18 +9,18 @@ export class NotificationService {
   constructor( private toastrService: ToastrService) { }
 
   showSuccess (title : string, message : string,) {
-    this.toastrService.success(title, message)
+    this.toastrService.success(message, title);
   }
 
   showError (title : string, message : string,) {
-    this.toastrService.error(title, message)
+    this.toastrService.error(message, title);
   }
 
   showInfo (title : string, message : string,) {
-    this.toastrService.info(title, message)
+    this.toastrService.info(message, title);
   }
 
   showWarning (title : string, message : string,) {
-    this.toastrService.warning(title, message)
+    this.toastrService.warning(message, title);
   }
 }

@@ -9,6 +9,7 @@ import { Usuario } from 'src/app/interfaces/usuario';
 import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'page-edit-account',
@@ -18,6 +19,7 @@ import { NotificationService } from 'src/app/services/notification/notification.
 export class PageEditAccountComponent extends BasePageComponent implements OnInit, OnDestroy {
   userInfo: any;
   userForm: FormGroup;
+  passForm: FormGroup;
   gender: IOption[];
   status: IOption[];
   currentAvatar: string | ArrayBuffer;
@@ -33,6 +35,8 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     private userService: CrudUsuarioService,
     private actRoute: ActivatedRoute,
     private notificationService: NotificationService,
+    private authService: AuthService,
+    private router: Router,
   ) {
     super(store, httpSv);
 
@@ -76,7 +80,7 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
-    
+
   }
 
   ngOnInit() {
@@ -98,6 +102,7 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
 
     //this.currentAvatar = this.userInfo.img;
     this.initUserForm(this.currentUser);
+    this.initPassForm();
   }
 
   // init form
@@ -124,6 +129,13 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     });
   }
 
+  initPassForm() {
+    this.passForm = this.formBuilder.group({
+      pass: ['', Validators.required],
+      confirmPass: ['', Validators.required]
+    });
+  }
+
   calcularEdad(fecha) {
     var hoy = new Date();
     var cumpleanos = new Date(fecha);
@@ -131,19 +143,19 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     var m = hoy.getMonth() - cumpleanos.getMonth();
 
     if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
-        edad--;
+      edad--;
     }
 
     return edad;
-}
+  }
 
   // save form data
   saveData(form: FormGroup) {
     if (form.valid) {
       this.userInfo = form.value;
-      this.userService.update(this.currentUser.uid, this.userInfo).then( res =>{
+      this.userService.update(this.currentUser.uid, this.userInfo).then(res => {
         this.notificationService.showSuccess('Actualizado', 'Perfil actualizado correctamente');
-      }).catch ( err =>{
+      }).catch(err => {
         this.notificationService.showError('Error', 'Error al actualizar');
       });
       this.changes = false;
@@ -223,7 +235,7 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
 
   checkRun() {
     let run = this.f['rut'];
-    if(run){
+    if (run) {
       console.log(run.value);
       var runClean = run.value.replace(/[^0-9kK]+/g, '').toUpperCase();
       if (runClean.length <= 1) {
@@ -241,6 +253,24 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
   get f() { return this.userForm.controls; }
 
   get fValue() { return this.userForm.value; }
+
+  updatePassword() {
+    let pass = this.passForm.get('pass').value;
+    let confirmPass = this.passForm.get('confirmPass').value;
+
+    if (pass == confirmPass) {
+      this.authService.changePassword(confirmPass).then(res => {
+
+      }).finally(() => {
+        this.authService.logout();
+        this.router.navigate(['../public/sign-in/']);
+      });
+    }
+
+    else {
+      this.notificationService.showError("Error", "Las contraseñas no coinciden");
+    }
+  }
 
   // registrar(){
   //   var mail = this.usuario.email;

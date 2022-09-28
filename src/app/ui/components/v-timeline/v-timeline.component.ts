@@ -6,6 +6,7 @@ import { Paciente } from 'src/app/interfaces/paciente';
 import { Content } from '../../interfaces/modal';
 import { HistorialService } from 'src/app/services/historial/historial.service';
 import { listAll, ref, Storage, getDownloadURL } from '@angular/fire/storage';
+import { IOption } from '../../interfaces/option';
 
 @Component({
   selector: 'tc-v-timeline',
@@ -41,6 +42,7 @@ export class TCVTimelineComponent implements OnInit {
   changes: boolean;
   documentos: any;
   isDocument: boolean;
+  sucursales: IOption[];
 
   constructor(private modal: TCModalService,
     private formBuilder: FormBuilder,
@@ -49,6 +51,20 @@ export class TCVTimelineComponent implements OnInit {
     this.showLabels = false;
     this.showIcons = true;
     this.data = [];
+    this.sucursales = [
+      {
+        label: 'Sucursal 1',
+        value: 'sucursal 1'
+      },
+      {
+        label: 'Sucursal 2',
+        value: 'sucursal 2'
+      },
+      {
+        label: 'Sucursal 3',
+        value: 'sucursal 3'
+      }
+    ];
 
     this.changes = false;
   }
@@ -78,6 +94,7 @@ export class TCVTimelineComponent implements OnInit {
   initHistorialForm(data: ITimelineBox) {
     this.historialForm = this.formBuilder.group({
       nombreFuncionario: [{ value: data.sectionFicha.nombreFuncionario, disabled: true }, Validators.required],
+      sucursal: [{ value: data.sectionFicha.sucursal, disabled: true }, Validators.required],
       fecha: [data.fecha.toDate(), Validators.required],
       alergias: [{ value: data.sectionFicha.alergias, disabled: true }, Validators.required],
       antMorbidos: [{ value: data.sectionFicha.antMorbidos, disabled: true }, Validators.required],

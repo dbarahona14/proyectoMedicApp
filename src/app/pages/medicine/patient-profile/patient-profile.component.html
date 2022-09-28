@@ -45,7 +45,8 @@
 
       <tc-form-group>
         <tc-form-label>RUT</tc-form-label>
-        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut">
+        </tc-input>
         <tc-form-description [tcColor]="'#e24d4d'"
           *ngIf="patientForm.controls.rut.touched && patientForm.controls.rut.invalid">
           RUT inválido
@@ -187,16 +188,26 @@
           </tc-input>
         </tc-form-group>
 
-        <tc-form-group>
-          <mat-form-field appearance="fill">
-            <mat-label>Fecha de hoy</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="fecha">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </tc-form-group>
-
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <tc-form-group>
+              <tc-form-label>Sucursal</tc-form-label>
+              <tc-select [placeholder]="'Sucursal'" [formControl]="historialForm.controls['sucursal']" [options]="sucursales">
+              </tc-select>
+            </tc-form-group>
+          </div>
+          <div class="col-12 col-sm-6 mt-4">
+            <tc-form-group>
+              <mat-form-field appearance="fill">
+                <mat-label>Fecha de hoy</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fecha" [disabled]="true">
+                <mat-hint>DD/MM/AAAA</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </tc-form-group>
+          </div>
+        </div>
         <tc-form-group>
           <tc-form-label>Alergias</tc-form-label>
           <tc-input [placeholder]="'Alergias'" formControlName="alergias" [readonly]="true"></tc-input>
@@ -272,7 +283,7 @@
               Adjuntar Archivos
             </button>
           </div>
-          <div class="col-12 col-sm-6 mt-2" >
+          <div class="col-12 col-sm-6 mt-2">
             <tc-form-label>{{labelDocuments}}</tc-form-label>
           </div>
         </div>
@@ -285,10 +296,11 @@
 
           <div class="row mb-2" *ngFor="let file of this.file_list; let i = index">
             <div class="col-10">
-              <tc-input value= {{file}} [readonly]="true"[prefixIcon]="'icofont-papers'"></tc-input>
+              <tc-input value={{file}} [readonly]="true" [prefixIcon]="'icofont-papers'"></tc-input>
             </div>
             <div class="col-2">
-              <button tc-button [afterIcon]="'icofont-bin'" [view]="'error'" [square]="true" [outline]="true" (click)="deleteDoc(i)">
+              <button tc-button [afterIcon]="'icofont-bin'" [view]="'error'" [square]="true" [outline]="true"
+                (click)="deleteDoc(i)">
               </button>
             </div>
           </div>
