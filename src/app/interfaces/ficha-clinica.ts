@@ -14,7 +14,8 @@ export interface FichaClinica {
     content: string;
     title: string;
     date: any;
-    nombreFuncionario: string; 
+    nombreFuncionario: string;
+    sucursal: string;
 }
 
 export interface ITimelineBox {

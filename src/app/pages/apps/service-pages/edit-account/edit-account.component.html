@@ -36,6 +36,7 @@
       </tc-form-group>
 
       <tc-form-group>
+        <tc-form-label>RUT</tc-form-label>
         <tc-input [placeholder]="'RUT'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
         <tc-form-description [tcColor]="'#e24d4d'"
           *ngIf="userForm.controls.rut.touched && userForm.controls.rut.invalid">
@@ -118,32 +119,39 @@
 
     <h4>Cambiar contraseña</h4>
 
-    <form novalidate>
-      <div class="row">
+    <p> <i><b>Nota:</b> Para realizar un cambio de contraseña se requiere haber iniciado sesión recientemente. 
+      Una vez actualizada la contraseña, deberá reingresar con la contraseña nueva.</i>
+    </p>
+
+    <form 
+      [formGroup]="passForm"
+      novalidate
+      (ngSubmit)="updatePassword()">
+      <!-- <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Contraseña actual</tc-form-label>
             <tc-input [placeholder]="'Contraseña actual'"></tc-input>
           </tc-form-group>
         </div>
-      </div>
+      </div> -->
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Nueva contraseña</tc-form-label>
-            <tc-input [placeholder]="'Nueva contraseña'"></tc-input>
+            <tc-input [placeholder]="'Nueva contraseña'" formControlName="pass" [type]="'password'"></tc-input>
           </tc-form-group>
         </div>
 
         <div class="col-12 col-sm-6">
           <tc-form-group>
             <tc-form-label>Confirme nueva contraseña</tc-form-label>
-            <tc-input [placeholder]="'Confirme nueva contraseña'"></tc-input>
+            <tc-input [placeholder]="'Confirme nueva contraseña'" formControlName="confirmPass" [type]="'password'"></tc-input>
           </tc-form-group>
         </div>
       </div>
 
-      <button tc-button [view]="'default'" [outline]="true" [type]="'button'">
+      <button tc-button (click)="updatePassword()" [view]="'default'" [outline]="true" [type]="'button'">
         Cambiar contraseña
       </button>
     </form>

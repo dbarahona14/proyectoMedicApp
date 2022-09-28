@@ -20,6 +20,7 @@ import { ITimeline } from '../../../interfaces/ficha-clinica';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { Storage, ref, uploadBytes, listAll } from '@angular/fire/storage';
 import { async } from '@firebase/util';
+import { Usuario } from '../../../interfaces/usuario';
 
 @Component({
   selector: 'page-patient-profile',
@@ -34,6 +35,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   historialForm: FormGroup;
   gender: IOption[];
   status: IOption[];
+  sucursales: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
   changes: boolean;
@@ -43,7 +45,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
 
   fichasClinicas: ITimelineBox[];
   noData: boolean = true;
-
+  usuarioActivo: Usuario;
 
   patientName: string;
 
@@ -105,6 +107,20 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
         value: 'pending'
       }
     ];
+    this.sucursales = [
+      {
+        label: 'Sucursal 1',
+        value: 'sucursal 1'
+      },
+      {
+        label: 'Sucursal 2',
+        value: 'sucursal 2'
+      },
+      {
+        label: 'Sucursal 3',
+        value: 'sucursal 3'
+      }
+    ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
@@ -122,7 +138,7 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
         this.obtenerPaciente(this.idPaciente);
         this.obtenerHistorial(this.idPaciente);
       });
-
+    this.usuarioActivo = JSON.parse(localStorage.getItem('userData'));
     //this.getData('assets/data/patient-info.json', 'patientInfo', 'loadedDetect');
     // this.historialService.getAll(this.obtenerId()).snapshotChanges().subscribe(res =>{
     //   this.patientTimeline = res;
@@ -215,7 +231,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
     this.newFileList = [];
     this.historialForm = this.formBuilder.group({
       nombre: [patient.nombre, Validators.required],
-      nombreFuncionario: ['Patricio Fuentes Díaz', Validators.required],
+      nombreFuncionario: [this.usuarioActivo.nombre + ' ' + this.usuarioActivo.apellidos, Validators.required],
+      sucursal: ['', Validators.required],
       fecha: [new Date(), Validators.required],
       alergias: ['Sin alergias.', Validators.required],
       antMorbidos: ['Sin antecedentes morbidos.', Validators.required],
@@ -350,7 +367,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
           content: "string",
           title: "string",
           date: "any",
-          nombreFuncionario: "string"
+          nombreFuncionario: "string",
+          sucursal: "string"
         }, fecha: "",
         id: "",
         documents: false,
