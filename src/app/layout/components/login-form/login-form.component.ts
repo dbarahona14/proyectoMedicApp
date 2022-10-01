@@ -12,6 +12,7 @@ import { NotificationService } from 'src/app/services/notification/notification.
 })
 export class LoginFormComponent implements OnInit {
   loginForm: FormGroup;
+  loading: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -24,19 +25,25 @@ export class LoginFormComponent implements OnInit {
       login: ['', Validators.required],
       pass: ['', Validators.required]
     });
+    this.loading = false;
   }
 
-  logIn() {
+  async logIn() {
     var email = this.loginForm.get('login').value;
     var pass = this.loginForm.get('pass').value;
 
     if (email && pass != "") {
-      this._auth.login(email, pass).then(()=>{
+      this.loading = true;
+      await this._auth.login(email, pass).then(() => {
         this.loginForm.reset();
-      }).catch((err)=>{
-        console.log(err.message);
-      });
-      
+        this.loading = false;
+      }).finally(() => {
+        console.log("Terminó");
+      })
+        .catch((err) => {
+          console.log(err.message);
+        });
+
     }
     else {
       console.log('Favor, rellenar campos requeridos para iniciar sesión.');

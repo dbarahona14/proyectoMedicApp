@@ -11,4 +11,5 @@ export interface Usuario {
     genero: string;
     telefono: string;
     domicilio: string;
+    isEnabled: boolean;
 }

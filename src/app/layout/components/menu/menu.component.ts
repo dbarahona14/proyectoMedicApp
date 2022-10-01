@@ -8,6 +8,8 @@ import * as SettingsActions from '../../../store/actions/app-settings.actions';
 import { IAppState } from '../../../interfaces/app-state';
 import * as PageActions from '../../../store/actions/page.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { User } from '@firebase/auth';
+import { Usuario } from 'src/app/interfaces/usuario';
 
 @Component({
   selector: 'app-menu',
@@ -43,6 +45,7 @@ export class MenuComponent implements OnInit {
   @Input() src: string;
   menuItems: IMenuItem[];
   caret: string;
+  user: Usuario;
 
   constructor(
     private httpSv: HttpService,
@@ -55,12 +58,24 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     this.getMenuData(this.src);
+    this.user = JSON.parse(localStorage.getItem('userData'));
   }
 
   getMenuData(url: string) {
+    let aux = [];
     this.httpSv.getData(url).subscribe(
       data => {
-        this.menuItems = data;
+        data.forEach(element => {
+          if (this.user.rol == 'funcionario'){
+            if (element.title != 'Doctores'){
+              aux.push(element);
+            }
+          }
+          else {
+            aux = data;
+          }
+        });
+        this.menuItems = aux;
       },
       err => {
         console.log(err)

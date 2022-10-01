@@ -18,15 +18,21 @@ export class AuthService {
     private router: Router,
     private notificationService: NotificationService) { }
 
-  login(email: string, password: string) {
-    return this._auth
+  async login(email: string, password: string) {
+    return await this._auth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.usuarioService.getUserById(result.user.uid).get().subscribe(data => {
-          localStorage.setItem('userData', JSON.stringify(data.data()));
-          this.router.navigate(['vertical/default-dashboard']);
+          if (data.data().isEnabled) {
+            localStorage.setItem('userData', JSON.stringify(data.data()));
+            this.router.navigate(['vertical/default-dashboard']);
+            localStorage.setItem('user', JSON.stringify(result.user));
+          }
+          else {
+            this.notificationService.showInfo("Usuario deshabilitado", "Su usuario está deshabilitado.");
+          }
+
         });
-        localStorage.setItem('user', JSON.stringify(result.user));
         // this.ngZone.run(() => {
         //   this.router.navigate(['vertical/default-dashboard']);
         // });

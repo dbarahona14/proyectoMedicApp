@@ -308,6 +308,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     var mail = form.get('email').value;
     var contra = form.get('rut').value;
     var usuario: Usuario = form.value;
+    usuario.isEnabled = true;
     this.authService.register(mail, contra).then(res =>{
       res.user.sendEmailVerification();
       //console.log("El uid es: " + res.user.uid);
