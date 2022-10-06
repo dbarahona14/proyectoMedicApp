@@ -67,7 +67,7 @@ export class MenuComponent implements OnInit {
       data => {
         data.forEach(element => {
           if (this.user.rol == 'funcionario'){
-            if (element.title != 'Doctores'){
+            if (element.title != 'Usuarios'){
               aux.push(element);
             }
           }

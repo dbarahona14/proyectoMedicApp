@@ -28,6 +28,7 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
   userForm: FormGroup;
   gender: IOption[];
   status: IOption[];
+  rol: IOption[];
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
 
@@ -60,6 +61,16 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
         }
       ]
     };
+    this.rol = [
+      {
+        label: 'Administrador',
+        value: 'administrador'
+      },
+      {
+        label: 'Funcionario',
+        value: 'funcionario'
+      }
+    ];
     this.usuarios = [];
     this.gender = [
       {
@@ -184,7 +195,8 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
       fNac: [data.fNac.toDate(), Validators.required],
       email: [data.email, Validators.required],
-      edad: [edad, Validators.required],
+      rol: [data.rol, Validators.required]
+      // edad: [edad, Validators.required],
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]
     });
@@ -290,5 +302,11 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
 
   get fValue() { return this.userForm.value; }
 
-  cambiarEstado(estado: boolean){}
+  cambiarEstado(usuario: Usuario, estado: boolean){
+    let newUser = usuario;
+    newUser.isEnabled = estado ;
+    this.usersService.update(usuario.uid, newUser).then( res =>{
+      this.notificationService.showSuccess("Listo", "Usuario actualizado correctamente");
+    });
+  }
 }

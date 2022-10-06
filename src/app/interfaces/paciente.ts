@@ -9,4 +9,6 @@ export interface Paciente {
     nombreRut: string;
     rut: string;
     telefono: string;
+    alergias: string;
+    antMorbidos: string;
 }

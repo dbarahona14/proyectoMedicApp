@@ -158,6 +158,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       edad: ['', Validators.required],
       genero: ['', Validators.required],
       domicilio: ['', Validators.required],
+      alergias: ['', Validators.required],
+      antMorbidos: ['', Validators.required]
     });
   }
 

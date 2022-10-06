@@ -71,11 +71,10 @@
             (click)="openModal(modalBody, 'Actualizar información usuario', modalFooter, row)"></button>
 
           <button *ngIf="row.isEnabled" tc-button [afterIcon]="'icofont-eye'" view="warning" [square]="true"
-            [tcShape]="500" [size]="'sm'" [tcFontSize]="15"
-            (click)="openModalTwo(modalBodyTwo, 'Inhabilitar cuenta', modalFooterTwo)"></button>
+            [tcShape]="500" [size]="'sm'" [tcFontSize]="15" (click)="cambiarEstado(row, false)"></button>
 
           <button *ngIf="!row.isEnabled" tc-button [afterIcon]="'icofont-eye-blocked'" view="warning" [square]="true"
-            [tcShape]="500" [size]="'sm'" [tcFontSize]="15" (click)="cambiarEstado(true)"></button>
+            [tcShape]="500" [size]="'sm'" [tcFontSize]="15" (click)="cambiarEstado(row, true)"></button>
 
           <button tc-button [afterIcon]="'icofont-ui-delete'" [view]="'error'" [square]="true" [tcShape]="500"
             [size]="'sm'" disabled="true" [tcFontSize]="15" (click)="remove(row.id)"></button>
@@ -135,7 +134,7 @@
       <div class="row">
         <div class="col-12 col-sm-6">
           <tc-form-group>
-            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad" [disabled]="true"></tc-input>
+            <tc-select [placeholder]="'Rol'" formControlName="rol" [options]="rol"></tc-select>
           </tc-form-group>
         </div>
 
@@ -167,7 +166,7 @@
 </ng-container>
 <!-- end Modal window -->
 
-<ng-container>
+<!-- <ng-container>
   <ng-template #modalBodyTwo>
     <div class="row container">
       <p>¿Desea inhabilitar cuenta?</p>
@@ -182,4 +181,4 @@
       </button>
     </div>
   </ng-template>
-</ng-container>
+</ng-container> -->
