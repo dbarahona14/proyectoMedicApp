@@ -190,6 +190,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       nombre: [data.nombre, Validators.required],
       telefono: [data.telefono, Validators.required],
       correo: [data.correo, Validators.required],
+      alergias: [data.alergias ? data.alergias : 'Sin alergias'],
+      antMorbidos: [data.antMorbidos ? data.antMorbidos : 'Sin antecedentes'],
       fNac: [data.fNac.toDate(), Validators.required],
       domicilio: [data.domicilio, Validators.required],
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
@@ -234,8 +236,8 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
       nombreFuncionario: [this.usuarioActivo.nombre + ' ' + this.usuarioActivo.apellidos, Validators.required],
       sucursal: ['', Validators.required],
       fecha: [new Date(), Validators.required],
-      alergias: ['Sin alergias.', Validators.required],
-      antMorbidos: ['Sin antecedentes morbidos.', Validators.required],
+      alergias: [patient.alergias ? patient.alergias : 'Sin alergias', Validators.required],
+      antMorbidos: [patient.antMorbidos ? patient.antMorbidos : 'Sin antecedentes', Validators.required],
       PA: ['128/79', Validators.required],
       FC: ['84', Validators.required],
       FR: ['0000', Validators.required],
@@ -415,7 +417,6 @@ export class PagePatientProfileComponent extends BasePageComponent implements On
   }
 
   mostrar() {
-    console.log("SI ENTRA");
     this.notificationService.showSuccess("Título", "Mensaje");
   }
 

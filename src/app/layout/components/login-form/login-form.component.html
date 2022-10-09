@@ -20,7 +20,7 @@
   </tc-form-group> -->
 
   <div class="actions justify-content-between">
-    <button tc-button [view]="'accent'" [beforeIcon]="'icofont-login'" (click)="logIn()">
+    <button tc-button [view]="'accent'" [beforeIcon]="'icofont-login'" [load]="loading" (click)="logIn()">
       Iniciar sesión
     </button>
   </div>

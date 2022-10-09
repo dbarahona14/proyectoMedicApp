@@ -235,8 +235,8 @@ export class PageDashboardComponent extends BasePageComponent implements OnInit,
           }
         },
         data:[
-          { value: 154, name: 'Female' },
-          { value: 173, name: 'Male' }
+          { value: 154, name: 'Mujer' },
+          { value: 173, name: 'Hombre' }
         ],
         itemStyle: this.pieStyle
       }]

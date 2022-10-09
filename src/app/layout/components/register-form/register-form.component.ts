@@ -13,21 +13,6 @@ import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.servic
 export class RegisterFormComponent implements OnInit {
   registerForm: FormGroup;
 
-  usuario: Usuario = {
-    uid: '',
-    nombre: 'Diego',
-    apellidos: 'Barahona Leal',
-    rut: '18.988.397-8',
-    fNac: '20 de febrero de 1995',
-    email: 'diego@yahoo.com',
-    rol: 'administrador',
-    especialidad: 'Medico',
-    estado: true,
-    genero: 'hombre',
-    telefono: '985026258',
-    domicilio: 'Heriberto Soto 1039, San Fernando'
-  };
-
   pass: string = '123456';
 
   uid?: string;
@@ -43,16 +28,20 @@ export class RegisterFormComponent implements OnInit {
   }
 
   registrar(){
-    var mail = this.usuario.email;
-    var contra = this.pass;
-    this.auth.register(mail, contra).then(res =>{
-
-      console.log("El uid es: " + res.user.uid);
-      this.usuario.uid = res.user.uid;
-      this.db.createWithId(this.usuario, res.user.uid).then(() => {
-        console.log('Created new user successfully!');
-        alert('Se creó el usuario correctamente! :)');
-      });
-    });
+    
   }
+
+  // registrar(){
+  //   var mail = this.usuario.email;
+  //   var contra = this.pass;
+  //   this.auth.register(mail, contra).then(res =>{
+
+  //     console.log("El uid es: " + res.user.uid);
+  //     this.usuario.uid = res.user.uid;
+  //     this.db.createWithId(this.usuario, res.user.uid).then(() => {
+  //       console.log('Created new user successfully!');
+  //       alert('Se creó el usuario correctamente! :)');
+  //     });
+  //   });
+  // }
 }

@@ -62,18 +62,20 @@ import { Page500Component } from '../pages/apps/sessions/page-500';
 import { PageDatepickersComponent } from '../pages/ui/components/datepickers';
 import { PageAntTableComponent } from '../pages/ui/tables/ant-table';
 import { UsersComponent } from '../pages/medicine/users/users.component';
+import { AuthGuard } from '../guards/auth.guard';
+import { AdminGuard } from '../guards/admin.guard';
 
 const privateRoutes: Routes = [
-  { path: 'default-dashboard', component: PageDashboardComponent },
-  { path: 'doctors', component: PageDoctorsComponent },
-  { path: 'doctor-profile', component: PageDoctorProfileComponent },
-  { path: 'patients', component: PagePatientsComponent },
-  { path: 'patient-profile/:id', component: PagePatientProfileComponent },
-  { path: 'payments', component: PagePaymentsComponent },
-  { path: 'appointments', component: PageAppointmentsComponent },
-  { path: 'departments', component: PageDepartmentsComponent },
-  { path: 'department', component: PageDepartmentComponent },
-  { path: 'users', component: UsersComponent },
+  { path: 'default-dashboard', component: PageDashboardComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'doctors', component: PageDoctorsComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'doctor-profile', component: PageDoctorProfileComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'patients', component: PagePatientsComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'patient-profile/:id', component: PagePatientProfileComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'payments', component: PagePaymentsComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'appointments', component: PageAppointmentsComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'departments', component: PageDepartmentsComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'department', component: PageDepartmentComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'users', component: UsersComponent, canActivate: [ AuthGuard, AdminGuard ], canLoad: [ AuthGuard, AdminGuard ] },
 
   { path: 'alerts', component: PageAlertsComponent },
   { path: 'buttons', component: PageButtonsComponent },
@@ -115,15 +117,14 @@ const privateRoutes: Routes = [
   { path: 'invoices', component: PageInvoiceComponent },
   { path: 'pricing', component: PagePricingComponent },
   { path: 'events-timeline', component: PageTimelineComponent },
-  { path: 'user-profile', component: PageUserProfileComponent },
-  { path: 'edit-account/:id', component: PageEditAccountComponent },
+  { path: 'user-profile', component: PageUserProfileComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
+  { path: 'edit-account/:id', component: PageEditAccountComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] },
   { path: 'events-calendar', component: PageCalendarComponent },
-  { path: 'settings', component: PageSettingsComponent }
+  { path: 'settings', component: PageSettingsComponent, canActivate: [ AuthGuard ], canLoad: [ AuthGuard ] }
 ];
 
 const publicRoutes: Routes = [
   { path: 'sign-in', component: PageSignInComponent },
-  { path: 'sign-up', component: PageSignUpComponent },
   { path: 'page-404', component: Page404Component },
   { path: 'page-500', component: Page500Component },
   { path: '**', component: Page404Component }

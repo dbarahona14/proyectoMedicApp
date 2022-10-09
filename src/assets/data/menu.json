@@ -11,18 +11,11 @@
     "routing": "default-dashboard"
   },
   {
-    "title": "Doctores",
+    "title": "Usuarios",
     "icon": {
       "class": "icofont-doctor"
     },
     "routing": "users"
-  },
-  {
-    "title": "Especialidades",
-    "icon": {
-      "class": "icofont-nurse"
-    },
-    "routing": "departments"
   },
   {
     "title": "Pacientes",

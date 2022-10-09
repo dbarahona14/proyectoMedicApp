@@ -85,7 +85,7 @@
 </tc-card>
 
 <div class="row">
-  <div class="col col-12 col-md-6">
+  <!-- <div class="col col-12 col-md-6">
     <tc-card>
       <h4 class="mt-0 mb-1">$250380</h4>
       <p class="mb-0" [tcColor]="'#9d9d9d'">Ingresos en el último mes</p>
@@ -101,16 +101,16 @@
 
       <div echarts [options]="heOptions" class="chat-container"></div>
     </tc-card>
-  </div>
+  </div> -->
 
   <div class="col col-12 col-md-4">
-    <tc-card [title]="'Patients age'">
+    <tc-card [title]="'Edad de los pacientes'">
       <div echarts [options]="paOptions" class="chat-container container-h-300"></div>
     </tc-card>
   </div>
 
   <div class="col col-12 col-md-4">
-    <tc-card [title]="'Patients gender'">
+    <tc-card [title]="'Género de los pacientes'">
       <div echarts [options]="pgOptions" class="chat-container container-h-300"></div>
     </tc-card>
   </div>
@@ -122,7 +122,7 @@
   </div>
 </div>
 
-<tc-card [title]="'Last appointments'" class="mb-0">
+<!-- <tc-card [title]="'Last appointments'" class="mb-0">
   <tc-table [rows]="appointments" [hovered]="true" [pagination]="true">
     <tc-table-col [columnTitle]="'Photo'" [columnName]="'img'">
       <ng-template #tableTDTemplate let-value>
@@ -161,4 +161,4 @@
     <tc-table-col [columnTitle]="'Doctor'" [columnName]="'doctor'" [enableSorting]="true"></tc-table-col>
     <tc-table-col [columnTitle]="'Injury / Condition'" [columnName]="'injury'" [enableSorting]="true"></tc-table-col>
   </tc-table>
-</tc-card>
+</tc-card> -->

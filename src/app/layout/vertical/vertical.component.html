@@ -135,8 +135,16 @@
         </div>
       </div>
 
-      <tc-form-group class="mb-0">
+      <tc-form-group>
         <tc-textarea [placeholder]="'Domicilio'" formControlName="domicilio"></tc-textarea>
+      </tc-form-group>
+
+      <tc-form-group>
+        <tc-input [placeholder]="'Alergias'" formControlName="alergias"></tc-input>
+      </tc-form-group>
+
+      <tc-form-group class="mb-0">
+        <tc-input [placeholder]="'Antecedentes mórbidos'" formControlName="antMorbidos"></tc-input>
       </tc-form-group>
     </form>
   </ng-template>
