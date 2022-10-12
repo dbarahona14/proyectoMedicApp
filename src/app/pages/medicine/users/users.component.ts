@@ -195,7 +195,8 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
       genero: [data.genero ? data.genero.toLowerCase() : '', Validators.required],
       fNac: [data.fNac.toDate(), Validators.required],
       email: [data.email, Validators.required],
-      rol: [data.rol, Validators.required]
+      rol: [data.rol, Validators.required],
+      especialidad: [data.especialidad, Validators.required]
       // edad: [edad, Validators.required],
       // lastVisit: [data.lastVisit, Validators.required],
       // status: [data.status, Validators.required]

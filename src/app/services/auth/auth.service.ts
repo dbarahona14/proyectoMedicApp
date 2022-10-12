@@ -13,13 +13,18 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class AuthService {
 
-  destroy$: Subject<void>;
+  destroy$ = new Subject<void>();
 
   constructor(private _auth: AngularFireAuth,
     private usuarioService: CrudUsuarioService,
     private ngZone: NgZone,
     private router: Router,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService) {
+    if (localStorage.getItem('userData') != null) {
+      let usuarioActivo: Usuario = JSON.parse(localStorage.getItem('userData'));
+      this.userUpdate(usuarioActivo.uid);
+    }
+  }
 
   login(email: string, password: string) {
     this.destroy$ = new Subject<void>();
@@ -27,21 +32,21 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.usuarioService.getUserById(result.user.uid).valueChanges()
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe(data => {
-          if (data.isEnabled) {
-            localStorage.setItem('userData', JSON.stringify(data));
-            this.router.navigate(['vertical/default-dashboard']);
-            localStorage.setItem('user', JSON.stringify(result.user));
-          }
-          if (!data.isEnabled) {
-            this.notificationService.showInfo("Usuario deshabilitado", "Su usuario está deshabilitado.");
-            this.router.navigate(['./public/sign-in']);
-            this.logout();
-          }
-        });
+          .pipe(
+            takeUntil(this.destroy$)
+          )
+          .subscribe(data => {
+            if (data.isEnabled) {
+              localStorage.setItem('userData', JSON.stringify(data));
+              this.router.navigate(['vertical/default-dashboard']);
+              localStorage.setItem('user', JSON.stringify(result.user));
+            }
+            if (!data.isEnabled) {
+              this.notificationService.showInfo("Usuario deshabilitado", "Su usuario está deshabilitado.");
+              this.router.navigate(['./public/sign-in']);
+              this.logout();
+            }
+          });
         // this.ngZone.run(() => {
         //   this.router.navigate(['vertical/default-dashboard']);
         // });
@@ -62,6 +67,23 @@ export class AuthService {
             this.notificationService.showError(err.message, "Error");
           }
         });
+  }
+
+  userUpdate(uid: string) {
+    this.usuarioService.getUserById(uid).valueChanges()
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(data => {
+        if (data.isEnabled) {
+          localStorage.setItem('userData', JSON.stringify(data));
+        }
+        if (!data.isEnabled) {
+          this.notificationService.showInfo("Usuario deshabilitado", "Su usuario está deshabilitado.");
+          this.router.navigate(['./public/sign-in']);
+          this.logout();
+        }
+      });
   }
 
   register(email: string, password: string) {
