@@ -76,8 +76,8 @@
           <button *ngIf="!row.isEnabled" tc-button [afterIcon]="'icofont-eye-blocked'" view="warning" [square]="true"
             [tcShape]="500" [size]="'sm'" [tcFontSize]="15" (click)="cambiarEstado(row, true)"></button>
 
-          <button tc-button [afterIcon]="'icofont-ui-delete'" [view]="'error'" [square]="true" [tcShape]="500"
-            [size]="'sm'" disabled="true" [tcFontSize]="15" (click)="remove(row.id)"></button>
+          <!-- <button tc-button [afterIcon]="'icofont-ui-delete'" [view]="'error'" [square]="true" [tcShape]="500"
+            [size]="'sm'" disabled="true" [tcFontSize]="15" (click)="remove(row.id)"></button> -->
         </div>
       </ng-template>
     </tc-table-col>

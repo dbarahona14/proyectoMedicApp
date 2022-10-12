@@ -38,7 +38,7 @@ export class LoginFormComponent implements OnInit {
         this.loginForm.reset();
         this.loading = false;
       }).finally(() => {
-        console.log("Terminó");
+        
       })
         .catch((err) => {
           console.log(err.message);

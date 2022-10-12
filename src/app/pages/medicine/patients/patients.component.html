@@ -2,7 +2,7 @@
   <tc-table [rows]="patients" [hovered]="true" [search]="true" [pagination]="true" [headerBgColor]="'#336cfb'" [headerColor]="'#fff'">
     <tc-table-col [columnTitle]="''" [columnName]="'id'">
       <ng-template #tableTDTemplate let-value>
-        <tc-icon class="icofont-ui-user"></tc-icon>
+        <tc-icon class="icofont-ui-user" [routerLink]="['../patient-profile/', value]"></tc-icon>
         <!-- <tc-avatar [src]="value"></tc-avatar> -->
       </ng-template>
     </tc-table-col>

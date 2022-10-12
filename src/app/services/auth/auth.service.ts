@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { updateProfile } from '@firebase/auth';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Injectable({
@@ -12,26 +13,34 @@ import { NotificationService } from 'src/app/services/notification/notification.
 })
 export class AuthService {
 
+  destroy$: Subject<void>;
+
   constructor(private _auth: AngularFireAuth,
     private usuarioService: CrudUsuarioService,
     private ngZone: NgZone,
     private router: Router,
     private notificationService: NotificationService) { }
 
-  async login(email: string, password: string) {
-    return await this._auth
+  login(email: string, password: string) {
+    this.destroy$ = new Subject<void>();
+    return this._auth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.usuarioService.getUserById(result.user.uid).get().subscribe(data => {
-          if (data.data().isEnabled) {
-            localStorage.setItem('userData', JSON.stringify(data.data()));
+        this.usuarioService.getUserById(result.user.uid).valueChanges()
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe(data => {
+          if (data.isEnabled) {
+            localStorage.setItem('userData', JSON.stringify(data));
             this.router.navigate(['vertical/default-dashboard']);
             localStorage.setItem('user', JSON.stringify(result.user));
           }
-          else {
+          if (!data.isEnabled) {
             this.notificationService.showInfo("Usuario deshabilitado", "Su usuario está deshabilitado.");
+            this.router.navigate(['./public/sign-in']);
+            this.logout();
           }
-
         });
         // this.ngZone.run(() => {
         //   this.router.navigate(['vertical/default-dashboard']);
@@ -61,6 +70,8 @@ export class AuthService {
 
   logout() {
     localStorage.clear();
+    this.destroy$.next();
+    this.destroy$.complete();
     return this._auth.signOut();
   }
 
