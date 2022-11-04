@@ -151,15 +151,15 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     this.patientForm = this.fb.group({
       img: [],
       nombre: ['', Validators.required],
-      correo: ['', Validators.required],
+      correo: [''],
       fNac: [Validators.required],
       rut: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
-      telefono: ['', Validators.required],
+      telefono: [''],
       edad: ['', Validators.required],
       genero: ['', Validators.required],
       domicilio: ['', Validators.required],
-      alergias: ['', Validators.required],
-      antMorbidos: ['', Validators.required]
+      alergias: ['Sin alergias.', Validators.required],
+      antMorbidos: ['Sin antecedentes mórbidos.', Validators.required]
     });
   }
 

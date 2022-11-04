@@ -266,7 +266,8 @@
 
         <tc-form-group>
           <tc-form-label>Nombre procedimiento</tc-form-label>
-          <tc-input [placeholder]="'Procedimiento'" formControlName="title"></tc-input>
+          <tc-select [placeholder]="'Procedimiento'" [formControl]="historialForm.controls['title']" [options]="procedimientos">
+          </tc-select>
         </tc-form-group>
 
         <tc-form-group>

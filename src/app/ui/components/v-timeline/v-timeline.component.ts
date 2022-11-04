@@ -43,6 +43,7 @@ export class TCVTimelineComponent implements OnInit {
   documentos: any;
   isDocument: boolean;
   sucursales: IOption[];
+  procedimientos: IOption[];
 
   constructor(private modal: TCModalService,
     private formBuilder: FormBuilder,
@@ -63,6 +64,81 @@ export class TCVTimelineComponent implements OnInit {
       {
         label: 'Sucursal 3',
         value: 'sucursal 3'
+      }
+    ];
+
+    this.procedimientos = [
+      {
+        label: 'Punción intramuscular',
+        value: 'Punción intramuscular'
+      },
+      {
+        label: 'Punción I.M. descuento',
+        value: 'Punción I.M. descuento'
+      },
+      {
+        label: 'Punción subcutánea',
+        value: 'Punción subcutánea'
+      },
+      {
+        label: 'Curación simple',
+        value: 'Curación simple'
+      },
+      {
+        label: 'Curación avanzada',
+        value: 'Curación avanzada'
+      },
+      {
+        label: 'TTO. E.V. FIERRO',
+        value: 'TTO. E.V. FIERRO'
+      },
+      {
+        label: 'TTO. E.V.',
+        value: 'TTO. E.V.'
+      },
+      {
+        label: 'TTO. E.V. BOLO',
+        value: 'TTO. E.V. BOLO'
+      },
+      {
+        label: 'Instalación sonda Foley',
+        value: 'Instalación sonda Foley'
+      },
+      {
+        label: 'Control presión arterial',
+        value: 'Control presión arterial'
+      },
+      {
+        label: 'Control glicemia',
+        value: 'Control glicemia'
+      },
+      {
+        label: 'Test antígenos',
+        value: 'Test antígenos'
+      },
+      {
+        label: 'Detect SARVS Cov-19 FONASA',
+        value: 'Detect SARVS Cov-19 FONASA'
+      },
+      {
+        label: 'Detect SARVS Cov-19',
+        value: 'Detect SARVS Cov-19'
+      },
+      {
+        label: 'Retiro de puntos',
+        value: 'Retiro de puntos'
+      },
+      {
+        label: 'Retiro de grapas',
+        value: 'Retiro de grapas'
+      },
+      {
+        label: 'Visita dom X E.U.',
+        value: 'Visita dom X E.U.'
+      },
+      {
+        label: 'Punción vacuna influenza',
+        value: 'Punción vacuna influenza'
       }
     ];
 
