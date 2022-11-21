@@ -30,6 +30,8 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
   currentAvatar: string | ArrayBuffer;
   defaultAvatar: string;
 
+  maxDate: Date;
+
   edad: any;
 
   constructor(
@@ -77,6 +79,7 @@ export class PagePatientsComponent extends BasePageComponent implements OnInit, 
       }
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
+    this.maxDate = new Date();
     //this.currentAvatar = this.defaultAvatar;
   }
 

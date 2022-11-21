@@ -28,6 +28,8 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
 
   currentUser: Usuario;
 
+  maxDate: Date;
+
   constructor(
     store: Store<IAppState>,
     httpSv: HttpService,
@@ -80,6 +82,7 @@ export class PageEditAccountComponent extends BasePageComponent implements OnIni
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
     this.changes = false;
+    this.maxDate = new Date();
 
   }
 

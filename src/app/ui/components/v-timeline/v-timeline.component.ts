@@ -54,16 +54,16 @@ export class TCVTimelineComponent implements OnInit {
     this.data = [];
     this.sucursales = [
       {
-        label: 'Sucursal 1',
-        value: 'sucursal 1'
+        label: 'San Pedro',
+        value: 'San Pedro'
       },
       {
-        label: 'Sucursal 2',
-        value: 'sucursal 2'
+        label: 'Collao',
+        value: 'Collao'
       },
       {
-        label: 'Sucursal 3',
-        value: 'sucursal 3'
+        label: 'Domicilio',
+        value: 'Domicilio'
       }
     ];
 

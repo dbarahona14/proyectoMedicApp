@@ -16,7 +16,7 @@
     <ul class="list">
       <ng-container *ngIf="notifications && notifications.length">
         <li *ngFor="let item of notifications">
-          <a href="#">
+          <a href="#" (click)="$event.preventDefault()">
             <span class="icon {{ item.icon }}"></span>
 
             <div class="content">

@@ -41,6 +41,8 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
 
   usuarioActivo: Usuario;
 
+  maxDate: Date;
+
 
   data: Paciente[] = [];
   @Input() layout: string;
@@ -82,6 +84,7 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.currentAvatar = this.defaultAvatar;
+    this.maxDate = new Date();
 
   }
 
@@ -155,7 +158,6 @@ export class VerticalLayoutComponent extends BaseLayoutComponent implements OnIn
       fNac: [Validators.required],
       rut: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^[0-9]+-[0-9kK]{1}|(((\d{2})|(\d{1})).\d{3}\.\d{3}-)([0-9kK]){1}$/), this.checkVerificatorDigit]],
       telefono: [''],
-      edad: ['', Validators.required],
       genero: ['', Validators.required],
       domicilio: ['', Validators.required],
       alergias: ['Sin alergias.', Validators.required],

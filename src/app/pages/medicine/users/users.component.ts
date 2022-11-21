@@ -16,6 +16,7 @@ import { NotificationService } from 'src/app/services/notification/notification.
 import { CrudUsuarioService } from 'src/app/services/usuario/crud-usuario.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { timingSafeEqual } from 'crypto';
 
 @Component({
   selector: 'app-users',
@@ -36,6 +37,8 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
   changes: boolean;
 
   edad: any;
+
+  maxDate: Date;
 
   constructor(
     store: Store<IAppState>,
@@ -94,6 +97,7 @@ export class UsersComponent extends BasePageComponent implements OnInit, OnDestr
     ];
     this.defaultAvatar = 'assets/content/anonymous-400.jpg';
     this.changes = false;
+    this.maxDate = new Date();
     //this.currentAvatar = this.defaultAvatar;
   }
 

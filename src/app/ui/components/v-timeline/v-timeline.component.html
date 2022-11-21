@@ -66,7 +66,7 @@
         <div class="col-12 col-sm-6 mt-4">
           <tc-form-group>
             <mat-form-field appearance="fill">
-              <mat-label>Fecha de hoy</mat-label>
+              <mat-label>Fecha de atención</mat-label>
               <input matInput [matDatepicker]="picker" formControlName="fecha" [disabled]="true">
               <mat-hint>DD/MM/AAAA</mat-hint>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -124,23 +124,23 @@
 
       <tc-form-group>
         <tc-form-label>Nombre procedimiento</tc-form-label>
-        <tc-select [placeholder]="'Procedimiento'" [formControl]="historialForm.controls['title']" [options]="procedimientos"> </tc-select>
+        <tc-select [placeholder]="'Procedimiento'" [formControl]="historialForm.controls['title']" [options]="procedimientos" [disabled]="true"> </tc-select>
       </tc-form-group>
 
       <tc-form-group>
         <tc-form-label>Descripción</tc-form-label>
-        <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content" [readonly]="true">
+        <tc-textarea [placeholder]="'Descripción del procedimiento'" formControlName="content" [autoGrow]="true">
         </tc-textarea>
       </tc-form-group>
 
       <tc-form-group>
         <tc-form-label>Indicaciones</tc-form-label>
-        <tc-input [placeholder]="'Indicaciones'" formControlName="indicaciones"></tc-input>
+        <tc-textarea [placeholder]="'Indicaciones'" formControlName="indicaciones" [autoGrow]="true"></tc-textarea>
       </tc-form-group>
 
       <tc-form-group>
         <tc-form-label>Observaciones</tc-form-label>
-        <tc-input [placeholder]="'Observaciones'" formControlName="observaciones"></tc-input>
+        <tc-textarea [placeholder]="'Observaciones'" formControlName="observaciones" [autoGrow]="true"></tc-textarea>
       </tc-form-group>
 
       <div *ngIf="isDocument">

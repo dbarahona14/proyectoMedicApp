@@ -1,6 +1,6 @@
 export interface Paciente {
     correo: string;
-    domicilio: string;
+    domicilio?: string;
     genero: string;
     edad: number;
     fNac: any;
@@ -8,7 +8,7 @@ export interface Paciente {
     nombre: string;
     nombreRut: string;
     rut: string;
-    telefono: string;
+    telefono?: string;
     alergias: string;
     antMorbidos: string;
 }

@@ -97,7 +97,7 @@
       <tc-form-group>
         <mat-form-field appearance="fill">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <input matInput [matDatepicker]="picker" [max]="maxDate" formControlName="fNac">
           <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [startAt]="'fNac'"></mat-datepicker>

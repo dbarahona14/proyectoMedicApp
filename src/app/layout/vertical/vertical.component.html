@@ -36,7 +36,7 @@
           (click)="openModal(modalBody, 'Agregar nuevo paciente', modalFooter)">Agregar Paciente</button>
       </div>
 
-      <div class="row" *ngIf="usuarioActivo.rol == 'administrador' || usuarioActivo.rol == 'superadministrador'" >
+      <div class="row" *ngIf="usuarioActivo.rol == 'administrador' || usuarioActivo.rol == 'superadministrador'">
         <button tc-button [view]="'accent'" [beforeIcon]="'icofont-live-messenger'"
           (click)="openModalTwo(modalBodyThree, 'Agregar nuevo usuario', modalFooterThree)">Agregar Usuario</button>
       </div>
@@ -47,7 +47,7 @@
         <tc-icon [iconClass]="'icofont-ui-settings'" [tcFontSize]="'1.3em'"></tc-icon>Settings
       </a> -->
 
-      <a href="#" class="link">
+      <a class="link">
         <tc-icon [iconClass]="'icofont-question-square'" [tcFontSize]="'1.3em'"></tc-icon>Soporte
       </a>
     </menu>
@@ -97,7 +97,8 @@
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT del paciente'" [charLimiting]="12" (input)="checkRun()" formControlName="rut">
+        </tc-input>
         <tc-form-description [tcColor]="'#e24d4d'"
           *ngIf="patientForm.controls.rut.touched && patientForm.controls.rut.invalid">
           RUT inválido
@@ -107,7 +108,7 @@
       <tc-form-group>
         <mat-form-field appearance="fill">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <input matInput [matDatepicker]="picker" [max]="maxDate" formControlName="fNac">
           <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
@@ -121,19 +122,9 @@
         <tc-input [placeholder]="'Celular'" [type]="'number'" formControlName="telefono"></tc-input>
       </tc-form-group>
 
-      <div class="row">
-        <div class="col-12 col-sm-6">
-          <tc-form-group>
-            <tc-input [placeholder]="'Edad'" [type]="'number'" formControlName="edad"></tc-input>
-          </tc-form-group>
-        </div>
-
-        <div class="col-12 col-sm-6">
-          <tc-form-group>
-            <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
-          </tc-form-group>
-        </div>
-      </div>
+      <tc-form-group>
+        <tc-select [placeholder]="'Género'" formControlName="genero" [options]="gender"></tc-select>
+      </tc-form-group>
 
       <tc-form-group>
         <tc-textarea [placeholder]="'Domicilio'" formControlName="domicilio"></tc-textarea>
@@ -206,7 +197,8 @@
       </tc-form-group>
 
       <tc-form-group>
-        <tc-input [placeholder]="'RUT del usuario'" [charLimiting]="12" (input)="checkRun()" formControlName="rut"></tc-input>
+        <tc-input [placeholder]="'RUT del usuario'" [charLimiting]="12" (input)="checkRun()" formControlName="rut">
+        </tc-input>
         <tc-form-description [tcColor]="'#e24d4d'"
           *ngIf="userForm.controls.rut.touched && userForm.controls.rut.invalid">
           RUT inválido
@@ -216,7 +208,7 @@
       <tc-form-group>
         <mat-form-field appearance="fill">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fNac">
+          <input matInput [matDatepicker]="picker" [max]="maxDate" formControlName="fNac">
           <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
